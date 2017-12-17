@@ -1,11 +1,17 @@
-const dev = {
-  API_URL: "localhost:3001/"
+const development = {
+  API_URL: "http://localhost:3001/"
 };
 
-const prod = {
+const production = {
   API_URL: "https://api.breakinotes.com/"
 };
 
-const config = (process.env.REACT_APP_STAGE === 'production') ? prod : dev
+let config;
+
+if (process.env.REACT_APP_STAGE === 'development') {
+  config = development;
+} else if (process.env.REACT_APP_STAGE === 'production') {
+  config = production;
+};
 
 export { config }
