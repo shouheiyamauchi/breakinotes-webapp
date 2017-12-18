@@ -5,15 +5,12 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 import HomePage from './HomePage';
 
 class App extends Component {
   render() {
     return (
       <Router>
-        <MuiThemeProvider>
           <div>
             <ul>
               <li><Link to="/">Home</Link></li>
@@ -26,7 +23,6 @@ class App extends Component {
             <Route path="/about" component={HomePage}/>
             <Route path="/topics" component={HomePage}/>
           </div>
-        </MuiThemeProvider>
       </Router>
     );
   }

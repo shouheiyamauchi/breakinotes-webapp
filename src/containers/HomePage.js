@@ -1,9 +1,7 @@
 import { config } from '../config'
 import React, { Component } from 'react';
 import axios from 'axios';
-import RaisedButton from 'material-ui/RaisedButton';
-import { List } from 'material-ui/List';
-import Paper from 'material-ui/Paper';
+import { Button } from 'antd';
 import MovesListItem from '../components/MovesListItem';
 
 class HomePage extends Component {
@@ -44,13 +42,9 @@ class HomePage extends Component {
 
     return (
       <div>
-        <Paper style={style} zDepth={1}>
-          <RaisedButton label="Get Moves" onClick={this.getMoves} />
-          <RaisedButton label="Reset" onClick={this.resetMoves} />
-          <List>
-            {movesList}
-          </List>
-        </Paper>
+        <Button onClick={this.getMoves}>Get Moves</Button>
+        <Button onClick={this.resetMoves}>Reset</Button>
+        {movesList}
       </div>
     );
   }
