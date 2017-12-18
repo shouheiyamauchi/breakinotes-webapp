@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Button } from 'antd';
 import MovesListItem from '../components/MovesListItem';
 
-class HomePage extends Component {
+class MovesList extends Component {
   constructor(props) {
     super(props);
 
@@ -50,4 +50,4 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage;
+export default MovesList;
