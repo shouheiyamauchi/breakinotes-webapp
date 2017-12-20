@@ -49,14 +49,16 @@ class Move extends Component {
             <span>{_.capitalize(this.state.move.origin)} {_.capitalize(this.state.move.type)}</span>
           </div>
         </div>
-        <Divider />
-        <Card title="Starting Position">
-          {this.state.startingPosition === {} ? null : <Tag color="blue">{this.state.startingPosition.name}</Tag>}
-        </Card>
         <div className="vertical-spacer" />
-        <Card title="Ending Positions">
-          {this.state.startingPosition === {} ? null : <Tag color="blue">{this.state.startingPosition.name}</Tag>}
-        </Card>
+        <Divider />
+        <div className="vertical-spacer" />
+        <h3>Starting Position</h3>
+        <Tag color="blue">{this.state.startingPosition.name}</Tag>
+        <Divider />
+        <h3>Ending Positions</h3>
+        <Tag color="red">On Back</Tag>
+        <Tag color="blue">Baby Freeze</Tag>
+        <Tag color="purple">Crouching</Tag>
       </div>
     );
   }

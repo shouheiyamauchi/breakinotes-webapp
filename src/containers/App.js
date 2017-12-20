@@ -9,7 +9,7 @@ import MovesList from './MovesList';
 import Move from './Move';
 import About from './About';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Content, Affix } = Layout;
 
 class App extends Component {
   state = {
@@ -25,42 +25,40 @@ handleClick = (e) => {
     return (
       <Router>
         <Layout>
-          <Layout>
-            <Header style={{height: "46px"}}>
+            <Header style={{height: '46px', position: 'fixed', width: '100%', paddingLeft: '5px', zIndex: '1' }}>
               <Menu
                 onClick={this.handleClick}
                 selectedKeys={[this.state.current]}
-                mode="horizontal"
-                theme="dark"
+                mode='horizontal'
+                theme='dark'
               >
-                <Menu.SubMenu title={<span><Icon type="ant-design" />BreakiNotes</span>}>
-                  <Menu.ItemGroup title="General">
-                    <Menu.Item key="1">
-                      <Link to="/"><Icon type="user" />Home</Link>
+                <Menu.SubMenu title={<span><Icon type='ant-design' />BreakiNotes</span>}>
+                  <Menu.ItemGroup title='General'>
+                    <Menu.Item key='1'>
+                      <Link to='/'><Icon type='user' />Home</Link>
                     </Menu.Item>
-                    <Menu.Item key="2">
-                      <Link to="/about"><Icon type="question-circle-o" />About</Link>
+                    <Menu.Item key='2'>
+                      <Link to='/about'><Icon type='question-circle-o' />About</Link>
                     </Menu.Item>
                   </Menu.ItemGroup>
-                  <Menu.ItemGroup title="Reports">
-                    <Menu.Item key="setting:3">
-                      <Icon type="fast-forward" />Option 3
+                  <Menu.ItemGroup title='Reports'>
+                    <Menu.Item key='setting:3'>
+                      <Icon type='fast-forward' />Option 3
                     </Menu.Item>
-                    <Menu.Item key="setting:4">
-                      <Icon type="area-chart" />Option 4
+                    <Menu.Item key='setting:4'>
+                      <Icon type='area-chart' />Option 4
                     </Menu.Item>
                   </Menu.ItemGroup>
                 </Menu.SubMenu>
               </Menu>
             </Header>
-            <Content style={{ padding: 24, minHeight: '100vh' }}>
-              <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
-                <Route exact path="/" component={MovesList}/>
-                <Route path="/about" component={About}/>
-                <Route path="/move" component={Move}/>
-              </Card>
-            </Content>
-          </Layout>
+          <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
+            <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
+              <Route exact path='/' component={MovesList}/>
+              <Route path='/about' component={About}/>
+              <Route path='/move' component={Move}/>
+            </Card>
+          </Content>
         </Layout>
       </Router>
     );
