@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 
 class MovesListItem extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class MovesListItem extends Component {
 
     return (
       <div>
-        {this.props.move.name}
+        <Link to={{ pathname: '/move', state: { move: this.props.move} }}>{this.props.move.name}</Link>
       </div>
     );
   }

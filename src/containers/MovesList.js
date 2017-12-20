@@ -1,4 +1,5 @@
 import { config } from '../config'
+import { Link } from 'react-router-dom'
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'antd';
@@ -34,11 +35,6 @@ class MovesList extends Component {
     const movesList = this.state.moves.map((move, i) => {
       return <MovesListItem key={i} move={move} />
     })
-
-    const style = {
-      margin: 20,
-      padding: 20
-    };
 
     return (
       <div>

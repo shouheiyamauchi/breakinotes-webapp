@@ -6,35 +6,58 @@ import {
 } from 'react-router-dom'
 import { Layout, Menu, Icon, Card } from 'antd';
 import MovesList from './MovesList';
+import Move from './Move';
 import About from './About';
 
 const { Header, Footer, Sider, Content } = Layout;
 
 class App extends Component {
+  state = {
+  current: 'mail',
+}
+handleClick = (e) => {
+  console.log('click ', e);
+  this.setState({
+    current: e.key,
+  });
+}
   render() {
     return (
       <Router>
         <Layout>
-          <Sider
-            breakpoint="lg"
-            collapsedWidth="0"
-            onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
-          >
-            <div className="logo" />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-              <Menu.Item key="1">
-                <Link to="/"><Icon type="user" />Home</Link>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Link to="/about"><Icon type="question-circle-o" />About</Link>
-              </Menu.Item>
-            </Menu>
-          </Sider>
           <Layout>
+            <Header style={{height: "46px"}}>
+              <Menu
+                onClick={this.handleClick}
+                selectedKeys={[this.state.current]}
+                mode="horizontal"
+                theme="dark"
+              >
+                <Menu.SubMenu title={<span><Icon type="ant-design" />BreakiNotes</span>}>
+                  <Menu.ItemGroup title="General">
+                    <Menu.Item key="1">
+                      <Link to="/"><Icon type="user" />Home</Link>
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                      <Link to="/about"><Icon type="question-circle-o" />About</Link>
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                  <Menu.ItemGroup title="Reports">
+                    <Menu.Item key="setting:3">
+                      <Icon type="fast-forward" />Option 3
+                    </Menu.Item>
+                    <Menu.Item key="setting:4">
+                      <Icon type="area-chart" />Option 4
+                    </Menu.Item>
+                  </Menu.ItemGroup>
+                </Menu.SubMenu>
+              </Menu>
+            </Header>
             <Content style={{ padding: 24, minHeight: '100vh' }}>
-              <Card style={{ width: '100%', minHeight: 'calc(100vh - 48px)' }}>
+              <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
                 <Route exact path="/" component={MovesList}/>
                 <Route path="/about" component={About}/>
+                <Route path="/move" component={Move}/>
               </Card>
             </Content>
           </Layout>
