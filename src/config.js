@@ -1,9 +1,9 @@
 const development = {
-  API_URL: "http://localhost:3001/"
+  API_URL: 'http://localhost:3001/'
 };
 
 const production = {
-  API_URL: "https://api.breakinotes.com/"
+  API_URL: 'https://api.breakinotes.com/'
 };
 
 let config;

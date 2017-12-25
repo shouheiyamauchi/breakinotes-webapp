@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  Switch
 } from 'react-router-dom'
 import { Layout, Menu, Icon, Card } from 'antd';
 import MovesList from './MovesList';
+import NewMove from './NewMove'
 import Move from './Move';
-import About from './About';
 
-const { Header, Content, Affix } = Layout;
+const { Header, Content } = Layout;
 
 class App extends Component {
   state = {
   current: 'mail',
 }
 handleClick = (e) => {
-  console.log('click ', e);
   this.setState({
     current: e.key,
   });
@@ -38,7 +38,7 @@ handleClick = (e) => {
                       <Link to='/'><Icon type='user' />Home</Link>
                     </Menu.Item>
                     <Menu.Item key='2'>
-                      <Link to='/about'><Icon type='question-circle-o' />About</Link>
+                      <Link to='/newmove'><Icon type='question-circle-o' />New Move</Link>
                     </Menu.Item>
                   </Menu.ItemGroup>
                   <Menu.ItemGroup title='Reports'>
@@ -54,9 +54,11 @@ handleClick = (e) => {
             </Header>
           <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
             <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
-              <Route exact path='/' component={MovesList}/>
-              <Route path='/about' component={About}/>
-              <Route path='/move' component={Move}/>
+              <Switch>
+                <Route exact path='/' component={MovesList}/>
+                <Route path='/newmove' component={NewMove}/>
+                <Route path='/move/:id' component={Move}/>
+              </Switch>
             </Card>
           </Content>
         </Layout>

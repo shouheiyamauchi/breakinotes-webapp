@@ -13,7 +13,7 @@ class MovesListItem extends Component {
 
     return (
       <div>
-        <Link to={{ pathname: '/move', state: { move: this.props.move} }}>{this.props.move.name}</Link>
+        <Link to={{ pathname: '/move/' + this.props.move._id }}>{this.props.move.name}</Link>
       </div>
     );
   }

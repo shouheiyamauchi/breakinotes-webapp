@@ -1,43 +1,55 @@
-import { config } from '../config'
+import { config } from '../config';
 import React, { Component } from 'react';
 import axios from 'axios';
-import _ from 'lodash'
-import { Avatar, Divider, Tag, Card } from 'antd';
+import _ from 'lodash';
+import { Avatar, Divider } from 'antd';
+import MoveTag from '../components/MoveTag';
+
 
 class Move extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      move: this.props.location.state.move,
-      startingPosition: {},
-      endingPositiongs: []
+      move: {
+        startingPosition: null,
+        endingPositions: [],
+        parentMove: null,
+        childMoves: []
+      }
     }
 
     this.getMove = this.getMove.bind(this);
   }
 
   componentDidMount() {
-    this.getMove(this.state.move.startingPosition);
+    this.getMove(this.props.match.params.id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // update move when navigating from one to another
+    this.getMove(nextProps.match.params.id);
   }
 
   getMove(id) {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
-        console.log(config.API_URL + 'moves/' + id)
-        this.setState({startingPosition: response.data});
+        this.setState({move: response.data});
       })
       .catch((error) => {
-        console.log(config.API_URL + 'moves/' + id)
         console.log(error);
       })
   }
 
-  generateMoveTag(move) {
-
-  }
-
   render() {
+    const endingPositions = this.state.move.endingPositions.map((move, index) => {
+      return <MoveTag move={move} key={'endingPosition-' + index} />;
+    })
+
+    const childMoves = this.state.move.childMoves.map((move, index) => {
+      return <MoveTag move={move} key={'childMoves-' + index} />;
+    })
+
     return (
       <div>
         <div className="vertical-align">
@@ -52,13 +64,26 @@ class Move extends Component {
         <div className="vertical-spacer" />
         <Divider />
         <div className="vertical-spacer" />
-        <h3>Starting Position</h3>
-        <Tag color="blue">{this.state.startingPosition.name}</Tag>
+        <div>
+          <h3>Starting Position</h3>
+          {(this.state.move.startingPosition === null) ? null : <MoveTag move={this.state.move.startingPosition} /> }
+        </div>
+        <div>
+          <Divider />
+          <h3>Ending Positions</h3>
+          {endingPositions}
+        </div>
         <Divider />
-        <h3>Ending Positions</h3>
-        <Tag color="red">On Back</Tag>
-        <Tag color="blue">Baby Freeze</Tag>
-        <Tag color="purple">Crouching</Tag>
+        <div className="vertical-spacer" />
+        <div>
+          <h3>Parent Move</h3>
+          {(this.state.move.parentMove === null) ? null : <MoveTag move={this.state.move.parentMove} /> }
+        </div>
+        <div>
+          <Divider />
+          <h3>Child Moves</h3>
+          {childMoves}
+        </div>
       </div>
     );
   }
