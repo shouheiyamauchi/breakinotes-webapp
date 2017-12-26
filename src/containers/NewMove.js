@@ -103,9 +103,9 @@ class NewMove extends Component {
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPosition: this.state.startingPosition._id,
+      startingPosition: (this.state.startingPosition) ? this.state.startingPosition._id : null,
       endingPositions: JSON.stringify(endingPositionsIds),
-      parentMove: this.state.parentMove._id,
+      parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       childMoves: JSON.stringify(childMovesIds)
     }))
     .then(function (response) {
@@ -118,43 +118,43 @@ class NewMove extends Component {
 
   render() {
     const validStartingEndingPosition = (move) => {
-      return move.type === 'position' || move.type === 'freeze' || move.type ==='powermove'
+      return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
     }
 
     const startingPositionOptions = this.state.moves.map((move, index) => {
       if (validStartingEndingPosition(move) && (this.state.startingPosition === null || this.state.startingPosition._id !== move._id)) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>
+        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
     })
 
     const endingPositionsOptions = this.state.moves.map((move, index) => {
       if (validStartingEndingPosition(move) && (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === move._id) === -1)) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>
+        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
     })
 
     const endingPositionsTags = this.state.endingPositions.map((move, index) => {
-      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'endingPositions')} key={index} />
+      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'endingPositions')} key={index} />;
     })
 
     const parentMoveOptions = this.state.moves.map((move, index) => {
       if (this.state.parentMove === null || this.state.parentMove._id !== move._id) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>
+        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
     })
 
     const childMovesOptions = this.state.moves.map((move, index) => {
       if (this.state.childMoves.length === 0 || this.state.childMoves.findIndex(childMove => childMove._id === move._id) === -1) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>
+        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
     })
 
     const childMovesTags = this.state.childMoves.map((move, index) => {
-      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'childMoves')} key={index} />
+      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'childMoves')} key={index} />;
     })
 
     return (
@@ -176,7 +176,7 @@ class NewMove extends Component {
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               <Option value="disabled" disabled>Select the move origin</Option>
-              <Option value="foundation">Foundation</Option>
+              <Option value="foundational">Foundational</Option>
               <Option value="original">Original</Option>
             </Select>
           </FormItem>
@@ -190,7 +190,7 @@ class NewMove extends Component {
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               <Option value="disabled" disabled>Select the move type</Option>
-              <Option value="foundation">Toprock</Option>
+              <Option value="toprock">Toprock</Option>
               <Option value="rocking">Rocking</Option>
               <Option value="drop">Drop</Option>
               <Option value="footwork">Footwork</Option>

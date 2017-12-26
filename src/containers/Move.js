@@ -17,7 +17,7 @@ class Move extends Component {
         parentMove: null,
         childMoves: []
       }
-    }
+    };
 
     this.getMove = this.getMove.bind(this);
   }

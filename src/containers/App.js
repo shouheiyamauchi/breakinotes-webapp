@@ -4,7 +4,7 @@ import {
   Route,
   Link,
   Switch
-} from 'react-router-dom'
+} from 'react-router-dom';
 import { Layout, Menu, Icon, Card } from 'antd';
 import MovesList from './MovesList';
 import NewMove from './NewMove'

@@ -19,7 +19,7 @@ class MovesList extends Component {
   getMoves() {
     axios.get(config.API_URL + 'moves')
       .then((response) => {
-        this.setState({moves: response.data})
+        this.setState({moves: response.data});
       })
       .catch((error) => {
         console.log(error);
@@ -31,9 +31,7 @@ class MovesList extends Component {
   }
 
   render() {
-    const movesList = this.state.moves.map((move, i) =>
-      <MovesListItem key={'move-' + i} move={move} />
-    )
+    const movesList = this.state.moves.map((move, i) => <MovesListItem key={'move-' + i} move={move} />)
 
     return (
       <div>
