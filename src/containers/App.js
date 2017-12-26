@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
-import NavMenu from './NavMenu'
+import NavMenu from './NavMenu';
 import MovesList from './MovesList';
-import NewMove from './NewMove'
+import NewMove from './NewMove';
 import Move from './Move';
 
 const { Header, Content } = Layout;

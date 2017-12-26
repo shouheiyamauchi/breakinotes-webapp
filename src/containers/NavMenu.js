@@ -5,10 +5,10 @@ import { Menu, Dropdown, Icon } from 'antd';
 const menuItems = (
   <Menu>
     <Menu.Item key="0">
-      <Link to='/'><Icon type='user' />Home</Link>
+      <Link to="/"><Icon type="user" />Home</Link>
     </Menu.Item>
     <Menu.Item key="1">
-      <Link to='/newmove'><Icon type='question-circle-o' />New Move</Link>
+      <Link to="/newmove"><Icon type="question-circle-o" />New Move</Link>
     </Menu.Item>
   </Menu>
 );
