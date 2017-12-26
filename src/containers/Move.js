@@ -74,7 +74,6 @@ class Move extends Component {
           {endingPositions}
         </div>
         <Divider />
-        <div className="vertical-spacer" />
         <div>
           <h3>Parent Move</h3>
           {(this.state.move.parentMove === null) ? null : <MoveTag move={this.state.move.parentMove} /> }

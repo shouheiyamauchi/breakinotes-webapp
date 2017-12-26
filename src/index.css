@@ -26,13 +26,14 @@
 
 /* custom CSS for menu */
 
-.ant-menu {
+.menu-title {
   font-size: 1.2em;
   font-weight: 300;
+  color: rgba(255, 255, 255, 0.65);
 }
 
-.ant-menu-vertical.ant-menu-sub {
-  margin-left: 10px;
+.ant-dropdown-menu-item .anticon {
+  margin-right: 5px;
 }
 
 /* custom CSS for tag */
