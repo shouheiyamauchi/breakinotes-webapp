@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash';
-import { Avatar, List } from 'antd';
+import { Avatar, List, Button, Modal } from 'antd';
 
 class MovesList extends Component {
   constructor(props) {
@@ -18,6 +18,8 @@ class MovesList extends Component {
 
     this.getMoves = this.getMoves.bind(this);
     this.redirectToUrl = this.redirectToUrl.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
+    this.deleteMove = this.deleteMove.bind(this);
   };
 
   componentDidMount() {
@@ -39,6 +41,28 @@ class MovesList extends Component {
     this.setState({redirectUrl: url})
   }
 
+  confirmDelete(move) {
+    Modal.confirm({
+      title: 'Confirm delete',
+      content: 'Are you sure to delete "' + move.name + '"?',
+      onOk: () => {
+        this.deleteMove(move._id);
+      },
+      onCancel() {},
+    });
+  }
+
+  deleteMove(id) {
+    axios.delete(config.API_URL + 'moves/' + id)
+      .then((response) => {
+        this.getMoves();
+        return
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -56,6 +80,12 @@ class MovesList extends Component {
                   <br />
                   <span>{_.capitalize(move.origin)} {_.capitalize(move.type)}</span>
                 </div>
+              </div>
+              <div className="vertical-spacer" />
+              <div className="align-right">
+                <Button type="dashed" size="small">Edit</Button>
+                &nbsp;
+                <Button type="danger" size="small" onClick={() => this.confirmDelete(move)}>Delete</Button>
               </div>
             </List.Item>
           )}
