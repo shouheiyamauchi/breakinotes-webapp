@@ -1,4 +1,5 @@
 import { config } from '../config';
+import { moveTypeColors, moveTypeShortNames } from '../constants'
 import React, { Component } from 'react';
 import axios from 'axios';
 import _ from 'lodash';
@@ -53,7 +54,7 @@ class Move extends Component {
     return (
       <div>
         <div className="vertical-align">
-          <Avatar size="large" style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>T</Avatar>
+          <Avatar size="large" style={{ backgroundColor: moveTypeColors[this.state.move.type] }}>{moveTypeShortNames[this.state.move.type]}</Avatar>
           <div className="horizontal-spacer" />
           <div style={{lineHeight:"125%"}}>
             <span className="title">{this.state.move.name}</span>

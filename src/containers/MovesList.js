@@ -1,8 +1,10 @@
 import { config } from '../config'
+import { moveTypeColors, moveTypeShortNames } from '../constants'
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import axios from 'axios';
-import { Button } from 'antd';
-import MovesListItem from '../components/MovesListItem';
+import _ from 'lodash';
+import { Avatar, List, Button, Modal } from 'antd';
 
 class MovesList extends Component {
   constructor(props) {
@@ -10,11 +12,19 @@ class MovesList extends Component {
 
     this.state = {
       moves: [],
+      redirect: false,
+      redirectUrl: ''
     };
 
     this.getMoves = this.getMoves.bind(this);
-    this.resetMoves = this.resetMoves.bind(this);
+    this.redirectToUrl = this.redirectToUrl.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
+    this.deleteMove = this.deleteMove.bind(this);
   };
+
+  componentDidMount() {
+    this.getMoves();
+  }
 
   getMoves() {
     axios.get(config.API_URL + 'moves')
@@ -26,18 +36,60 @@ class MovesList extends Component {
       });
   }
 
-  resetMoves() {
-    this.setState({moves: []});
+  redirectToUrl(url) {
+    this.setState({redirect: true});
+    this.setState({redirectUrl: url})
+  }
+
+  confirmDelete(move) {
+    Modal.confirm({
+      title: 'Confirm delete',
+      content: 'Are you sure to delete "' + move.name + '"?',
+      onOk: () => {
+        this.deleteMove(move._id);
+      },
+      onCancel() {},
+    });
+  }
+
+  deleteMove(id) {
+    axios.delete(config.API_URL + 'moves/' + id)
+      .then((response) => {
+        this.getMoves();
+        return
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
-    const movesList = this.state.moves.map((move, i) => <MovesListItem key={'move-' + i} move={move} />)
-
     return (
       <div>
-        <Button onClick={this.getMoves}>Get Moves</Button>
-        <Button onClick={this.resetMoves}>Reset</Button>
-        {movesList}
+        {this.state.redirect ? <Redirect to={this.state.redirectUrl} /> : null}
+        <List
+          itemLayout="vertical"
+          dataSource={this.state.moves}
+          renderItem={move => (
+            <List.Item>
+              <div className="vertical-align" onClick={() => this.redirectToUrl('/move/' + move._id)}>
+                <Avatar size="large" style={{ backgroundColor: moveTypeColors[move.type] }}>{moveTypeShortNames[move.type]}</Avatar>
+                <div className="horizontal-spacer" />
+                <div style={{lineHeight:"125%"}}>
+                  <span className="list-title">{move.name}</span>
+                  <br />
+                  <span>{_.capitalize(move.origin)} {_.capitalize(move.type)}</span>
+                </div>
+              </div>
+              <div className="vertical-spacer" />
+              <div className="align-right">
+                <Button type="dashed" size="small">Edit</Button>
+                &nbsp;
+                <Button type="danger" size="small" onClick={() => this.confirmDelete(move)}>Delete</Button>
+              </div>
+            </List.Item>
+          )}
+        />
       </div>
     );
   }

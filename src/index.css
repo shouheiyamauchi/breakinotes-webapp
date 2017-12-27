@@ -16,11 +16,21 @@
   justify-content: flex-start;
 }
 
+.align-right {
+  text-align: right;
+}
+
 /* typography */
 
 .title {
   color: #000000;
   font-size: 2em;
+  font-weight: 500;
+}
+
+.list-title {
+  color: #000000;
+  font-size: 1.5em;
   font-weight: 500;
 }
 
@@ -44,5 +54,10 @@
 
 /* custom CSS for divider */
 .ant-divider-horizontal {
-  margin: 10px 0
+  margin: 10px 0;
+}
+
+/* custom CSS for list */
+.ant-list-vertical .ant-list-item-content {
+  margin-bottom: 0;
 }
