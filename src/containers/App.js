@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
 import NavMenu from './NavMenu';
 import MovesList from './MovesList';
@@ -18,9 +18,11 @@ class App extends Component {
             </Header>
           <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
             <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
-              <Route exact path="/" component={MovesList}/>
-              <Route path="/newmove" component={NewMove}/>
-              <Route path="/move/:id" component={Move}/>
+              <Switch>
+                <Route exact path="/" component={MovesList}/>
+                <Route path="/newmove" component={NewMove}/>
+                <Route path="/move/:id" component={Move}/>
+              </Switch>
             </Card>
           </Content>
         </Layout>

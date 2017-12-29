@@ -1,7 +1,7 @@
 import { config } from '../config'
 import { moveTypeColors, moveTypeShortNames } from '../constants'
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash';
 import { Avatar, List, Button, Modal } from 'antd';
@@ -66,7 +66,7 @@ class MovesList extends Component {
   render() {
     return (
       <div>
-        {this.state.redirect ? <Redirect to={this.state.redirectUrl} /> : null}
+        {this.state.redirect ? <Redirect push to={this.state.redirectUrl} /> : null}
         <List
           itemLayout="vertical"
           dataSource={this.state.moves}
