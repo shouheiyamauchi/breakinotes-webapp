@@ -8,14 +8,17 @@ const menuItems = (
       <Link to="/"><Icon type="user" />Home</Link>
     </Menu.Item>
     <Menu.Item key="1">
-      <Link to="/newmove"><Icon type="question-circle-o" />New Move</Link>
+      <Link to="/newmove"><Icon type="plus-circle-o" />New Move</Link>
+    </Menu.Item>
+    <Menu.Item key="2">
+      <Link to="/filter"><Icon type="search" />Filter</Link>
     </Menu.Item>
   </Menu>
 );
 
 const NavMenu = () => (
   <Dropdown overlay={menuItems} trigger={['click']}>
-    <span className="menu-title"><Icon type="ant-design" style={{marginRight: '10px'}} />BreakiNotes</span>
+    <span className="menu-title"><Icon type="share-alt" style={{marginRight: '7px'}} />BreakiNotes</span>
   </Dropdown>
 );
 

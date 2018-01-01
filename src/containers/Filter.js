@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { Modal, Button, Form, Input, Select, Tag } from 'antd';
+import { Affix, Modal, Button, Form, Input, Select, Tag } from 'antd';
 import MovesList from './MovesList.js'
 import MoveTag from '../components/MoveTag';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-const { TextArea } = Input;
 
 class Filter extends Component {
   constructor(props) {
@@ -22,36 +21,34 @@ class Filter extends Component {
       name: '',
       origin: '',
       type: '',
-      notes: '',
-      startingPosition: null,
+      startingPosition: '',
       endingPositions: [],
-      parentMove: null,
+      parentMove: '',
       childMoves: []
     };
   }
 
   componentDidMount() {
-    this.getAllMoves();
-
     const urlParams = qs.parse(this.props.location.search.substr(1));
-    this.setState({
-      name: urlParams.name,
-      origin: urlParams.origin,
-      type: urlParams.type,
-      notes: urlParams.notes,
-      startingPosition: (urlParams.startingPosition) ? urlParams.startingPosition : null,
-      endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions : [],
-      parentMove: (urlParams.parentMove) ? urlParams.parentMove : null,
-      childMoves: (urlParams.childMoves) ? urlParams.childMoves : []
-    }, () => {
-      this.getFilteredMoves();
-    });
+    this.getAllMoves(urlParams);
   }
 
-  getAllMoves = () => {
+  getAllMoves = (urlParams) => {
     axios.get(config.API_URL + 'moves')
       .then((response) => {
-        this.setState({allMoves: response.data});
+        this.setState({allMoves: response.data}, () => {
+          this.setState({
+            name: urlParams.name,
+            origin: urlParams.origin,
+            type: urlParams.type,
+            startingPosition: (urlParams.startingPosition) ? this.state.allMoves.find((move) => move._id === urlParams.startingPosition) : '',
+            endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
+            parentMove: (urlParams.parentMove) ? this.state.allMoves.find((move) => move._id === urlParams.parentMove) : '',
+            childMoves: (urlParams.childMoves) ? urlParams.childMoves.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : []
+          }, () => {
+            this.getFilteredMoves();
+          });
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -63,36 +60,13 @@ class Filter extends Component {
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
-      notes: this.state.notes,
       startingPosition: this.state.startingPosition,
       endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
       parentMove: this.state.parentMove,
-      childMoves: (this.state.childMoves > 0) ? JSON.stringify(this.state.childMoves) : null
+      childMoves: (this.state.childMoves.length > 0) ? JSON.stringify(this.state.childMoves) : null
     }))
       .then((response) => {
-        const filters = {
-          name: this.state.name,
-          origin: this.state.origin,
-          type: this.state.type,
-          notes: this.state.notes,
-          startingPosition: this.state.startingPosition ? this.state.startingPosition : null,
-          endingPositions: this.state.endingPositions,
-          parentMove: this.state.parentMove ? this.state.parentMove : null,
-          childMoves: this.state.childMoves
-        };
-
-        for (const filterType in filters) {
-          if (!filters[filterType] || filters[filterType].length === 0) {
-            delete filters[filterType];
-          };
-        };
-
-        const paramString = qs.stringify(filters);
-        if (paramString) {
-          window.history.replaceState('', '', '/filter?' + paramString);
-        } else {
-          window.history.replaceState('', '', '/filter');
-        };
+        this.updateUrl();
 
         this.setState({
           filteredMoves: response.data,
@@ -102,6 +76,32 @@ class Filter extends Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  updateUrl = () => {
+    const filters = {
+      name: this.state.name,
+      origin: this.state.origin,
+      type: this.state.type,
+      notes: this.state.notes,
+      startingPosition: this.state.startingPosition ? this.state.startingPosition._id : null,
+      endingPositions: this.state.endingPositions.map(move => move._id),
+      parentMove: this.state.parentMove ? this.state.parentMove._id : null,
+      childMoves: this.state.childMoves.map(move => move._id)
+    };
+
+    for (const filterType in filters) {
+      if (!filters[filterType] || filters[filterType].length === 0) {
+        delete filters[filterType];
+      };
+    };
+
+    const paramString = qs.stringify(filters);
+    if (paramString) {
+      window.history.replaceState('', '', '/filter?' + paramString);
+    } else {
+      window.history.replaceState('', '', '/filter');
+    };
   }
 
   deleteMove = id => {
@@ -183,7 +183,7 @@ class Filter extends Component {
     }
 
     const startingPositionOptions = this.state.allMoves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (this.state.startingPosition === null || this.state.startingPosition._id !== move._id)) {
+      if (validStartingEndingPosition(move) && (!this.state.startingPosition || this.state.startingPosition._id !== move._id)) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -201,7 +201,7 @@ class Filter extends Component {
     })
 
     const parentMoveOptions = this.state.allMoves.map((move, index) => {
-      if (this.state.parentMove === null || this.state.parentMove._id !== move._id) {
+      if (!this.state.parentMove || this.state.parentMove._id !== move._id) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -220,9 +220,12 @@ class Filter extends Component {
 
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>Open</Button>
+        <Affix offsetTop={75} style={{ position: 'absolute', right: -15}}>
+          <Button onClick={this.showModal} type="danger" shape="circle" icon="search" />
+        </Affix>
         <Modal
           title="Apply Filters"
+          style={{ top: 20 }}
           visible={this.state.filterModalVisible}
           onOk={this.getFilteredMoves}
           onCancel={this.handleCancel}
@@ -268,9 +271,6 @@ class Filter extends Component {
                 <Option value="position">Position</Option>
               </Select>
             </FormItem>
-            <FormItem label='Notes'>
-              <TextArea placeholder="Add some notes" rows={4} name='notes' value={this.state.notes} onChange={this.handleInputChange} />
-            </FormItem>
             <div className="ant-form-item-label">
               <label>Transitions</label>
             </div>
@@ -287,7 +287,7 @@ class Filter extends Component {
                 {startingPositionOptions}
               </Select>
               {
-                (this.state.startingPosition === null) ?
+                (!this.state.startingPosition) ?
                 <Tag>Select a move from above</Tag> :
                 <MoveTag move={this.state.startingPosition} closable={true} onClose={(e) => this.clearSingleMove(e, 'startingPosition')} />
               }
@@ -326,7 +326,7 @@ class Filter extends Component {
                 {parentMoveOptions}
               </Select>
               {
-                (this.state.parentMove === null) ?
+                (!this.state.parentMove) ?
                 <Tag>Select a move from above</Tag> :
                 <MoveTag move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
               }
@@ -351,6 +351,7 @@ class Filter extends Component {
             </FormItem>
           </Form>
         </Modal>
+
         <MovesList moves={this.state.filteredMoves} deleteMove={this.deleteMove} />
       </div>
     );

@@ -20,9 +20,9 @@ class NewMove extends Component {
       origin: 'disabled',
       type: 'disabled',
       notes: '',
-      startingPosition: null,
+      startingPosition: '',
       endingPositions: [],
-      parentMove: null,
+      parentMove: '',
       childMoves: []
     };
   }
@@ -113,7 +113,7 @@ class NewMove extends Component {
     }
 
     const startingPositionOptions = this.state.moves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (this.state.startingPosition === null || this.state.startingPosition._id !== move._id)) {
+      if (validStartingEndingPosition(move) && (!this.state.startingPosition || this.state.startingPosition._id !== move._id)) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -131,7 +131,7 @@ class NewMove extends Component {
     })
 
     const parentMoveOptions = this.state.moves.map((move, index) => {
-      if (this.state.parentMove === null || this.state.parentMove._id !== move._id) {
+      if (!this.state.parentMove || this.state.parentMove._id !== move._id) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -211,7 +211,7 @@ class NewMove extends Component {
               {startingPositionOptions}
             </Select>
             {
-              (this.state.startingPosition === null) ?
+              (!this.state.startingPosition) ?
               <Tag>Select a move from above</Tag> :
               <MoveTag move={this.state.startingPosition} closable={true} onClose={(e) => this.clearSingleMove(e, 'startingPosition')} />
             }
@@ -250,7 +250,7 @@ class NewMove extends Component {
               {parentMoveOptions}
             </Select>
             {
-              (this.state.parentMove === null) ?
+              (!this.state.parentMove) ?
               <Tag>Select a move from above</Tag> :
               <MoveTag move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
             }
