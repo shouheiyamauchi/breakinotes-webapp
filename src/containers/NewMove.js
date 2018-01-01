@@ -207,7 +207,7 @@ class NewMove extends Component {
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value='disabled' disabled>Starting Positions</Option>
+              <Option value='disabled' disabled>Starting Position</Option>
               {startingPositionOptions}
             </Select>
             {
