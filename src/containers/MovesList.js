@@ -1,8 +1,7 @@
-import { config } from '../config'
 import { moveTypeColors, moveTypeShortNames } from '../constants'
 import React, { Component } from 'react';
-import { Redirect, Link } from 'react-router-dom'
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom'
 import _ from 'lodash';
 import { Avatar, List, Button, Modal } from 'antd';
 
@@ -11,56 +10,25 @@ class MovesList extends Component {
     super(props);
 
     this.state = {
-      moves: [],
       redirect: false,
       redirectUrl: ''
     };
-
-    this.getMoves = this.getMoves.bind(this);
-    this.redirectToUrl = this.redirectToUrl.bind(this);
-    this.confirmDelete = this.confirmDelete.bind(this);
-    this.deleteMove = this.deleteMove.bind(this);
-  };
-
-  componentDidMount() {
-    this.getMoves();
   }
 
-  getMoves() {
-    axios.get(config.API_URL + 'moves')
-      .then((response) => {
-        this.setState({moves: response.data});
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  redirectToUrl(url) {
+  redirectToUrl = url => {
     this.setState({redirect: true});
     this.setState({redirectUrl: url})
   }
 
-  confirmDelete(move) {
+  confirmDelete = move => {
     Modal.confirm({
       title: 'Confirm delete',
       content: 'Are you sure to delete "' + move.name + '"?',
       onOk: () => {
-        this.deleteMove(move._id);
+        this.props.deleteMove(move._id);
       },
       onCancel() {},
     });
-  }
-
-  deleteMove(id) {
-    axios.delete(config.API_URL + 'moves/' + id)
-      .then((response) => {
-        this.getMoves();
-        return
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   render() {
@@ -69,7 +37,7 @@ class MovesList extends Component {
         {this.state.redirect ? <Redirect push to={this.state.redirectUrl} /> : null}
         <List
           itemLayout="vertical"
-          dataSource={this.state.moves}
+          dataSource={this.props.moves}
           renderItem={move => (
             <List.Item>
               <div className="vertical-align" onClick={() => this.redirectToUrl('/move/' + move._id)}>
@@ -93,6 +61,11 @@ class MovesList extends Component {
       </div>
     );
   }
+}
+
+MovesList.propTypes = {
+  moves: PropTypes.array,
+  deleteMove: PropTypes.func
 }
 
 export default MovesList;

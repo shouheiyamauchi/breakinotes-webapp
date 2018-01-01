@@ -25,22 +25,13 @@ class NewMove extends Component {
       parentMove: null,
       childMoves: []
     };
-
-    this.getMoves = this.getMoves.bind(this);
-    this.setSingleMove = this.setSingleMove.bind(this);
-    this.clearSingleMove = this.clearSingleMove.bind(this);
-    this.addMoveToArray = this.addMoveToArray.bind(this);
-    this.removeMoveFromArray = this.removeMoveFromArray.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     this.getMoves();
   }
 
-  getMoves() {
+  getMoves = () => {
     axios.get(config.API_URL + 'moves')
       .then((response) => {
         this.setState({moves: response.data});
@@ -50,7 +41,7 @@ class NewMove extends Component {
       });
   }
 
-  setSingleMove(id, state) {
+  setSingleMove = (id, state) => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         this.setState({[state]: response.data});
@@ -60,12 +51,12 @@ class NewMove extends Component {
       })
   }
 
-  clearSingleMove(e, state) {
+  clearSingleMove = (e, state) => {
     e.preventDefault();
     this.setState({[state]: null});
   }
 
-  addMoveToArray(id, state) {
+  addMoveToArray = (id, state) => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         this.setState({[state]: [...this.state[state], response.data]});
@@ -75,12 +66,12 @@ class NewMove extends Component {
       })
   }
 
-  removeMoveFromArray(e, id, state) {
+  removeMoveFromArray = (e, id, state) => {
     e.preventDefault();
     this.setState({[state]: this.state[state].filter(move => move._id !== id)});
   }
 
-  handleInputChange(e) {
+  handleInputChange = e => {
     const target = e.target;
     const value = target.value;
     const name = target.name;
@@ -88,11 +79,11 @@ class NewMove extends Component {
     this.setState({[name]: value});
   }
 
-  handleSelectChange(value, name) {
+  handleSelectChange = (value, name) => {
     this.setState({[name]: value});
   }
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
 
     const endingPositionsIds = this.state.endingPositions.map(move => move._id);
@@ -108,16 +99,16 @@ class NewMove extends Component {
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       childMoves: JSON.stringify(childMovesIds)
     }))
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   render() {
-    const validStartingEndingPosition = (move) => {
+    const validStartingEndingPosition = move => {
       return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
     }
 

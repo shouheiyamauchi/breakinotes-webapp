@@ -19,8 +19,6 @@ class Move extends Component {
         childMoves: []
       }
     };
-
-    this.getMove = this.getMove.bind(this);
   }
 
   componentDidMount() {
@@ -32,7 +30,7 @@ class Move extends Component {
     this.getMove(nextProps.match.params.id);
   }
 
-  getMove(id) {
+  getMove = id => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         this.setState({move: response.data});
