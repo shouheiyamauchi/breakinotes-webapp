@@ -40,7 +40,7 @@ class MovesList extends Component {
           dataSource={this.props.moves}
           renderItem={move => (
             <List.Item>
-              <div className="vertical-align" onClick={() => this.redirectToUrl('/move/' + move._id)}>
+              <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/move/' + move._id)}>
                 <Avatar size="large" style={{ backgroundColor: moveTypeColors[move.type] }}>{moveTypeShortNames[move.type]}</Avatar>
                 <div className="horizontal-spacer" />
                 <div style={{lineHeight:"125%"}}>

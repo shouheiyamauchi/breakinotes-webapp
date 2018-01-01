@@ -10,25 +10,44 @@ class Filter extends Component {
 
     this.state = {
       moves:[],
-      redirectUrl: ''
+      redirectUrl: '',
+      name: '',
+      origin: '',
+      type: '',
+      notes: '',
+      startingPosition: '',
+      endingPositions: [],
+      parentMove: '',
+      childMoves: []
     };
   }
 
   componentDidMount() {
-    const urlParams = qs.parse(this.props.location.search.substr(1))
-    this.getMoves(urlParams);
+    const urlParams = qs.parse(this.props.location.search.substr(1));
+    this.setState({
+      name: urlParams.name,
+      origin: urlParams.origin,
+      type: urlParams.type,
+      notes: urlParams.notes,
+      startingPosition: urlParams.startingPosition,
+      endingPositions: urlParams.endingPositions,
+      parentMove: urlParams.parentMove,
+      childMoves: urlParams.childMoves
+    }, () => {
+      this.getMoves();
+    });
   }
 
-  getMoves = params => {
+  getMoves = () => {
     axios.post(config.API_URL + 'moves/filter', qs.stringify({
-      name: params.name,
-      origin: params.origin,
-      type: params.type,
-      notes: params.notes,
-      startingPosition: params.startingPosition,
-      endingPositions: JSON.stringify(params.endingPositions),
-      parentMove: params.parentMove,
-      childMoves: JSON.stringify(params.childMoves)
+      name: this.state.name,
+      origin: this.state.origin,
+      type: this.state.type,
+      notes: this.state.notes,
+      startingPosition: this.state.startingPosition,
+      endingPositions: JSON.stringify(this.state.endingPositions),
+      parentMove: this.state.parentMove,
+      childMoves: JSON.stringify(this.state.childMoves)
     }))
       .then((response) => {
         this.setState({moves: response.data});
