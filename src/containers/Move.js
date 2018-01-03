@@ -15,11 +15,15 @@ class Move extends Component {
 
     this.state = {
       move: {
-        startingPosition: null,
+        name: '',
+        origin: '',
+        type: '',
+        notes: '',
+        startingPosition: '',
         endingPositions: [],
-        parentMove: null,
-        childMoves: []
+        parentMove: '' 
       },
+      childMoves: [],
       entries: [],
       exits: []
     };
@@ -38,6 +42,7 @@ class Move extends Component {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         if (['freeze', 'powermove', 'position'].includes(response.data.type)) this.getEntriesAndExits(id);
+        this.getChildMoves(id);
         this.setState({move: response.data});
       })
       .catch((error) => {
@@ -45,7 +50,19 @@ class Move extends Component {
       })
   }
 
-  getEntriesAndExits(id) {
+  getChildMoves = id => {
+    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+      parentMove: id
+    }))
+      .then((response) => {
+        this.setState({childMoves: response.data});
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
+  getEntriesAndExits = id => {
     axios.post(config.API_URL + 'moves/filter', qs.stringify({
       endingPositions: JSON.stringify([id])
     }))
@@ -122,7 +139,7 @@ class Move extends Component {
         <div>
           <Divider />
           <h3>Child Moves</h3>
-          {this.state.move.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.move.childMoves} />}
+          {this.state.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.childMoves} />}
         </div>
       </div>
     );
