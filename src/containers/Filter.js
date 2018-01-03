@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { Affix, Modal, Button, Form, Input, Select, Tag } from 'antd';
 import MovesList from './MovesList.js'
 import MoveTag from '../components/MoveTag';
+import MoveTags from '../components/MoveTags';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -158,9 +159,12 @@ class Filter extends Component {
       })
   }
 
-  removeMoveFromArray = (e, id, state) => {
+  removeMoveFromArray = (e, state) => {
     e.preventDefault();
-    this.setState({[state]: this.state[state].filter(move => move._id !== id)});
+    const moveUrl = e.target.parentElement.childNodes[0].childNodes[0].href;
+    const moveId = moveUrl.substr(moveUrl.lastIndexOf('/') + 1);
+
+    this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
   }
 
   handleOk = e => {
@@ -196,10 +200,6 @@ class Filter extends Component {
       return null;
     })
 
-    const endingPositionsTags = this.state.endingPositions.map((move, index) => {
-      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'endingPositions')} key={index} />;
-    })
-
     const parentMoveOptions = this.state.allMoves.map((move, index) => {
       if (!this.state.parentMove || this.state.parentMove._id !== move._id) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
@@ -212,10 +212,6 @@ class Filter extends Component {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
-    })
-
-    const childMovesTags = this.state.childMoves.map((move, index) => {
-      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'childMoves')} key={index} />;
     })
 
     return (
@@ -307,7 +303,7 @@ class Filter extends Component {
               {
                 (this.state.endingPositions.length === 0) ?
                 <Tag>Select moves from above</Tag> :
-                endingPositionsTags
+                <MoveTags moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'endingPositions')} />
               }
             </FormItem>
             <div className="ant-form-item-label">
@@ -346,7 +342,7 @@ class Filter extends Component {
               {
                 (this.state.childMoves.length === 0) ?
                 <Tag>Select moves from above</Tag> :
-                childMovesTags
+                <MoveTags moves={this.state.childMoves} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'childMoves')} />
               }
             </FormItem>
           </Form>
