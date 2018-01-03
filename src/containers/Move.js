@@ -23,8 +23,6 @@ class Move extends Component {
       entries: [],
       exits: []
     };
-
-    this.getMove = this.getMove.bind(this);
   }
 
   componentDidMount() {
@@ -36,7 +34,7 @@ class Move extends Component {
     this.getMove(nextProps.match.params.id);
   }
 
-  getMove(id) {
+  getMove = id => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         if (['freeze', 'powermove', 'position'].includes(response.data.type)) this.getEntriesAndExits(id);

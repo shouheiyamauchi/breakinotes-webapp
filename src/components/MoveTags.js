@@ -6,7 +6,7 @@ const MoveTags = props => {
   return (
     <div>
       {props.moves.map((move, index) => {
-        return <MoveTag move={move} key={index} />;
+        return <MoveTag move={move} key={index} closable={props.closable} onClose={props.onClose} />;
       })}
     </div>
   );

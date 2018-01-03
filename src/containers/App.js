@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
 import NavMenu from './NavMenu';
-import MovesList from './MovesList';
+import Home from './Home';
 import NewMove from './NewMove';
+import Filter from './Filter';
 import Move from './Move';
 
 const { Header, Content } = Layout;
@@ -19,8 +20,9 @@ class App extends Component {
           <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
             <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
               <Switch>
-                <Route exact path="/" component={MovesList}/>
+                <Route exact path="/" component={Home}/>
                 <Route path="/newmove" component={NewMove}/>
+                <Route path="/filter" component={Filter}/>
                 <Route path="/move/:id" component={Move}/>
               </Switch>
             </Card>

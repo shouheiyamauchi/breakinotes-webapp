@@ -5,6 +5,7 @@ import qs from 'qs';
 import _ from 'lodash';
 import { Divider, Form, Input, Select, Button, Tag } from 'antd';
 import MoveTag from '../components/MoveTag';
+import MoveTags from '../components/MoveTags';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -20,27 +21,18 @@ class NewMove extends Component {
       origin: 'disabled',
       type: 'disabled',
       notes: '',
-      startingPosition: null,
+      startingPosition: '',
       endingPositions: [],
-      parentMove: null,
+      parentMove: '',
       childMoves: []
     };
-
-    this.getMoves = this.getMoves.bind(this);
-    this.setSingleMove = this.setSingleMove.bind(this);
-    this.clearSingleMove = this.clearSingleMove.bind(this);
-    this.addMoveToArray = this.addMoveToArray.bind(this);
-    this.removeMoveFromArray = this.removeMoveFromArray.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     this.getMoves();
   }
 
-  getMoves() {
+  getMoves = () => {
     axios.get(config.API_URL + 'moves')
       .then((response) => {
         this.setState({moves: response.data});
@@ -50,7 +42,7 @@ class NewMove extends Component {
       });
   }
 
-  setSingleMove(id, state) {
+  setSingleMove = (id, state) => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         this.setState({[state]: response.data});
@@ -60,12 +52,12 @@ class NewMove extends Component {
       })
   }
 
-  clearSingleMove(e, state) {
+  clearSingleMove = (e, state) => {
     e.preventDefault();
     this.setState({[state]: null});
   }
 
-  addMoveToArray(id, state) {
+  addMoveToArray = (id, state) => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
         this.setState({[state]: [...this.state[state], response.data]});
@@ -75,12 +67,15 @@ class NewMove extends Component {
       })
   }
 
-  removeMoveFromArray(e, id, state) {
+  removeMoveFromArray = (e, state) => {
     e.preventDefault();
-    this.setState({[state]: this.state[state].filter(move => move._id !== id)});
+    const moveUrl = e.target.parentElement.childNodes[0].childNodes[0].href;
+    const moveId = moveUrl.substr(moveUrl.lastIndexOf('/') + 1);
+
+    this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
   }
 
-  handleInputChange(e) {
+  handleInputChange = e => {
     const target = e.target;
     const value = target.value;
     const name = target.name;
@@ -88,11 +83,11 @@ class NewMove extends Component {
     this.setState({[name]: value});
   }
 
-  handleSelectChange(value, name) {
+  handleSelectChange = (value, name) => {
     this.setState({[name]: value});
   }
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
 
     const endingPositionsIds = this.state.endingPositions.map(move => move._id);
@@ -108,21 +103,21 @@ class NewMove extends Component {
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       childMoves: JSON.stringify(childMovesIds)
     }))
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   render() {
-    const validStartingEndingPosition = (move) => {
+    const validStartingEndingPosition = move => {
       return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
     }
 
     const startingPositionOptions = this.state.moves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (this.state.startingPosition === null || this.state.startingPosition._id !== move._id)) {
+      if (validStartingEndingPosition(move) && (!this.state.startingPosition || this.state.startingPosition._id !== move._id)) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -135,12 +130,8 @@ class NewMove extends Component {
       return null;
     })
 
-    const endingPositionsTags = this.state.endingPositions.map((move, index) => {
-      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'endingPositions')} key={index} />;
-    })
-
     const parentMoveOptions = this.state.moves.map((move, index) => {
-      if (this.state.parentMove === null || this.state.parentMove._id !== move._id) {
+      if (!this.state.parentMove || this.state.parentMove._id !== move._id) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -151,10 +142,6 @@ class NewMove extends Component {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
-    })
-
-    const childMovesTags = this.state.childMoves.map((move, index) => {
-      return <MoveTag move={move} closable={true} onClose={(e) => this.removeMoveFromArray(e, move._id, 'childMoves')} key={index} />;
     })
 
     return (
@@ -216,11 +203,11 @@ class NewMove extends Component {
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value='disabled' disabled>Starting Positions</Option>
+              <Option value='disabled' disabled>Starting Position</Option>
               {startingPositionOptions}
             </Select>
             {
-              (this.state.startingPosition === null) ?
+              (!this.state.startingPosition) ?
               <Tag>Select a move from above</Tag> :
               <MoveTag move={this.state.startingPosition} closable={true} onClose={(e) => this.clearSingleMove(e, 'startingPosition')} />
             }
@@ -240,7 +227,7 @@ class NewMove extends Component {
             {
               (this.state.endingPositions.length === 0) ?
               <Tag>Select moves from above</Tag> :
-              endingPositionsTags
+              <MoveTags moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'endingPositions')} />
             }
           </FormItem>
           <div className="ant-form-item-label">
@@ -259,7 +246,7 @@ class NewMove extends Component {
               {parentMoveOptions}
             </Select>
             {
-              (this.state.parentMove === null) ?
+              (!this.state.parentMove) ?
               <Tag>Select a move from above</Tag> :
               <MoveTag move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
             }
@@ -279,7 +266,7 @@ class NewMove extends Component {
             {
               (this.state.childMoves.length === 0) ?
               <Tag>Select moves from above</Tag> :
-              childMovesTags
+              <MoveTags moves={this.state.childMoves} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'childMoves')} />
             }
           </FormItem>
           <FormItem>
