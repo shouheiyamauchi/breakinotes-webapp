@@ -1,10 +1,12 @@
 import { config } from '../config';
-import { moveTypeColors, moveTypeShortNames } from '../constants'
 import React, { Component } from 'react';
 import axios from 'axios';
+import qs from 'qs';
 import _ from 'lodash';
-import { Avatar, Divider } from 'antd';
+import { Tag, Divider } from 'antd';
+import MoveTypeAvatar from '../components/MoveTypeAvatar';
 import MoveTag from '../components/MoveTag';
+import MoveTags from '../components/MoveTags';
 
 
 class Move extends Component {
@@ -17,7 +19,9 @@ class Move extends Component {
         endingPositions: [],
         parentMove: null,
         childMoves: []
-      }
+      },
+      entries: [],
+      exits: []
     };
   }
 
@@ -33,6 +37,7 @@ class Move extends Component {
   getMove = id => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
+        if (['freeze', 'powermove', 'position'].includes(response.data.type)) this.getEntriesAndExits(id);
         this.setState({move: response.data});
       })
       .catch((error) => {
@@ -40,19 +45,33 @@ class Move extends Component {
       })
   }
 
+  getEntriesAndExits(id) {
+    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+      endingPositions: JSON.stringify([id])
+    }))
+      .then((response) => {
+        this.setState({entries: response.data});
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+
+    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+      startingPosition: id
+    }))
+      .then((response) => {
+        this.setState({exits: response.data});
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
   render() {
-    const endingPositions = this.state.move.endingPositions.map((move, index) => {
-      return <MoveTag move={move} key={'endingPosition-' + index} />;
-    })
-
-    const childMoves = this.state.move.childMoves.map((move, index) => {
-      return <MoveTag move={move} key={'childMoves-' + index} />;
-    })
-
     return (
       <div>
         <div className="vertical-align">
-          <Avatar size="large" style={{ backgroundColor: moveTypeColors[this.state.move.type] }}>{moveTypeShortNames[this.state.move.type]}</Avatar>
+          <MoveTypeAvatar move={this.state.move} />
           <div className="horizontal-spacer" />
           <div style={{lineHeight:"125%"}}>
             <span className="title">{this.state.move.name}</span>
@@ -63,24 +82,47 @@ class Move extends Component {
         <div className="vertical-spacer" />
         <Divider />
         <div className="vertical-spacer" />
-        <div>
-          <h3>Starting Position</h3>
-          {(this.state.move.startingPosition === null) ? null : <MoveTag move={this.state.move.startingPosition} /> }
-        </div>
-        <div>
-          <Divider />
-          <h3>Ending Positions</h3>
-          {endingPositions}
-        </div>
+        {!this.state.move.type ?
+          null :
+          (
+            ['freeze', 'powermove', 'position'].includes(this.state.move.type) ?
+              (
+                <div>
+                  <div>
+                    <h3>Entries</h3>
+                    {this.state.entries.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.entries} />}
+                  </div>
+                  <div>
+                    <Divider />
+                    <h3>Exits</h3>
+                    {this.state.exits.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.exits} />}
+                  </div>
+                </div>
+              ) :
+              (
+                <div>
+                  <div>
+                    <h3>Starting Position</h3>
+                    {!this.state.move.startingPosition ? <Tag>None</Tag> : <MoveTag move={this.state.move.startingPosition} /> }
+                  </div>
+                  <div>
+                    <Divider />
+                    <h3>Ending Positions</h3>
+                    {this.state.move.endingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.move.endingPositions} />}
+                  </div>
+                </div>
+              )
+          )
+        }
         <Divider />
         <div>
           <h3>Parent Move</h3>
-          {(this.state.move.parentMove === null) ? null : <MoveTag move={this.state.move.parentMove} /> }
+          {!this.state.move.parentMove ? <Tag>None</Tag> : <MoveTag move={this.state.move.parentMove} /> }
         </div>
         <div>
           <Divider />
           <h3>Child Moves</h3>
-          {childMoves}
+          {this.state.move.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.move.childMoves} />}
         </div>
       </div>
     );

@@ -1,9 +1,10 @@
-import { moveTypeColors, moveTypeShortNames } from '../constants'
+import { config } from '../config'
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom'
 import _ from 'lodash';
-import { Avatar, List, Button, Modal } from 'antd';
+import { List, Button, Modal } from 'antd';
+import MoveTypeAvatar from '../components/MoveTypeAvatar';
 
 class MovesList extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class MovesList extends Component {
           renderItem={move => (
             <List.Item>
               <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/move/' + move._id)}>
-                <Avatar size="large" style={{ backgroundColor: moveTypeColors[move.type] }}>{moveTypeShortNames[move.type]}</Avatar>
+                <MoveTypeAvatar move={move} />
                 <div className="horizontal-spacer" />
                 <div style={{lineHeight:"125%"}}>
                   <span className="list-title">{move.name}</span>

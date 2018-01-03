@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom'
 import { Tag } from 'antd';
 
 const MoveTag = props => {
-    return (
-      <Tag color={moveTypeColors[props.move.type]} closable={props.closable} onClose={props.onClose}>
-        <Link to={{ pathname: '/move/' + props.move._id }}>{props.move.name}</Link>
-      </Tag>
-    );
+  return (
+    <Tag color={moveTypeColors[props.move.type]} closable={props.closable} onClose={props.onClose}>
+      <Link to={{ pathname: '/move/' + props.move._id }}>{props.move.name}</Link>
+    </Tag>
+  );
 }
 
 MoveTag.propTypes = {
