@@ -9,11 +9,11 @@ const MoveTags = props => {
         return <MoveTag move={move} key={index} />;
       })}
     </div>
-  )
+  );
 }
 
 MoveTags.propTypes = {
   moves: PropTypes.array
 }
 
-export default MoveTags
+export default MoveTags;
