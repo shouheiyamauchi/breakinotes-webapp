@@ -40,7 +40,7 @@ class MovesList extends Component {
           dataSource={this.props.moves}
           renderItem={move => (
             <List.Item>
-              <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/move/' + move._id)}>
+              <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/moves/' + move._id)}>
                 <MoveTypeAvatar move={move} />
                 <div className="horizontal-spacer" />
                 <div style={{lineHeight:"125%"}}>
@@ -51,7 +51,7 @@ class MovesList extends Component {
               </div>
               <div className="vertical-spacer" />
               <div className="align-right">
-                <Button type="dashed" size="small">Edit</Button>
+                <Button type="dashed" size="small" onClick={() => this.redirectToUrl('/moves/edit/' + move._id)}>Edit</Button>
                 &nbsp;
                 <Button type="danger" size="small" onClick={() => this.confirmDelete(move)}>Delete</Button>
               </div>
