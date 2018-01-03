@@ -8,10 +8,10 @@ const menuItems = (
       <Link to="/"><Icon type="user" />Home</Link>
     </Menu.Item>
     <Menu.Item key="1">
-      <Link to="/newmove"><Icon type="plus-circle-o" />New Move</Link>
+      <Link to="/moves/new"><Icon type="plus-circle-o" />New Move</Link>
     </Menu.Item>
     <Menu.Item key="2">
-      <Link to="/filter"><Icon type="search" />Filter</Link>
+      <Link to="/moves/filter"><Icon type="search" />Filter</Link>
     </Menu.Item>
   </Menu>
 );

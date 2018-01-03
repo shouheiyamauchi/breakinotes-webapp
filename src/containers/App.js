@@ -6,6 +6,7 @@ import Home from './Home';
 import NewMove from './NewMove';
 import Filter from './Filter';
 import Move from './Move';
+import EditMove from './EditMove';
 
 const { Header, Content } = Layout;
 
@@ -21,9 +22,10 @@ class App extends Component {
             <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
               <Switch>
                 <Route exact path="/" component={Home}/>
-                <Route path="/newmove" component={NewMove}/>
-                <Route path="/filter" component={Filter}/>
-                <Route path="/move/:id" component={Move}/>
+                <Route path="/moves/new" component={NewMove}/>
+                <Route path="/moves/filter" component={Filter}/>
+                <Route path="/moves/edit/:id" component={EditMove}/>
+                <Route path="/moves/:id" component={Move}/>
               </Switch>
             </Card>
           </Content>

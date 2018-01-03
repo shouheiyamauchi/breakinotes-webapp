@@ -12,7 +12,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
 
-class NewMove extends Component {
+class EditMove extends Component {
   constructor(props) {
     super(props);
 
@@ -32,6 +32,7 @@ class NewMove extends Component {
 
   componentDidMount() {
     this.getMoves();
+    this.getMove(this.props.match.params.id);
   }
 
   getMoves = () => {
@@ -42,6 +43,24 @@ class NewMove extends Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  getMove = id => {
+    axios.get(config.API_URL + 'moves/' + id)
+      .then((response) => {
+        this.setState({
+          name: response.data.name,
+          origin: response.data.origin,
+          type: response.data.type,
+          notes: response.data.notes,
+          startingPosition: response.data.startingPosition,
+          endingPositions: response.data.endingPositions,
+          parentMove: response.data.parentMove
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   setSingleMove = (id, state) => {
@@ -94,7 +113,7 @@ class NewMove extends Component {
 
     const endingPositionsIds = this.state.endingPositions.map(move => move._id);
 
-    axios.post(config.API_URL + 'moves', qs.stringify({
+    axios.put(config.API_URL + 'moves/' + this.props.match.params.id, qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
@@ -145,7 +164,7 @@ class NewMove extends Component {
     return (
       <div>
         {this.state.redirect ? <Redirect push to={this.state.redirectUrl} /> : null}
-        <span className="title">Add New Move</span>
+        <span className="title">Edit Move</span>
         <Divider />
         <div className="vertical-spacer" />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
@@ -252,7 +271,7 @@ class NewMove extends Component {
           </FormItem>
           <FormItem>
             <Button type='primary' htmlType='submit'>
-              Add Move
+              Update Move
             </Button>
           </FormItem>
         </Form>
@@ -261,4 +280,4 @@ class NewMove extends Component {
   }
 }
 
-export default NewMove;
+export default EditMove;
