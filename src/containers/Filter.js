@@ -25,7 +25,6 @@ class Filter extends Component {
       startingPosition: '',
       endingPositions: [],
       parentMove: '',
-      childMoves: []
     };
   }
 
@@ -45,7 +44,6 @@ class Filter extends Component {
             startingPosition: (urlParams.startingPosition) ? this.state.allMoves.find((move) => move._id === urlParams.startingPosition) : '',
             endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
             parentMove: (urlParams.parentMove) ? this.state.allMoves.find((move) => move._id === urlParams.parentMove) : '',
-            childMoves: (urlParams.childMoves) ? urlParams.childMoves.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : []
           }, () => {
             this.getFilteredMoves();
           });
@@ -64,7 +62,6 @@ class Filter extends Component {
       startingPosition: this.state.startingPosition,
       endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
       parentMove: this.state.parentMove,
-      childMoves: (this.state.childMoves.length > 0) ? JSON.stringify(this.state.childMoves) : null
     }))
       .then((response) => {
         this.updateUrl();
@@ -88,7 +85,6 @@ class Filter extends Component {
       startingPosition: this.state.startingPosition ? this.state.startingPosition._id : null,
       endingPositions: this.state.endingPositions.map(move => move._id),
       parentMove: this.state.parentMove ? this.state.parentMove._id : null,
-      childMoves: this.state.childMoves.map(move => move._id)
     };
 
     for (const filterType in filters) {
@@ -207,13 +203,6 @@ class Filter extends Component {
       return null;
     })
 
-    const childMovesOptions = this.state.allMoves.map((move, index) => {
-      if (this.state.childMoves.length === 0 || this.state.childMoves.findIndex(childMove => childMove._id === move._id) === -1) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
-      };
-      return null;
-    })
-
     return (
       <div>
         <Affix offsetTop={75} style={{ position: 'absolute', right: -15}}>
@@ -325,24 +314,6 @@ class Filter extends Component {
                 (!this.state.parentMove) ?
                 <Tag>Select a move from above</Tag> :
                 <MoveTag move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
-              }
-            </FormItem>
-            <FormItem>
-              <Select
-                showSearch
-                placeholder='Child Moves'
-                value='disabled'
-                onSelect={(value) => this.addMoveToArray(value, 'childMoves')}
-                optionFilterProp="children"
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-              >
-                <Option value='disabled' disabled>Child Moves</Option>
-                {childMovesOptions}
-              </Select>
-              {
-                (this.state.childMoves.length === 0) ?
-                <Tag>Select moves from above</Tag> :
-                <MoveTags moves={this.state.childMoves} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'childMoves')} />
               }
             </FormItem>
           </Form>

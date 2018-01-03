@@ -24,7 +24,6 @@ class NewMove extends Component {
       startingPosition: '',
       endingPositions: [],
       parentMove: '',
-      childMoves: []
     };
   }
 
@@ -91,7 +90,6 @@ class NewMove extends Component {
     e.preventDefault();
 
     const endingPositionsIds = this.state.endingPositions.map(move => move._id);
-    const childMovesIds = this.state.childMoves.map(move => move._id);
 
     axios.post(config.API_URL + 'moves', qs.stringify({
       name: this.state.name,
@@ -100,8 +98,7 @@ class NewMove extends Component {
       notes: this.state.notes,
       startingPosition: (this.state.startingPosition) ? this.state.startingPosition._id : null,
       endingPositions: JSON.stringify(endingPositionsIds),
-      parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
-      childMoves: JSON.stringify(childMovesIds)
+      parentMove: (this.state.parentMove) ? this.state.parentMove._id : null
     }))
       .then(function (response) {
         console.log(response);
@@ -132,13 +129,6 @@ class NewMove extends Component {
 
     const parentMoveOptions = this.state.moves.map((move, index) => {
       if (!this.state.parentMove || this.state.parentMove._id !== move._id) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
-      };
-      return null;
-    })
-
-    const childMovesOptions = this.state.moves.map((move, index) => {
-      if (this.state.childMoves.length === 0 || this.state.childMoves.findIndex(childMove => childMove._id === move._id) === -1) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -249,24 +239,6 @@ class NewMove extends Component {
               (!this.state.parentMove) ?
               <Tag>Select a move from above</Tag> :
               <MoveTag move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
-            }
-          </FormItem>
-          <FormItem>
-            <Select
-              showSearch
-              placeholder='Child Moves'
-              value='disabled'
-              onSelect={(value) => this.addMoveToArray(value, 'childMoves')}
-              optionFilterProp="children"
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              <Option value='disabled' disabled>Child Moves</Option>
-              {childMovesOptions}
-            </Select>
-            {
-              (this.state.childMoves.length === 0) ?
-              <Tag>Select moves from above</Tag> :
-              <MoveTags moves={this.state.childMoves} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'childMoves')} />
             }
           </FormItem>
           <FormItem>
