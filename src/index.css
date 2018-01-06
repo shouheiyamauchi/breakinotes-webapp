@@ -24,6 +24,10 @@
   text-align: right;
 }
 
+.align-center {
+  text-align: center;
+}
+
 /* typography */
 
 .title {
@@ -44,6 +48,7 @@
   font-size: 1.2em;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
 }
 
 .ant-dropdown-menu-item .anticon {

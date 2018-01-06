@@ -7,7 +7,7 @@ import { Tag, Divider } from 'antd';
 import MoveTypeAvatar from '../components/MoveTypeAvatar';
 import MoveTag from '../components/MoveTag';
 import MoveTags from '../components/MoveTags';
-
+import MultimediaTags from '../components/MultimediaTags';
 
 class Move extends Component {
   constructor(props) {
@@ -21,7 +21,8 @@ class Move extends Component {
         notes: '',
         startingPosition: '',
         endingPositions: [],
-        parentMove: '' 
+        parentMove: '',
+        multimedia: []
       },
       childMoves: [],
       entries: [],
@@ -109,8 +110,8 @@ class Move extends Component {
                     <h3>Entries</h3>
                     {this.state.entries.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.entries} />}
                   </div>
+                  <Divider />
                   <div>
-                    <Divider />
                     <h3>Exits</h3>
                     {this.state.exits.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.exits} />}
                   </div>
@@ -122,8 +123,8 @@ class Move extends Component {
                     <h3>Starting Position</h3>
                     {!this.state.move.startingPosition ? <Tag>None</Tag> : <MoveTag move={this.state.move.startingPosition} /> }
                   </div>
+                  <Divider />
                   <div>
-                    <Divider />
                     <h3>Ending Positions</h3>
                     {this.state.move.endingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.move.endingPositions} />}
                   </div>
@@ -136,10 +137,20 @@ class Move extends Component {
           <h3>Parent Move</h3>
           {!this.state.move.parentMove ? <Tag>None</Tag> : <MoveTag move={this.state.move.parentMove} /> }
         </div>
+        <Divider />
         <div>
-          <Divider />
           <h3>Child Moves</h3>
           {this.state.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.childMoves} />}
+        </div>
+        <Divider />
+        <div>
+          <h3>Multimedia</h3>
+          {this.state.move.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.move.multimedia} />}
+        </div>
+        <Divider />
+        <div>
+          <h3>Notes</h3>
+          {!this.state.move.notes ? 'None' : this.state.move.notes}
         </div>
       </div>
     );

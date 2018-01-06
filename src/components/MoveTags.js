@@ -13,7 +13,13 @@ const MoveTags = props => {
 }
 
 MoveTags.propTypes = {
-  moves: PropTypes.array
+  moves: PropTypes.array,
+  closable: PropTypes.bool,
+  onClose: PropTypes.func
+}
+
+MoveTags.defaultProps = {
+  closable: false
 }
 
 export default MoveTags;
