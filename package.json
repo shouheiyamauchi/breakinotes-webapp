@@ -14,7 +14,7 @@
     "react-scripts": "1.0.17"
   },
   "scripts": {
-    "start": "REACT_APP_STAGE=production react-scripts start",
+    "start": "REACT_APP_STAGE=production PORT=80 react-scripts start",
     "dev": "REACT_APP_STAGE=development PORT=80 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
