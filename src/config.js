@@ -3,7 +3,7 @@ const development = {
 };
 
 const production = {
-  API_URL: 'https://103.230.158.66:3001/'
+  API_URL: 'http://103.230.158.66:3001/'
 };
 
 let config;
