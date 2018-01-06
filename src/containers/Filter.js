@@ -171,7 +171,6 @@ class Filter extends Component {
   }
 
   handleCancel = e => {
-    console.log(e);
     this.setState({
       filterModalVisible: false,
     });
@@ -214,6 +213,7 @@ class Filter extends Component {
           visible={this.state.filterModalVisible}
           onOk={this.getFilteredMoves}
           onCancel={this.handleCancel}
+          okText="Filter"
         >
           <Form layout='vertical'>
             <FormItem label='Name'>
