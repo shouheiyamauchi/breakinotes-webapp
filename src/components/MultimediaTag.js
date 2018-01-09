@@ -4,6 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 import PropTypes from 'prop-types';
 import { Tag, Modal, Spin } from 'antd';
+import MultimediaDisplay from './MultimediaDisplay';
 
 class MultimediaTag extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class MultimediaTag extends Component {
           onCancel={this.handleCancel}
           footer={null}
         >
-          {!this.state.multimediaUrl ? <div className="align-center"><Spin tip="Loading..." /></div> : this.state.multimediaUrl }
+          {!this.state.multimediaUrl ? <div className="align-center"><Spin tip="Loading..." /></div> : <MultimediaDisplay fileName={this.props.multimedia.value} multimediaUrl={this.state.multimediaUrl} />}
         </Modal>
       </div>
     );
