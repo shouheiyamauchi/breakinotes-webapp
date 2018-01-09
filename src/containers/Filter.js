@@ -22,7 +22,7 @@ class Filter extends Component {
       name: '',
       origin: '',
       type: '',
-      startingPosition: '',
+      startingPositions: [],
       endingPositions: [],
       parentMove: '',
     };
@@ -41,7 +41,7 @@ class Filter extends Component {
             name: urlParams.name,
             origin: urlParams.origin,
             type: urlParams.type,
-            startingPosition: (urlParams.startingPosition) ? this.state.allMoves.find((move) => move._id === urlParams.startingPosition) : '',
+            startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
             endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
             parentMove: (urlParams.parentMove) ? this.state.allMoves.find((move) => move._id === urlParams.parentMove) : '',
           }, () => {
@@ -59,7 +59,7 @@ class Filter extends Component {
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
-      startingPosition: this.state.startingPosition,
+      startingPosition: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
       endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
       parentMove: this.state.parentMove,
     }))
@@ -82,7 +82,7 @@ class Filter extends Component {
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPosition: this.state.startingPosition ? this.state.startingPosition._id : null,
+      startingPositions: this.state.startingPositions.map(move => move._id),
       endingPositions: this.state.endingPositions.map(move => move._id),
       parentMove: this.state.parentMove ? this.state.parentMove._id : null,
     };
@@ -181,8 +181,8 @@ class Filter extends Component {
       return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
     }
 
-    const startingPositionOptions = this.state.allMoves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (!this.state.startingPosition || this.state.startingPosition._id !== move._id)) {
+    const startingPositionsOptions = this.state.allMoves.map((move, index) => {
+      if (validStartingEndingPosition(move) && (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === move._id) === -1)) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -262,19 +262,19 @@ class Filter extends Component {
             <FormItem>
               <Select
                 showSearch
-                placeholder='Starting Position'
+                placeholder='Starting Positions'
                 value='disabled'
-                onSelect={(value) => this.setSingleMove(value, 'startingPosition')}
+                onSelect={(value) => this.addMoveToArray(value, 'startingPositions')}
                 optionFilterProp="children"
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
-                <Option value='disabled' disabled>Starting Position</Option>
-                {startingPositionOptions}
+                <Option value='disabled' disabled>Starting Positions</Option>
+                {startingPositionsOptions}
               </Select>
               {
-                (!this.state.startingPosition) ?
-                <Tag>Select a move from above</Tag> :
-                <MoveTag move={this.state.startingPosition} closable={true} onClose={(e) => this.clearSingleMove(e, 'startingPosition')} />
+                (this.state.startingPositions.length === 0) ?
+                <Tag>Select moves from above</Tag> :
+                <MoveTags moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'startingPositions')} />
               }
             </FormItem>
             <FormItem>

@@ -19,7 +19,7 @@ class Move extends Component {
         origin: '',
         type: '',
         notes: '',
-        startingPosition: '',
+        startingPositions: [],
         endingPositions: [],
         parentMove: '',
         multimedia: []
@@ -75,7 +75,7 @@ class Move extends Component {
       })
 
     axios.post(config.API_URL + 'moves/filter', qs.stringify({
-      startingPosition: id
+      startingPositions: JSON.stringify([id])
     }))
       .then((response) => {
         this.setState({exits: response.data});
@@ -121,7 +121,7 @@ class Move extends Component {
                 <div>
                   <div>
                     <h3>Starting Position</h3>
-                    {!this.state.move.startingPosition ? <Tag>None</Tag> : <MoveTag move={this.state.move.startingPosition} /> }
+                    {this.state.move.startingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags moves={this.state.move.startingPositions} />}
                   </div>
                   <Divider />
                   <div>

@@ -22,7 +22,7 @@ class MoveForm extends Component {
       origin: 'disabled',
       type: 'disabled',
       notes: '',
-      startingPosition: '',
+      startingPositions: [],
       endingPositions: [],
       parentMove: '',
       multimedia: [],
@@ -59,7 +59,7 @@ class MoveForm extends Component {
           origin: response.data.origin,
           type: response.data.type,
           notes: response.data.notes,
-          startingPosition: response.data.startingPosition,
+          startingPositions: response.data.startingPositions,
           endingPositions: response.data.endingPositions,
           parentMove: response.data.parentMove,
           multimedia: response.data.multimedia
@@ -127,7 +127,7 @@ class MoveForm extends Component {
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPosition: (this.state.startingPosition) ? this.state.startingPosition._id : null,
+      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
       endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
@@ -146,7 +146,7 @@ class MoveForm extends Component {
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPosition: (this.state.startingPosition) ? this.state.startingPosition._id : null,
+      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
       endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
@@ -223,8 +223,8 @@ class MoveForm extends Component {
       return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
     }
 
-    const startingPositionOptions = this.state.moves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (!this.state.startingPosition || this.state.startingPosition._id !== move._id)) {
+    const startingPositionsOptions = this.state.moves.map((move, index) => {
+      if (validStartingEndingPosition(move) && (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === move._id) === -1)) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -326,19 +326,19 @@ class MoveForm extends Component {
           <FormItem>
             <Select
               showSearch
-              placeholder='Starting Position'
+              placeholder='Starting Positions'
               value='disabled'
-              onSelect={(value) => this.setSingleMove(value, 'startingPosition')}
+              onSelect={(value) => this.addMoveToArray(value, 'startingPositions')}
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value='disabled' disabled>Starting Position</Option>
-              {startingPositionOptions}
+              <Option value='disabled' disabled>Starting Positions</Option>
+              {startingPositionsOptions}
             </Select>
             {
-              (!this.state.startingPosition) ?
-              <Tag>Select a move from above</Tag> :
-              <MoveTag move={this.state.startingPosition} closable={true} onClose={(e) => this.clearSingleMove(e, 'startingPosition')} />
+              (this.state.startingPositions.length === 0) ?
+              <Tag>Select moves from above</Tag> :
+              <MoveTags moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'startingPositions')} />
             }
           </FormItem>
           <FormItem>
