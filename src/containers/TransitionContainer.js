@@ -9,7 +9,7 @@ const TransitionContainer = Page => {
         transitionAppearTimeout={600}
         transitionEnterTimeout={600}
         transitionLeaveTimeout={200}
-        transitionName={props.match.path === '/thanks' ? 'SlideIn' : 'SlideOut'}
+        transitionName={'SlideIn'}
       >
         <Page {...props} />
       </ReactCSSTransitionGroup>
