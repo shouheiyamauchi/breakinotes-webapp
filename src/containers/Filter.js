@@ -95,9 +95,9 @@ class Filter extends Component {
 
     const paramString = qs.stringify(filters);
     if (paramString) {
-      window.history.replaceState('', '', '/filter?' + paramString);
+      window.history.replaceState('', '', '/moves/filter?' + paramString);
     } else {
-      window.history.replaceState('', '', '/filter');
+      window.history.replaceState('', '', '/moves/filter');
     };
   }
 
