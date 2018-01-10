@@ -53,7 +53,7 @@ class MultimediaTag extends Component {
           onCancel={this.handleCancel}
           footer={null}
         >
-          {!this.state.multimediaUrl ? <div className="align-center"><Spin tip="Loading..." /></div> : <MultimediaDisplay fileName={this.props.multimedia.value} multimediaUrl={this.state.multimediaUrl} />}
+          {!this.state.multimediaUrl ? <div className="align-center"><Spin tip="Loading..." /></div> : <MultimediaDisplay fileName={this.props.multimedia.value} multimediaUrl={this.state.multimediaUrl} visible={this.state.multimediaModalVisible} />}
         </Modal>
       </div>
     );
