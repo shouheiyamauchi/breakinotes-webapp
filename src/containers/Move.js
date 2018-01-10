@@ -34,11 +34,6 @@ class Move extends Component {
     this.getMove(this.props.match.params.id);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // update move when navigating from one to another
-    this.getMove(nextProps.match.params.id);
-  }
-
   getMove = id => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {

@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
 import NavMenu from './NavMenu';
+import TransitionContainer from './TransitionContainer';
 import Home from './Home';
 import NewMove from './NewMove';
 import Filter from './Filter';
 import Move from './Move';
 import EditMove from './EditMove';
+import RedirectPage from './RedirectPage';
 
 const { Header, Content } = Layout;
 
@@ -21,11 +23,12 @@ class App extends Component {
           <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
             <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
               <Switch>
-                <Route exact path="/" component={Home}/>
-                <Route path="/moves/new" component={NewMove}/>
-                <Route path="/moves/filter" component={Filter}/>
-                <Route path="/moves/edit/:id" component={EditMove}/>
-                <Route path="/moves/:id" component={Move}/>
+                <Route exact path="/" component={TransitionContainer(Home)}/>
+                <Route path="/moves/new" component={TransitionContainer(NewMove)}/>
+                <Route path="/moves/filter" component={TransitionContainer(Filter)}/>
+                <Route path="/moves/edit/:id" component={TransitionContainer(EditMove)}/>
+                <Route path="/moves/redirect/:id" component={TransitionContainer(RedirectPage)}/>
+                <Route path="/moves/:id" component={TransitionContainer(Move)}/>
               </Switch>
             </Card>
           </Content>
