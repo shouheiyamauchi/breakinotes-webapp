@@ -10,7 +10,6 @@ const MultimediaDisplay = props => {
 
   const isImage = (fileName) => {
     const extension = fileName.substr(fileName.lastIndexOf('.') + 1);
-    return true
     return ['jpg', 'jpeg', 'png', 'gif'].includes(extension)
   }
 
