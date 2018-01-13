@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Layout, Card } from 'antd';
+import { Layout, Card, Affix, Button, Icon } from 'antd';
 import NavMenu from './NavMenu';
 import TransitionContainer from './TransitionContainer';
 import Home from './Home';
@@ -32,6 +32,16 @@ class App extends Component {
               </Switch>
             </Card>
           </Content>
+          <Affix style={{ position: 'fixed', bottom: '20px', right: '20px'}}>
+            <Button.Group>
+              <Button type="dashed" onClick={() => window.history.back()}>
+                <Icon type="left" />
+              </Button>
+              <Button type="dashed" onClick={() => window.history.forward()}>
+                <Icon type="right" />
+              </Button>
+            </Button.Group>
+          </Affix>
         </Layout>
       </Router>
     );
