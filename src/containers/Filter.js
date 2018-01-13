@@ -204,7 +204,7 @@ class Filter extends Component {
 
     return (
       <div>
-        <Affix offsetTop={75} style={{ position: 'absolute', right: -15}}>
+        <Affix offsetTop={75} style={{position: 'absolute', right: '-15px'}}>
           <Button onClick={this.showModal} type="danger" shape="circle" icon="search" />
         </Affix>
         <Modal

@@ -32,7 +32,7 @@ class App extends Component {
               </Switch>
             </Card>
           </Content>
-          <Affix style={{ position: 'fixed', bottom: '20px', right: '20px'}}>
+          <Affix style={{position: 'fixed', bottom: '20px', right: '20px'}}>
             <Button.Group>
               <Button type="dashed" onClick={() => window.history.back()}>
                 <Icon type="left" />
