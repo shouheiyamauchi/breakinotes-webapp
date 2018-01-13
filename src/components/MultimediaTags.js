@@ -6,7 +6,7 @@ const MultimediaTags = props => {
   return (
     <div>
       {props.multimedia.map((multimedia, index) => {
-        return <MultimediaTag multimedia={multimedia} key={index} closable={props.closable} onClose={props.onClose} />;
+        return <MultimediaTag multimedia={multimedia} key={index} closable={props.closable} onClose={(e) => props.onClose(e, multimedia)} />;
       })}
     </div>
   );
