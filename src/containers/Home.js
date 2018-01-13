@@ -8,7 +8,8 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      moves: []
+      moves: [],
+      loading: true
     };
   }
 
@@ -17,13 +18,19 @@ class Home extends Component {
   }
 
   getMoves = () => {
-    axios.get(config.API_URL + 'moves')
-      .then((response) => {
-        this.setState({moves: response.data});
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.setState({loading: true}, () => {
+      axios.get(config.API_URL + 'moves')
+        .then((response) => {
+          this.setState({
+            moves: response.data,
+            loading: false
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+
   }
 
   deleteMove = id => {
@@ -39,7 +46,7 @@ class Home extends Component {
 
   render() {
     return (
-      <MovesList moves={this.state.moves} deleteMove={this.deleteMove} />
+      <MovesList moves={this.state.moves} deleteMove={this.deleteMove} loading={this.state.loading} />
     );
   }
 }

@@ -1,9 +1,10 @@
 import { config } from '../config';
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { Tag, Divider } from 'antd';
+import { Tag, Divider, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../components/MoveTypeAvatar';
 import MoveTag from '../components/MoveTag';
 import MoveTags from '../components/MoveTags';
@@ -26,7 +27,8 @@ class Move extends Component {
       },
       childMoves: [],
       entries: [],
-      exits: []
+      exits: [],
+      redirectUrl: ''
     };
   }
 
@@ -80,9 +82,35 @@ class Move extends Component {
       })
   }
 
+  editMove = () => {
+    this.setState({redirectUrl: '/moves/edit/' + this.state.move._id});
+  }
+
+  confirmDelete = () => {
+    Modal.confirm({
+      title: 'Confirm delete',
+      content: 'Are you sure to delete "' + this.state.move.name + '"?',
+      onOk: () => {
+        this.deleteMove();
+      },
+      onCancel() {},
+    });
+  }
+
+  deleteMove = () => {
+    axios.delete(config.API_URL + 'moves/' + this.state.move._id)
+      .then((response) => {
+        this.setState({redirectUrl: '/'});
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <div>
+        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         <div className="vertical-align">
           <MoveTypeAvatar move={this.state.move} />
           <div className="horizontal-spacer" />
@@ -91,6 +119,12 @@ class Move extends Component {
             <br />
             <span>{_.capitalize(this.state.move.origin)} {_.capitalize(this.state.move.type)}</span>
           </div>
+        </div>
+        <div className="vertical-spacer" />
+        <div className="align-right">
+          <Button type="dashed" size="small" onClick={this.editMove}>Edit</Button>
+          &nbsp;
+          <Button type="danger" size="small" onClick={this.confirmDelete}>Delete</Button>
         </div>
         <div className="vertical-spacer" />
         <Divider />

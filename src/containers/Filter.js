@@ -25,6 +25,7 @@ class Filter extends Component {
       startingPositions: [],
       endingPositions: [],
       parentMove: '',
+      loading: true
     };
   }
 
@@ -55,25 +56,28 @@ class Filter extends Component {
   }
 
   getFilteredMoves = () => {
-    axios.post(config.API_URL + 'moves/filter', qs.stringify({
-      name: this.state.name,
-      origin: this.state.origin,
-      type: this.state.type,
-      startingPosition: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
-      endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
-      parentMove: this.state.parentMove,
-    }))
-      .then((response) => {
-        this.updateUrl();
+    this.setState({loading: true}, () => {
+      axios.post(config.API_URL + 'moves/filter', qs.stringify({
+        name: this.state.name,
+        origin: this.state.origin,
+        type: this.state.type,
+        startingPosition: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
+        endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
+        parentMove: this.state.parentMove,
+      }))
+        .then((response) => {
+          this.updateUrl();
 
-        this.setState({
-          filteredMoves: response.data,
-          filterModalVisible: false
+          this.setState({
+            filteredMoves: response.data,
+            filterModalVisible: false,
+            loading: false
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    });
   }
 
   updateUrl = () => {
@@ -164,7 +168,6 @@ class Filter extends Component {
   }
 
   handleOk = e => {
-    console.log(e);
     this.setState({
       filterModalVisible: false,
     });
@@ -319,7 +322,7 @@ class Filter extends Component {
           </Form>
         </Modal>
 
-        <MovesList moves={this.state.filteredMoves} deleteMove={this.deleteMove} />
+        <MovesList moves={this.state.filteredMoves} deleteMove={this.deleteMove} loading={this.state.loading} />
       </div>
     );
   }
