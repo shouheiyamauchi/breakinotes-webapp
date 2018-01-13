@@ -1,10 +1,19 @@
 import React from 'react';
-import isImage from 'is-image';
-import isVideo from 'is-video';
 import { Player } from 'video-react';
 import "video-react/dist/video-react.css";
 
 const MultimediaDisplay = props => {
+  const isVideo = (fileName) => {
+    const extension = fileName.substr(fileName.lastIndexOf('.') + 1);
+    return ['mp4', 'mov', 'avi'].includes(extension)
+  }
+
+  const isImage = (fileName) => {
+    const extension = fileName.substr(fileName.lastIndexOf('.') + 1);
+    return true
+    return ['jpg', 'jpeg', 'png', 'gif'].includes(extension)
+  }
+
   if (isImage(props.fileName) && props.visible) {
     return (
       <div className="align-center">
