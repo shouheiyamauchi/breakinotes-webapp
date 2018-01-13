@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom'
 import _ from 'lodash';
-import { List, Button, Modal } from 'antd';
+import { List, Button, Modal, Spin } from 'antd';
 import MoveTypeAvatar from '../components/MoveTypeAvatar';
 
 class MovesList extends Component {
@@ -10,14 +10,12 @@ class MovesList extends Component {
     super(props);
 
     this.state = {
-      redirect: false,
       redirectUrl: ''
     };
   }
 
   redirectToUrl = url => {
-    this.setState({redirect: true});
-    this.setState({redirectUrl: url})
+    this.setState({redirectUrl: url});
   }
 
   confirmDelete = move => {
@@ -34,36 +32,46 @@ class MovesList extends Component {
   render() {
     return (
       <div>
-        {this.state.redirect ? <Redirect push to={this.state.redirectUrl} /> : null}
-        <List
-          itemLayout="vertical"
-          dataSource={this.props.moves}
-          renderItem={move => (
-            <List.Item>
-              <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/moves/' + move._id)}>
-                <MoveTypeAvatar move={move} />
-                <div className="horizontal-spacer" />
-                <div style={{lineHeight:"125%"}}>
-                  <span className="list-title">{move.name}</span>
-                  <br />
-                  <span>{_.capitalize(move.origin)} {_.capitalize(move.type)}</span>
+        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
+        {this.props.loading ? (
+          <div className="align-center">
+            <div className="vertical-spacer" />
+            <div className="vertical-spacer" />
+            <Spin />
+            <br/>Loading...
+          </div>
+        ) : (
+          <List
+            itemLayout="vertical"
+            dataSource={this.props.moves}
+            renderItem={move => (
+              <List.Item>
+                <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/moves/' + move._id)}>
+                  <MoveTypeAvatar move={move} />
+                  <div className="horizontal-spacer" />
+                  <div style={{lineHeight:"125%"}}>
+                    <span className="list-title">{move.name}</span>
+                    <br />
+                    <span>{_.capitalize(move.origin)} {_.capitalize(move.type)}</span>
+                  </div>
                 </div>
-              </div>
-              <div className="vertical-spacer" />
-              <div className="align-right">
-                <Button type="dashed" size="small" onClick={() => this.redirectToUrl('/moves/edit/' + move._id)}>Edit</Button>
-                &nbsp;
-                <Button type="danger" size="small" onClick={() => this.confirmDelete(move)}>Delete</Button>
-              </div>
-            </List.Item>
-          )}
-        />
+                <div className="vertical-spacer" />
+                <div className="align-right">
+                  <Button type="dashed" size="small" onClick={() => this.redirectToUrl('/moves/edit/' + move._id)}>Edit</Button>
+                  &nbsp;
+                  <Button type="danger" size="small" onClick={() => this.confirmDelete(move)}>Delete</Button>
+                </div>
+              </List.Item>
+            )}
+          />
+        )}
       </div>
     );
   }
 }
 
 MovesList.propTypes = {
+  loading: PropTypes.bool,
   moves: PropTypes.array,
   deleteMove: PropTypes.func
 }

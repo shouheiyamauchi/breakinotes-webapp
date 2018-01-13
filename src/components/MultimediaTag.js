@@ -43,19 +43,17 @@ class MultimediaTag extends Component {
 
   render() {
     return (
-      <div>
         <Tag closable={this.props.closable} onClose={this.props.onClose}>
           <span onClick={this.showModal}>{this.props.multimedia.name}</span>
+          <Modal
+            title={this.props.multimedia.name}
+            visible={this.state.multimediaModalVisible}
+            onCancel={this.handleCancel}
+            footer={null}
+          >
+            {!this.state.multimediaUrl ? <div className="align-center"><Spin tip="Loading..." /></div> : <MultimediaDisplay fileName={this.props.multimedia.value} multimediaUrl={this.state.multimediaUrl} visible={this.state.multimediaModalVisible} />}
+          </Modal>
         </Tag>
-        <Modal
-          title={this.props.multimedia.name}
-          visible={this.state.multimediaModalVisible}
-          onCancel={this.handleCancel}
-          footer={null}
-        >
-          {!this.state.multimediaUrl ? <div className="align-center"><Spin tip="Loading..." /></div> : <MultimediaDisplay fileName={this.props.multimedia.value} multimediaUrl={this.state.multimediaUrl} visible={this.state.multimediaModalVisible} />}
-        </Modal>
-      </div>
     );
   }
 }

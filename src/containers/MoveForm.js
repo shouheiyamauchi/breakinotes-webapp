@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
 import MoveTag from '../components/MoveTag';
 import MoveTags from '../components/MoveTags';
+import MultimediaTags from '../components/MultimediaTags'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -26,9 +27,8 @@ class MoveForm extends Component {
       endingPositions: [],
       parentMove: '',
       multimedia: [],
-      redirect: false,
       redirectUrl: '',
-      uploading: []
+      uploading: new Map()
     };
   }
 
@@ -103,6 +103,12 @@ class MoveForm extends Component {
     this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
   }
 
+  removeMultimediaFromArray = (e, multimediaProp) => {
+    e.preventDefault();
+
+    this.setState({multimedia: this.state.multimedia.filter(multimedia => multimedia.value !== multimediaProp.value)});
+  }
+
   handleInputChange = e => {
     const target = e.target;
     const value = target.value;
@@ -133,7 +139,7 @@ class MoveForm extends Component {
       multimedia: JSON.stringify(this.state.multimedia)
     }))
       .then((response) => {
-        this.redirectToUrl('/moves/' + response.data._id);
+        this.setState({redirectUrl: '/moves/' + response.data._id});
       })
       .catch((error) => {
         console.log(error);
@@ -152,16 +158,11 @@ class MoveForm extends Component {
       multimedia: JSON.stringify(this.state.multimedia)
     }))
       .then((response) => {
-        this.redirectToUrl('/moves/' + response.data._id);
+        this.setState({redirectUrl: '/moves/' + response.data._id});
       })
       .catch((error) => {
         console.log(error);
       });
-  }
-
-  redirectToUrl = url => {
-    this.setState({redirect: true});
-    this.setState({redirectUrl: url});
   }
 
   getSignedRequestAndUpload = file => {
@@ -179,13 +180,7 @@ class MoveForm extends Component {
 
   uploadFile = (file, signedRequest, url) => {
     this.setState({
-      uploading: [...this.state.uploading,
-        {
-          name: file.name,
-          value: file.uid + '/' + file.name,
-          status: 0
-        }
-      ]
+      uploading: this.state.uploading.set(file, {name: file.name, progress: 0})
     })
 
     const options = {
@@ -194,15 +189,16 @@ class MoveForm extends Component {
       },
       onUploadProgress: progressEvent => {
         const percentCompleted = Math.round(progressEvent.loaded / progressEvent.total * 100);
-        const uploading = this.state.uploading;
-        const indexOnList = uploading.findIndex(fileObject => fileObject.value === (file.uid + '/' + file.name));
-        uploading[indexOnList].status = percentCompleted
-        this.setState({ uploading });
+
+        this.setState({uploading: this.state.uploading.set(file, {name: file.name, progress: percentCompleted})})
       }
     };
 
     axios.put(signedRequest, file, options)
       .then((response) => {
+        this.state.uploading.delete(file);
+        this.setState({uploading: this.state.uploading});
+
         this.setState({ multimedia:
           [...this.state.multimedia,
             {
@@ -251,18 +247,24 @@ class MoveForm extends Component {
       }
     }
 
-    const uploadProgress = this.state.uploading.map((file, index) => {
+    const uploadingMapClone = new Map(this.state.uploading);
+
+    const uploadingArray = Array.from(uploadingMapClone.keys()).map(key => {
+      return {fileObject: key, name: uploadingMapClone.get(key)['name'], progress: uploadingMapClone.get(key)['progress']};
+    });
+
+    const uploadProgress = uploadingArray.map((file, index) => {
       return (
         <div key={index}>
           {file.name}
-          <Progress percent={file.status} status={file.status === 100 ? "success" : "active"} />
+          <Progress percent={file.progress} status="active" />
         </div>
       )
     })
 
     return (
       <div>
-        {this.state.redirect ? <Redirect push to={this.state.redirectUrl} /> : null}
+        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         <span className="title">{!this.editPage() ? 'Add New Move' : 'Edit Move'}</span>
         <Divider />
         <div className="vertical-spacer" />
@@ -315,6 +317,9 @@ class MoveForm extends Component {
           </Upload>
           <div className="vertical-spacer" />
           {uploadProgress}
+          Uploaded
+          <br />
+          {this.state.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.multimedia} closable={true} onClose={this.removeMultimediaFromArray} />}
           <div className="vertical-spacer" />
           <div className="vertical-spacer" />
           <FormItem label='Notes'>
