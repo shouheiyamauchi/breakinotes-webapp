@@ -3,7 +3,7 @@ const development = {
 };
 
 const production = {
-  API_URL: 'http://http://54.252.149.34/:3001/'
+  API_URL: 'http://http://54.252.149.34:3001/'
 };
 
 let config;
