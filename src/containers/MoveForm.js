@@ -222,7 +222,7 @@ class MoveForm extends Component {
     const multimedia = this.state.multimedia[multimediaIndex];
     multimedia.name = newName;
 
-    this.setState({multimedia: this.state.multimedia})
+    this.setState({multimedia: this.state.multimedia});
   }
 
   render() {

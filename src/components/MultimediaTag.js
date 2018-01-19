@@ -18,13 +18,11 @@ class MultimediaTag extends Component {
     };
   }
 
-  showModal = (e, enough) => {
-    if (!enough) {
-      this.getMultimediaUrl();
-      this.setState({
-        multimediaModalVisible: true,
-      });
-    }
+  showModal = () => {
+    this.getMultimediaUrl();
+    this.setState({
+      multimediaModalVisible: true,
+    });
   }
 
   getMultimediaUrl = () => {
