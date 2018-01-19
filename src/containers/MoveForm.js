@@ -214,6 +214,17 @@ class MoveForm extends Component {
       });
   }
 
+  updateFileName = (e, multimediaValue, newName) => {
+    e.preventDefault();
+
+    const multimediaIndex = this.state.multimedia.findIndex(multimedia => multimedia.value === multimediaValue);
+
+    const multimedia = this.state.multimedia[multimediaIndex];
+    multimedia.name = newName;
+
+    this.setState({multimedia: this.state.multimedia})
+  }
+
   render() {
     const validStartingEndingPosition = move => {
       return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
@@ -319,7 +330,7 @@ class MoveForm extends Component {
           {uploadProgress}
           Uploaded
           <br />
-          {this.state.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.multimedia} closable={true} onClose={this.removeMultimediaFromArray} />}
+          {this.state.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.multimedia} updateFileName={this.updateFileName} closable={true} onClose={this.removeMultimediaFromArray} />}
           <div className="vertical-spacer" />
           <div className="vertical-spacer" />
           <FormItem label='Notes'>
