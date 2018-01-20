@@ -20,6 +20,5 @@ jobs:
       - run: python --version
       - run: curl -O https://bootstrap.pypa.io/get-pip.py
       - run: python get-pip.py --user
-      - run: $PATH
       - run: ~/.local/bin/pip  install awscli --upgrade --user
       - run: aws s3 ls
