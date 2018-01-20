@@ -18,5 +18,8 @@ jobs:
       - run: sudo npm install --global yarn@1.3.2
       - run: yarn --version
       - run: python --version
+      - run: curl -O https://bootstrap.pypa.io/get-pip.py
+      - run: python get-pip.py --user
+      - run: cat ~/.bash_profile
       # - run: sudo pip install awscli
       # - run: aws s3 ls
