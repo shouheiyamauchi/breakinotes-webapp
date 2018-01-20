@@ -17,5 +17,6 @@ jobs:
       - run: node -v
       - run: sudo npm install --global yarn@1.3.2
       - run: yarn --version
-      - run: sudo pip install awscli
-      - run: aws s3 ls
+      - run: python --version
+      # - run: sudo pip install awscli
+      # - run: aws s3 ls
