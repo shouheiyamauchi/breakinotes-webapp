@@ -1,12 +1,8 @@
-dependencies:
-  pre:
-    - nvm install v8.5.0
-
-  override:
-    - yarn
-    - sudo pip install awscli
-deployment:
-  prod:
-    branch: master
-    commands:
-      - aws s3 sync /home/ubuntu/breakinotes-webapp/build s3://breakinotes-react --delete
+version: 2
+jobs:
+   build:
+     docker:
+       - image: circleci/node:7
+     steps:
+       - checkout
+       - run: echo "hello world"
