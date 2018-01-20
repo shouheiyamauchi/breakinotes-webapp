@@ -1,0 +1,8 @@
+dependencies:
+    override:
+        - sudo pip install awscli
+deployment:
+  prod:
+    branch: master
+    commands:
+      - aws s3 sync /home/ubuntu/breakinotes-webapp/build s3://breakinotes-react --delete
