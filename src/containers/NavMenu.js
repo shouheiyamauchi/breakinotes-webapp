@@ -18,7 +18,7 @@ const menuItems = (
 
 const NavMenu = () => (
   <Dropdown overlay={menuItems} trigger={['click']}>
-    <span className="menu-title"><Icon type="share-alt" style={{marginRight: '7px'}} />BreakiNotes</span>
+    <span className="menu-title"><Icon type="share-alt" style={{marginRight: '7px'}} />BreakiNotesss</span>
   </Dropdown>
 );
 
