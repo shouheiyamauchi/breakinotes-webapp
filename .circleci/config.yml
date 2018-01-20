@@ -22,6 +22,8 @@ jobs:
       - run: python get-pip.py --user
       - run: echo 'export PATH=~/.local/bin:$PATH' >>~/.bashrc
       - run: source ~/.bashrc
+      - run: cat ~/.bashrc
+      - run: $PATH
       - run: ~/.local/bin/pip --version
       # - run: sudo pip install awscli
       # - run: aws s3 ls
