@@ -6,4 +6,5 @@ jobs:
      steps:
        - checkout
        - run: node -v
-       - run: yarn -v
+       - run: nvm install v8.5.0
+       - run: node -v
