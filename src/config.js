@@ -3,7 +3,7 @@ const development = {
 };
 
 const production = {
-  API_URL: 'https://api.breakinotes.com/'
+  API_URL: 'http://54.252.149.34:3001/'
 };
 
 let config;

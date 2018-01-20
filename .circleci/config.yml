@@ -1,0 +1,22 @@
+version: 2
+general:
+  branches:
+    only:
+      - master
+jobs:
+  build:
+    docker:
+      - image: circleci/node:7
+    steps:
+      - checkout
+      - run: node -v
+      - run: sudo npm cache clean -f
+      - run: sudo npm install -g n
+      - run: sudo n 8.5.0
+      - run: node -v
+      - run: sudo npm install --global yarn@1.3.2
+      - run: yarn install
+      - run: yarn build
+      - run: sudo apt-get update && sudo apt-get install -y python-pip libpython-dev
+      - run: sudo pip install awscli
+      - run: aws s3 sync ./build s3://breakinotes-react --delete

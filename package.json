@@ -4,19 +4,24 @@
   "private": true,
   "dependencies": {
     "antd": "^3.0.2",
+    "async": "^2.6.0",
     "axios": "^0.17.1",
     "lodash": "^4.17.4",
     "qs": "^6.5.1",
     "react": "^16.2.0",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-click-n-hold": "^1.0.6",
     "react-dom": "^16.2.0",
     "react-icons": "^2.2.7",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "redux": "^3.7.2",
+    "video-react": "^0.9.4"
   },
   "scripts": {
-    "start": "REACT_APP_STAGE=production react-scripts start",
-    "dev": "REACT_APP_STAGE=development react-scripts start",
-    "build": "react-scripts build",
+    "start": "REACT_APP_STAGE=production PORT=80 react-scripts start",
+    "dev": "REACT_APP_STAGE=development PORT=80 react-scripts start",
+    "build": "REACT_APP_STAGE=production react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
