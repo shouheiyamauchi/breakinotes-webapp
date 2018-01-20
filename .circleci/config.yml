@@ -21,6 +21,6 @@ jobs:
       # - run: curl -O https://bootstrap.pypa.io/get-pip.py
       # - run: python get-pip.py --user
       # - run: ~/.local/bin/pip  install awscli --upgrade --user
-      - run: apt-get update && apt-get install -y python-pip libpython-dev
+      - run: sudo apt-get update && apt-get install -y python-pip libpython-dev
       - run: pip install awscli
       - run: aws s3 ls
