@@ -20,9 +20,9 @@ jobs:
       - run: python --version
       - run: curl -O https://bootstrap.pypa.io/get-pip.py
       - run: python get-pip.py --user
-      - run: echo 'export PATH=~/.local/bin:$PATH' >>~/.bashrc
-      - run: source ~/.bashrc
-      - run: cat ~/.bashrc
+      # - run: echo 'export PATH=~/.local/bin:$PATH' >>~/.bashrc
+      # - run: source ~/.bashrc
+      # - run: cat ~/.bashrc
       - run: $PATH
       - run: ~/.local/bin/pip --version
       # - run: sudo pip install awscli
