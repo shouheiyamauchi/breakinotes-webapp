@@ -1,7 +1,10 @@
-version: 1
 dependencies:
-    override:
-        - sudo pip install awscli
+  pre:
+    - nvm install v8.5.0
+
+  override:
+    - yarn
+    - sudo pip install awscli
 deployment:
   prod:
     branch: master
