@@ -22,5 +22,5 @@ jobs:
       # - run: python get-pip.py --user
       # - run: ~/.local/bin/pip install awscli==1.11.18
       - run: sudo apt-get update && sudo apt-get install -y python-pip libpython-dev
-      - run: pip install awscli
+      - run: sudo pip install awscli
       - run: aws s3 ls
