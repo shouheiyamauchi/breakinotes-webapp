@@ -20,6 +20,8 @@ jobs:
       - run: python --version
       - run: curl -O https://bootstrap.pypa.io/get-pip.py
       - run: python get-pip.py --user
-      - run: cat ~/.bashrc
+      - run: echo 'export PATH=~/.local/bin:$PATH' >>~/.bashrc
+      - run: source ~/.bashrc
+      - run: pip --version
       # - run: sudo pip install awscli
       # - run: aws s3 ls
