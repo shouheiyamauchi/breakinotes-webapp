@@ -6,5 +6,7 @@ jobs:
      steps:
        - checkout
        - run: node -v
-       - run: nvm install v8.5.0
+       - run: sudo npm cache clean -f
+       - run: sudo npm install -g n
+       - run: sudo n 8.5.0
        - run: node -v
