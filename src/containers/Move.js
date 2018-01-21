@@ -38,6 +38,10 @@ class Move extends Component {
     this.getMove(this.props.match.params.id);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.getMove(nextProps.match.params.id);
+  }
+
   getMove = id => {
     axios.get(config.API_URL + 'moves/' + id)
       .then((response) => {
