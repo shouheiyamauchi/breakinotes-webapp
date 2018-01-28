@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
+import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal, Checkbox } from 'antd';
 import MoveTag from '../components/MoveTag';
 import MoveTags from '../components/MoveTags';
 import MultimediaTags from '../components/MultimediaTags'
@@ -28,7 +28,11 @@ class MoveForm extends Component {
       parentMove: '',
       multimedia: [],
       redirectUrl: '',
-      uploading: new Map()
+      uploading: new Map(),
+      startingPositionSuggestions: [],
+      endingPositionSuggestions: [],
+      extraStartingPositions: [],
+      extraEndingPositions: []
     };
   }
 
@@ -124,7 +128,64 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    !this.editPage() ? this.postNewMove() : this.updateMove()
+    axios.post(config.API_URL + 'moves/suggestions', qs.stringify({
+      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
+      endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
+    }))
+      .then((response) => {
+        this.setState({
+          startingPositionSuggestions: response.data.startingPositionSuggestions,
+          endingPositionSuggestions: response.data.endingPositionSuggestions
+        }, () => {
+          if (this.state.startingPositionSuggestions.length + this.state.endingPositionSuggestions.length > 0) {
+            this.displaySuggestionsModal();
+          } else {
+            !this.editPage() ? this.postNewMove() : this.updateMove();
+          };
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  displaySuggestionsModal = () => {
+    Modal.confirm({
+      title: 'Would you like to add to the starting and ending positions the following suggestions?',
+      content: (
+        <div>
+          {this.state.startingPositionSuggestions.length === 0 ? (
+            null
+          ) : (
+            <div>
+              <div className="ant-form-item-label">
+                <label>Starting Positions</label>
+              </div>
+              <Checkbox.Group options={this.state.startingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'extraStartingPositions')} />
+            </div>
+          )}
+          {this.state.endingPositionSuggestions.length === 0 ? (
+            null
+          ) : (
+            <div>
+              <div className="ant-form-item-label">
+                <label>Ending Positions</label>
+              </div>
+              <Checkbox.Group options={this.state.endingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'extraEndingPositions')} />
+            </div>
+          )}
+        </div>
+      ),
+      onOk: () => {
+        !this.editPage() ? this.postNewMove() : this.updateMove();
+      },
+      onCancel: () => {
+        this.setState({
+          extraStartingPositions: [],
+          extraEndingPositions: []
+        });
+      },
+    });
   }
 
   postNewMove = () => {
@@ -133,8 +194,8 @@ class MoveForm extends Component {
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
-      endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
+      startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.extraStartingPositions)),
+      endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.extraEndingPositions)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
     }))
@@ -152,8 +213,8 @@ class MoveForm extends Component {
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
-      endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
+      startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.extraStartingPositions)),
+      endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.extraEndingPositions)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
     }))
@@ -223,6 +284,10 @@ class MoveForm extends Component {
     multimedia.name = newName;
 
     this.setState({multimedia: this.state.multimedia});
+  }
+
+  addExtraPositions = (selectedValues, extraStartingOrEndingPositions) => {
+    this.setState({[extraStartingOrEndingPositions]: selectedValues});
   }
 
   render() {
