@@ -18,5 +18,5 @@ jobs:
       - run: yarn install
       - run: yarn build
       - run: sudo apt-get update && sudo apt-get install -y python-pip libpython-dev
-      - run: sudo pip install awscli
+      - run: sudo pip install awscli==1.8.33
       - run: aws s3 sync ./build s3://breakinotes-react --delete
