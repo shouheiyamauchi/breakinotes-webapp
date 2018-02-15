@@ -43,7 +43,11 @@ class Move extends Component {
   }
 
   getMove = id => {
-    axios.get(config.API_URL + 'moves/' + id)
+    axios.get(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         async.parallel({
           childMoves: callback => {
@@ -75,43 +79,55 @@ class Move extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
   getChildMoves = (id, callback) => {
     axios.post(config.API_URL + 'moves/filter', qs.stringify({
       parentMove: id
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         callback(null, response.data);
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
   getEntries = (id, callback) => {
     axios.post(config.API_URL + 'moves/filter', qs.stringify({
       endingPositions: JSON.stringify([id])
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         callback(null, response.data);
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
   getExits = (id, callback) => {
     axios.post(config.API_URL + 'moves/filter', qs.stringify({
       startingPositions: JSON.stringify([id])
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         callback(null, response.data);
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
@@ -131,12 +147,16 @@ class Move extends Component {
   }
 
   deleteMove = () => {
-    axios.delete(config.API_URL + 'moves/' + this.state.move._id)
+    axios.delete(config.API_URL + 'moves/' + this.state.move._id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({redirectUrl: '/'});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 

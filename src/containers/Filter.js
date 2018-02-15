@@ -35,7 +35,11 @@ class Filter extends Component {
   }
 
   getAllMoves = (urlParams) => {
-    axios.get(config.API_URL + 'moves')
+    axios.get(config.API_URL + 'moves', {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({allMoves: response.data}, () => {
           this.setState({
@@ -51,7 +55,7 @@ class Filter extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
@@ -64,7 +68,11 @@ class Filter extends Component {
         startingPosition: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
         endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
         parentMove: this.state.parentMove,
-      }))
+      }), {
+        headers: {
+          Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+        }
+      })
         .then((response) => {
           this.updateUrl();
 
@@ -75,7 +83,7 @@ class Filter extends Component {
           });
         })
         .catch((error) => {
-          console.log(error);
+          this.props.removeAuthToken();
         });
     });
   }
@@ -106,13 +114,17 @@ class Filter extends Component {
   }
 
   deleteMove = id => {
-    axios.delete(config.API_URL + 'moves/' + id)
+    axios.delete(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.getFilteredMoves();
         return
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
@@ -135,12 +147,16 @@ class Filter extends Component {
   }
 
   setSingleMove = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id)
+    axios.get(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({[state]: response.data});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
@@ -150,12 +166,16 @@ class Filter extends Component {
   }
 
   addMoveToArray = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id)
+    axios.get(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({[state]: [...this.state[state], response.data]});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 

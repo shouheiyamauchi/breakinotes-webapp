@@ -46,17 +46,25 @@ class MoveForm extends Component {
   }
 
   getMoves = () => {
-    axios.get(config.API_URL + 'moves')
+    axios.get(config.API_URL + 'moves', {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({moves: response.data});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
   getMove = id => {
-    axios.get(config.API_URL + 'moves/' + id)
+    axios.get(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({
           name: response.data.name,
@@ -75,12 +83,16 @@ class MoveForm extends Component {
   }
 
   setSingleMove = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id)
+    axios.get(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({[state]: response.data});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
@@ -90,12 +102,16 @@ class MoveForm extends Component {
   }
 
   addMoveToArray = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id)
+    axios.get(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({[state]: [...this.state[state], response.data]});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 
@@ -131,7 +147,11 @@ class MoveForm extends Component {
     axios.post(config.API_URL + 'moves/suggestions', qs.stringify({
       startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
       endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({
           startingPositionSuggestions: response.data.startingPositionSuggestions,
@@ -145,7 +165,7 @@ class MoveForm extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
@@ -198,12 +218,16 @@ class MoveForm extends Component {
       endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.extraEndingPositions)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({redirectUrl: '/moves/' + response.data._id});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
@@ -217,12 +241,16 @@ class MoveForm extends Component {
       endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.extraEndingPositions)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({redirectUrl: '/moves/' + response.data._id});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
@@ -230,12 +258,16 @@ class MoveForm extends Component {
     axios.post(config.API_URL + 's3/signed-url', qs.stringify({
       fileName: file.uid + '/' + file.name,
       fileType: file.type
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.uploadFile(file, response.data.signedRequest, response.data.url);
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 

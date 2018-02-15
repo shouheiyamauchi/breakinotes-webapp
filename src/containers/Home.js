@@ -19,7 +19,11 @@ class Home extends Component {
 
   getMoves = () => {
     this.setState({loading: true}, () => {
-      axios.get(config.API_URL + 'moves')
+      axios.get(config.API_URL + 'moves', {
+        headers: {
+          Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+        }
+      })
         .then((response) => {
           this.setState({
             moves: response.data,
@@ -27,20 +31,24 @@ class Home extends Component {
           });
         })
         .catch((error) => {
-          console.log(error);
+          this.props.removeAuthToken();
         });
     });
 
   }
 
   deleteMove = id => {
-    axios.delete(config.API_URL + 'moves/' + id)
+    axios.delete(config.API_URL + 'moves/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.getMoves();
         return
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 

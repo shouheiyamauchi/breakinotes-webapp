@@ -28,12 +28,16 @@ class MultimediaTag extends Component {
   getMultimediaUrl = () => {
     axios.post(config.API_URL + 's3/url-with-token', qs.stringify({
       fileName: this.props.multimedia.value
-    }))
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
       .then((response) => {
         this.setState({multimediaUrl: response.data});
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       })
   }
 

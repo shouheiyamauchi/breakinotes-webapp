@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-const TransitionContainer = Page => {
-  return props =>
+const TransitionContainer = props => {
+  return (
     <div className="page">
       <ReactCSSTransitionGroup
         transitionAppear={true}
@@ -11,9 +11,10 @@ const TransitionContainer = Page => {
         transitionLeaveTimeout={200}
         transitionName={'SlideIn'}
       >
-        <Page {...props} />
+        {props.children}
       </ReactCSSTransitionGroup>
-    </div>;
+    </div>
+  );
 };
 
 export default TransitionContainer;
