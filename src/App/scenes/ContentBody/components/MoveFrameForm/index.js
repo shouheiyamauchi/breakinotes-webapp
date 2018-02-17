@@ -1,12 +1,11 @@
-import config from 'helpers/config'
+import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
-import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal, Checkbox } from 'antd';
+import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
 import MoveTag from '../MoveTag';
-import MoveTags from '../MoveTags';
 import MultimediaTags from '../MultimediaTags'
 
 const FormItem = Form.Item;
@@ -40,7 +39,7 @@ class MoveForm extends Component {
   }
 
   getMoveFrames = () => {
-    axios.get(config.API_URL + 'moveFrames', {
+    axios.get(API_URL + 'moveFrames', {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -54,7 +53,7 @@ class MoveForm extends Component {
   }
 
   getMoveFrame = id => {
-    axios.get(config.API_URL + 'moveFrames/' + id, {
+    axios.get(API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -75,7 +74,7 @@ class MoveForm extends Component {
   }
 
   setSingleMove = (id, state) => {
-    axios.get(config.API_URL + 'moveFrames/' + id, {
+    axios.get(API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -94,7 +93,7 @@ class MoveForm extends Component {
   }
 
   addMoveToArray = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -140,7 +139,7 @@ class MoveForm extends Component {
   }
 
   postNewMoveFrame = () => {
-    axios.post(config.API_URL + 'moveFrames', qs.stringify({
+    axios.post(API_URL + 'moveFrames', qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
@@ -161,7 +160,7 @@ class MoveForm extends Component {
   }
 
   updateMoveFrame = () => {
-    axios.put(config.API_URL + 'moveFrames/' + this.props.id, qs.stringify({
+    axios.put(API_URL + 'moveFrames/' + this.props.id, qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
@@ -182,7 +181,7 @@ class MoveForm extends Component {
   }
 
   getSignedRequestAndUpload = file => {
-    axios.post(config.API_URL + 's3/signed-url', qs.stringify({
+    axios.post(API_URL + 's3/signed-url', qs.stringify({
       fileName: file.uid + '/' + file.name,
       fileType: file.type
     }), {
@@ -250,10 +249,6 @@ class MoveForm extends Component {
   }
 
   render() {
-    const validStartingEndingPosition = move => {
-      return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
-    }
-
     const parentMoveOptions = this.state.moveFrames.map((moveFrame, index) => {
       if (this.props.id !== moveFrame._id && (!this.state.parentMove || this.state.parentMove._id !== moveFrame._id)) {
         return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;

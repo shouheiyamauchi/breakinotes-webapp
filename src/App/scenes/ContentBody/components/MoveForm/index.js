@@ -1,4 +1,4 @@
-import config from 'helpers/config'
+import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
@@ -48,7 +48,7 @@ class MoveForm extends Component {
   }
 
   getMoves = () => {
-    axios.get(config.API_URL + 'moves', {
+    axios.get(API_URL + 'moves', {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -62,7 +62,7 @@ class MoveForm extends Component {
   }
 
   getMoveFrames = () => {
-    axios.get(config.API_URL + 'moveFrames', {
+    axios.get(API_URL + 'moveFrames', {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -76,7 +76,7 @@ class MoveForm extends Component {
   }
 
   getMove = id => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -99,7 +99,7 @@ class MoveForm extends Component {
   }
 
   setSingleMove = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -118,7 +118,7 @@ class MoveForm extends Component {
   }
 
   addMoveFrameToArray = (id, state) => {
-    axios.get(config.API_URL + 'moveFrames/' + id, {
+    axios.get(API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -160,7 +160,7 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    axios.post(config.API_URL + 'moves/suggestions', qs.stringify({
+    axios.post(API_URL + 'moves/suggestions', qs.stringify({
       startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
       endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
     }), {
@@ -226,7 +226,7 @@ class MoveForm extends Component {
   }
 
   postNewMove = () => {
-    axios.post(config.API_URL + 'moves', qs.stringify({
+    axios.post(API_URL + 'moves', qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
@@ -249,7 +249,7 @@ class MoveForm extends Component {
   }
 
   updateMove = () => {
-    axios.put(config.API_URL + 'moves/' + this.props.id, qs.stringify({
+    axios.put(API_URL + 'moves/' + this.props.id, qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
@@ -272,7 +272,7 @@ class MoveForm extends Component {
   }
 
   getSignedRequestAndUpload = file => {
-    axios.post(config.API_URL + 's3/signed-url', qs.stringify({
+    axios.post(API_URL + 's3/signed-url', qs.stringify({
       fileName: file.uid + '/' + file.name,
       fileType: file.type
     }), {

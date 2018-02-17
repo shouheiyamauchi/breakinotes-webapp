@@ -1,4 +1,4 @@
-import config from 'helpers/config';
+import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
@@ -41,7 +41,7 @@ class Move extends Component {
   }
 
   getMove = id => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -66,7 +66,7 @@ class Move extends Component {
   }
 
   getChildMoves = (id, callback) => {
-    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+    axios.post(API_URL + 'moves/filter', qs.stringify({
       parentMove: id
     }), {
       headers: {
@@ -97,7 +97,7 @@ class Move extends Component {
   }
 
   deleteMove = () => {
-    axios.delete(config.API_URL + 'moves/' + this.state.move._id, {
+    axios.delete(API_URL + 'moves/' + this.state.move._id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }

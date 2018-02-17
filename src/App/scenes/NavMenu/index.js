@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Dropdown, Icon } from 'antd';
+import { Layout, Menu, Dropdown, Icon } from 'antd';
+
+const { Header } = Layout;
 
 const menuItems = (
   <Menu>
@@ -26,9 +28,11 @@ const menuItems = (
 );
 
 const NavMenu = () => (
-  <Dropdown overlay={menuItems} trigger={['click']}>
-    <span className="menu-title"><Icon type="share-alt" style={{marginRight: '7px'}} />BreakiNotes</span>
-  </Dropdown>
+  <Header className="vertical-align" style={{height: '46px', position: 'fixed', width: '100%', paddingLeft: '20px', zIndex: '1' }}>
+    <Dropdown overlay={menuItems} trigger={['click']}>
+      <span className="menu-title"><Icon type="share-alt" style={{marginRight: '7px'}} />BreakiNotes</span>
+    </Dropdown>
+  </Header>
 );
 
 export default NavMenu;

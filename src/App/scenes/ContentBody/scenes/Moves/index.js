@@ -1,4 +1,4 @@
-import config from 'helpers/config';
+import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import axios from 'axios';
 import MovesList from '../../components/MovesList';
@@ -19,7 +19,7 @@ class Moves extends Component {
 
   getMoves = () => {
     this.setState({loading: true}, () => {
-      axios.get(config.API_URL + 'moves', {
+      axios.get(API_URL + 'moves', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('breakinotes')
         }
@@ -38,7 +38,7 @@ class Moves extends Component {
   }
 
   deleteMove = id => {
-    axios.delete(config.API_URL + 'moves/' + id, {
+    axios.delete(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }

@@ -1,4 +1,4 @@
-import config from 'helpers/config';
+import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
@@ -41,7 +41,7 @@ class MoveFrame extends Component {
   }
 
   getMoveFrame = id => {
-    axios.get(config.API_URL + 'moveFrames/' + id, {
+    axios.get(API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -74,7 +74,7 @@ class MoveFrame extends Component {
   }
 
   getChildMoveFrames = (id, callback) => {
-    axios.post(config.API_URL + 'moveFrames/filter', qs.stringify({
+    axios.post(API_URL + 'moveFrames/filter', qs.stringify({
       parentMove: id
     }), {
       headers: {
@@ -90,7 +90,7 @@ class MoveFrame extends Component {
   }
 
   getEntries = (id, callback) => {
-    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+    axios.post(API_URL + 'moves/filter', qs.stringify({
       endingPositions: JSON.stringify([id])
     }), {
       headers: {
@@ -106,7 +106,7 @@ class MoveFrame extends Component {
   }
 
   getExits = (id, callback) => {
-    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+    axios.post(API_URL + 'moves/filter', qs.stringify({
       startingPositions: JSON.stringify([id])
     }), {
       headers: {
@@ -137,7 +137,7 @@ class MoveFrame extends Component {
   }
 
   deleteMoveFrame = () => {
-    axios.delete(config.API_URL + 'moveFrames/' + this.state.moveFrame._id, {
+    axios.delete(API_URL + 'moveFrames/' + this.state.moveFrame._id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }

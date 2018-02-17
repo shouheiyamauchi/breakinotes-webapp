@@ -1,4 +1,4 @@
-import config from 'helpers/config'
+import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
@@ -35,7 +35,7 @@ class Filter extends Component {
   }
 
   getAllMoves = (urlParams) => {
-    axios.get(config.API_URL + 'moves', {
+    axios.get(API_URL + 'moves', {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -61,7 +61,7 @@ class Filter extends Component {
 
   getFilteredMoves = () => {
     this.setState({loading: true}, () => {
-      axios.post(config.API_URL + 'moves/filter', qs.stringify({
+      axios.post(API_URL + 'moves/filter', qs.stringify({
         name: this.state.name,
         origin: this.state.origin,
         type: this.state.type,
@@ -114,7 +114,7 @@ class Filter extends Component {
   }
 
   deleteMove = id => {
-    axios.delete(config.API_URL + 'moves/' + id, {
+    axios.delete(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -147,7 +147,7 @@ class Filter extends Component {
   }
 
   setSingleMove = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -166,7 +166,7 @@ class Filter extends Component {
   }
 
   addMoveToArray = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }

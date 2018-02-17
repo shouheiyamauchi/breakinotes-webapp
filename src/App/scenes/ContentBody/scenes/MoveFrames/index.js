@@ -1,4 +1,4 @@
-import config from 'helpers/config'
+import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import axios from 'axios';
 import MoveFramesList from '../MoveFramesList'
@@ -19,7 +19,7 @@ class MoveFrames extends Component {
 
   getMoves = () => {
     this.setState({loading: true}, () => {
-      axios.get(config.API_URL + 'moveFrames', {
+      axios.get(API_URL + 'moveFrames', {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('breakinotes')
         }
@@ -38,7 +38,7 @@ class MoveFrames extends Component {
   }
 
   deleteMove = id => {
-    axios.delete(config.API_URL + 'moveFrames/' + id, {
+    axios.delete(API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }

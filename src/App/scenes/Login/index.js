@@ -1,4 +1,4 @@
-import config from 'helpers/config';
+import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
@@ -23,7 +23,7 @@ class Login extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    axios.post(config.API_URL + 'users/login', qs.stringify({
+    axios.post(API_URL + 'users/login', qs.stringify({
       username: this.state.username,
       password: this.state.password
     }))

@@ -1,4 +1,4 @@
-import config from 'helpers/config'
+import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
@@ -26,7 +26,7 @@ class MultimediaTag extends Component {
   }
 
   getMultimediaUrl = () => {
-    axios.post(config.API_URL + 's3/url-with-token', qs.stringify({
+    axios.post(API_URL + 's3/url-with-token', qs.stringify({
       fileName: this.props.multimedia.value
     }), {
       headers: {

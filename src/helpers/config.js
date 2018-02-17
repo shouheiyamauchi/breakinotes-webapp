@@ -1,17 +1,9 @@
-const development = {
-  API_URL: 'http://localhost:3001/'
-};
-
-const production = {
-  API_URL: 'http://54.252.149.34:3001/'
-};
-
-let config;
+let API_URL;
 
 if (process.env.REACT_APP_STAGE === 'development') {
-  config = development;
+  API_URL = 'http://localhost:3001/';
 } else if (process.env.REACT_APP_STAGE === 'production') {
-  config = production;
+  API_URL = 'http://54.252.149.34:3001/';
 };
 
-export default config;
+export { API_URL };
