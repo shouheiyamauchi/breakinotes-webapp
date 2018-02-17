@@ -10,6 +10,10 @@ const moveTypeColors = {
   position: 'rgb(134,207,255)'
 };
 
+const moveFrameTypeColors = {
+
+};
+
 const moveTypeShortNames = {
   toprock: "Top",
   rocking: "Rock",
@@ -22,4 +26,4 @@ const moveTypeShortNames = {
   position: "Pos"
 }
 
-export { moveTypeColors, moveTypeShortNames };
+export { moveTypeColors, moveFrameTypeColors, moveTypeShortNames };

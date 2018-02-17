@@ -3,7 +3,7 @@ import MoveForm from './MoveForm';
 
 const EditMove = props => {
   return (
-    <MoveForm id={props.match.params.id} />
+    <MoveForm id={props.match.params.id} removeAuthToken={props.removeAuthToken} />
   );
 }
 

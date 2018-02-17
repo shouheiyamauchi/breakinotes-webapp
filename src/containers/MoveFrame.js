@@ -11,37 +11,37 @@ import MoveTag from '../components/MoveTag';
 import MoveTags from '../components/MoveTags';
 import MultimediaTags from '../components/MultimediaTags';
 
-class Move extends Component {
+class MoveFrame extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      move: {
+      moveFrame: {
         name: '',
         origin: '',
         type: '',
         notes: '',
-        startingPositions: [],
-        endingPositions: [],
         parentMove: '',
         multimedia: []
       },
       childMoves: [],
+      entries: [],
+      exits: [],
       redirectUrl: '',
       loading: true
     };
   }
 
   componentDidMount() {
-    this.getMove(this.props.match.params.id);
+    this.getMoveFrame(this.props.match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getMove(nextProps.match.params.id);
+    this.getMoveFrame(nextProps.match.params.id);
   }
 
-  getMove = id => {
-    axios.get(config.API_URL + 'moves/' + id, {
+  getMoveFrame = id => {
+    axios.get(config.API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -49,13 +49,21 @@ class Move extends Component {
       .then((response) => {
         async.parallel({
           childMoves: callback => {
-            this.getChildMoves(id, callback);
+            this.getChildMoveFrames(id, callback);
+          },
+          entries: callback => {
+            this.getEntries(id, callback);
+          },
+          exits: callback => {
+            this.getExits(id, callback);
           }
         },
         (err, results) => {
           this.setState({
-            move: response.data,
+            moveFrame: response.data,
             childMoves: results.childMoves,
+            entries: results.entries,
+            exits: results.exits,
             loading: false
           })
         });
@@ -65,8 +73,8 @@ class Move extends Component {
       })
   }
 
-  getChildMoves = (id, callback) => {
-    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+  getChildMoveFrames = (id, callback) => {
+    axios.post(config.API_URL + 'moveFrames/filter', qs.stringify({
       parentMove: id
     }), {
       headers: {
@@ -81,29 +89,61 @@ class Move extends Component {
       })
   }
 
-  editMove = () => {
-    this.setState({redirectUrl: '/moves/edit/' + this.state.move._id});
-  }
-
-  confirmDelete = () => {
-    Modal.confirm({
-      title: 'Confirm delete',
-      content: 'Are you sure to delete "' + this.state.move.name + '"?',
-      onOk: () => {
-        this.deleteMove();
-      },
-      onCancel() {},
-    });
-  }
-
-  deleteMove = () => {
-    axios.delete(config.API_URL + 'moves/' + this.state.move._id, {
+  getEntries = (id, callback) => {
+    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+      endingPositions: JSON.stringify([id])
+    }), {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
     })
       .then((response) => {
-        this.setState({redirectUrl: '/'});
+        callback(null, response.data);
+      })
+      .catch((error) => {
+        this.props.removeAuthToken();
+      })
+  }
+
+  getExits = (id, callback) => {
+    axios.post(config.API_URL + 'moves/filter', qs.stringify({
+      startingPositions: JSON.stringify([id])
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        callback(null, response.data);
+      })
+      .catch((error) => {
+        this.props.removeAuthToken();
+      })
+  }
+
+  editMoveFrame = () => {
+    this.setState({redirectUrl: '/moveFrames/edit/' + this.state.moveFrame._id});
+  }
+
+  confirmDelete = () => {
+    Modal.confirm({
+      title: 'Confirm delete',
+      content: 'Are you sure to delete "' + this.state.moveFrame.name + '"?',
+      onOk: () => {
+        this.deleteMoveFrame();
+      },
+      onCancel() {},
+    });
+  }
+
+  deleteMoveFrame = () => {
+    axios.delete(config.API_URL + 'moveFrames/' + this.state.moveFrame._id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        this.setState({redirectUrl: '/moveFrames'});
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -124,17 +164,17 @@ class Move extends Component {
           <div>
             {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
             <div className="vertical-align">
-              <MoveTypeAvatar move={this.state.move} />
+              <MoveTypeAvatar move={this.state.moveFrame} />
               <div className="horizontal-spacer" />
               <div style={{lineHeight:"125%"}}>
-                <span className="title">{this.state.move.name}</span>
+                <span className="title">{this.state.moveFrame.name}</span>
                 <br />
-                <span>{_.capitalize(this.state.move.origin)} {_.capitalize(this.state.move.type)}</span>
+                <span>{_.capitalize(this.state.moveFrame.origin)} {_.capitalize(this.state.moveFrame.type)}</span>
               </div>
             </div>
             <div className="vertical-spacer" />
             <div className="align-right">
-              <Button type="dashed" size="small" onClick={this.editMove}>Edit</Button>
+              <Button type="dashed" size="small" onClick={this.editMoveFrame}>Edit</Button>
               &nbsp;
               <Button type="danger" size="small" onClick={this.confirmDelete}>Delete</Button>
             </div>
@@ -143,34 +183,34 @@ class Move extends Component {
             <div className="vertical-spacer" />
             <div>
               <div>
-                <h3>Starting Position</h3>
-                {this.state.move.startingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.startingPositions} />}
+                <h3>Entries</h3>
+                {this.state.entries.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.entries} />}
               </div>
               <Divider />
               <div>
-                <h3>Ending Positions</h3>
-                {this.state.move.endingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.endingPositions} />}
+                <h3>Exits</h3>
+                {this.state.exits.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.exits} />}
               </div>
             </div>
             <Divider />
             <div>
               <h3>Parent Move</h3>
-              {!this.state.move.parentMove ? <Tag>None</Tag> : <MoveTag type="moves" move={this.state.move.parentMove} /> }
+              {!this.state.moveFrame.parentMove ? <Tag>None</Tag> : <MoveTag type="moveFrames" move={this.state.moveFrame.parentMove} /> }
             </div>
             <Divider />
             <div>
               <h3>Child Moves</h3>
-              {this.state.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.childMoves} />}
+              {this.state.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.childMoves} />}
             </div>
             <Divider />
             <div>
               <h3>Multimedia</h3>
-              {this.state.move.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.move.multimedia} />}
+              {this.state.moveFrame.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.moveFrame.multimedia} />}
             </div>
             <Divider />
             <div>
               <h3>Notes</h3>
-              {!this.state.move.notes ? 'None' : this.state.move.notes}
+              {!this.state.moveFrame.notes ? 'None' : this.state.moveFrame.notes}
             </div>
           </div>
         )}
@@ -179,4 +219,4 @@ class Move extends Component {
   }
 }
 
-export default Move;
+export default MoveFrame;

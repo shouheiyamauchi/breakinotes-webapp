@@ -6,14 +6,15 @@ const MoveTags = props => {
   return (
     <div>
       {props.moves.map((move, index) => {
-        return <MoveTag move={move} key={index} closable={props.closable} onClose={props.onClose} />;
+        return <MoveTag type={props.type} move={move} key={index} closable={props.closable} onClose={props.onClose} />;
       })}
     </div>
   );
 }
 
 MoveTags.propTypes = {
-  moves: PropTypes.array,
+  moves: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired,
   closable: PropTypes.bool,
   onClose: PropTypes.func
 }

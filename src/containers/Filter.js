@@ -297,7 +297,7 @@ class Filter extends Component {
               {
                 (this.state.startingPositions.length === 0) ?
                 <Tag>Select moves from above</Tag> :
-                <MoveTags moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'startingPositions')} />
+                <MoveTags type="moves" moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'startingPositions')} />
               }
             </FormItem>
             <FormItem>
@@ -315,7 +315,7 @@ class Filter extends Component {
               {
                 (this.state.endingPositions.length === 0) ?
                 <Tag>Select moves from above</Tag> :
-                <MoveTags moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'endingPositions')} />
+                <MoveTags type="moves" moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'endingPositions')} />
               }
             </FormItem>
             <div className="ant-form-item-label">
@@ -336,7 +336,7 @@ class Filter extends Component {
               {
                 (!this.state.parentMove) ?
                 <Tag>Select a move from above</Tag> :
-                <MoveTag move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
+                <MoveTag type="moves" move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
               }
             </FormItem>
           </Form>

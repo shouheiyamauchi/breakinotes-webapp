@@ -3,7 +3,7 @@ import MoveForm from './MoveForm';
 
 const NewMove = props => {
   return (
-    <MoveForm />
+    <MoveForm removeAuthToken={props.removeAuthToken} />
   );
 }
 

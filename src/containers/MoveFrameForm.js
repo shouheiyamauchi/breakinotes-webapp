@@ -18,47 +18,25 @@ class MoveForm extends Component {
     super(props);
 
     this.state = {
-      moves: [],
       moveFrames: [],
       name: '',
       origin: 'disabled',
       type: 'disabled',
       notes: '',
-      startingPositions: [],
-      endingPositions: [],
       parentMove: null,
       multimedia: [],
       redirectUrl: '',
-      uploading: new Map(),
-      startingPositionSuggestions: [],
-      endingPositionSuggestions: [],
-      addedStartingPositions: [],
-      addedEndingPositions: []
+      uploading: new Map()
     };
   }
 
   componentDidMount() {
-    if (this.editPage()) this.getMove(this.props.id); // edit page will have the move id as prop
-    this.getMoves();
+    if (this.editPage()) this.getMoveFrame(this.props.id); // edit page will have the move id as prop
     this.getMoveFrames();
   }
 
   editPage = () => {
     return this.props.id
-  }
-
-  getMoves = () => {
-    axios.get(config.API_URL + 'moves', {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        this.setState({moves: response.data});
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      });
   }
 
   getMoveFrames = () => {
@@ -75,8 +53,8 @@ class MoveForm extends Component {
       });
   }
 
-  getMove = id => {
-    axios.get(config.API_URL + 'moves/' + id, {
+  getMoveFrame = id => {
+    axios.get(config.API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -87,8 +65,6 @@ class MoveForm extends Component {
           origin: response.data.origin,
           type: response.data.type,
           notes: response.data.notes,
-          startingPositions: response.data.startingPositions,
-          endingPositions: response.data.endingPositions,
           parentMove: response.data.parentMove,
           multimedia: response.data.multimedia
         });
@@ -99,7 +75,7 @@ class MoveForm extends Component {
   }
 
   setSingleMove = (id, state) => {
-    axios.get(config.API_URL + 'moves/' + id, {
+    axios.get(config.API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -117,8 +93,8 @@ class MoveForm extends Component {
     this.setState({[state]: null});
   }
 
-  addMoveFrameToArray = (id, state) => {
-    axios.get(config.API_URL + 'moveFrames/' + id, {
+  addMoveToArray = (id, state) => {
+    axios.get(config.API_URL + 'moves/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -131,7 +107,7 @@ class MoveForm extends Component {
       })
   }
 
-  removeMoveFrameFromArray = (e, state) => {
+  removeMoveFromArray = (e, state) => {
     e.preventDefault();
     const moveUrl = e.target.parentElement.childNodes[0].childNodes[0].href;
     const moveId = moveUrl.substr(moveUrl.lastIndexOf('/') + 1);
@@ -160,79 +136,15 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    axios.post(config.API_URL + 'moves/suggestions', qs.stringify({
-      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
-      endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
-    }), {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        console.log(response.data)
-        this.setState({
-          startingPositionSuggestions: response.data.startingPositionSuggestions,
-          endingPositionSuggestions: response.data.endingPositionSuggestions
-        }, () => {
-          if (this.state.startingPositionSuggestions.length + this.state.endingPositionSuggestions.length > 0) {
-            this.displaySuggestionsModal();
-          } else {
-            !this.editPage() ? this.postNewMove() : this.updateMove();
-          };
-        });
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      });
+    !this.editPage() ? this.postNewMoveFrame() : this.updateMoveFrame();
   }
 
-  displaySuggestionsModal = () => {
-    Modal.confirm({
-      title: 'Would you like to add to the starting and ending positions the following suggestions?',
-      content: (
-        <div>
-          {this.state.startingPositionSuggestions.length === 0 ? (
-            null
-          ) : (
-            <div>
-              <div className="ant-form-item-label">
-                <label>Starting Positions</label>
-              </div>
-              <Checkbox.Group options={this.state.startingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'addedStartingPositions')} />
-            </div>
-          )}
-          {this.state.endingPositionSuggestions.length === 0 ? (
-            null
-          ) : (
-            <div>
-              <div className="ant-form-item-label">
-                <label>Ending Positions</label>
-              </div>
-              <Checkbox.Group options={this.state.endingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'addedEndingPositions')} />
-            </div>
-          )}
-        </div>
-      ),
-      onOk: () => {
-        !this.editPage() ? this.postNewMove() : this.updateMove();
-      },
-      onCancel: () => {
-        this.setState({
-          addedStartingPositions: [],
-          addedEndingPositions: []
-        });
-      },
-    });
-  }
-
-  postNewMove = () => {
-    axios.post(config.API_URL + 'moves', qs.stringify({
+  postNewMoveFrame = () => {
+    axios.post(config.API_URL + 'moveFrames', qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.addedStartingPositions)),
-      endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.addedEndingPositions)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
     }), {
@@ -241,21 +153,19 @@ class MoveForm extends Component {
       }
     })
       .then((response) => {
-        this.setState({redirectUrl: '/moves/' + response.data._id});
+        this.setState({redirectUrl: '/moveFrames/' + response.data._id});
       })
       .catch((error) => {
         this.props.removeAuthToken();
       });
   }
 
-  updateMove = () => {
-    axios.put(config.API_URL + 'moves/' + this.props.id, qs.stringify({
+  updateMoveFrame = () => {
+    axios.put(config.API_URL + 'moveFrames/' + this.props.id, qs.stringify({
       name: this.state.name,
       origin: this.state.origin,
       type: this.state.type,
       notes: this.state.notes,
-      startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.addedStartingPositions)),
-      endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.addedEndingPositions)),
       parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
     }), {
@@ -264,7 +174,7 @@ class MoveForm extends Component {
       }
     })
       .then((response) => {
-        this.setState({redirectUrl: '/moves/' + response.data._id});
+        this.setState({redirectUrl: '/moveFrames/' + response.data._id});
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -340,23 +250,13 @@ class MoveForm extends Component {
   }
 
   render() {
-    const startingPositionsOptions = this.state.moveFrames.map((moveFrame, index) => {
-      if (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === moveFrame._id) === -1) {
-        return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
-      };
-      return null;
-    })
+    const validStartingEndingPosition = move => {
+      return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
+    }
 
-    const endingPositionsOptions = this.state.moveFrames.map((moveFrame, index) => {
-      if (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === moveFrame._id) === -1) {
+    const parentMoveOptions = this.state.moveFrames.map((moveFrame, index) => {
+      if (this.props.id !== moveFrame._id && (!this.state.parentMove || this.state.parentMove._id !== moveFrame._id)) {
         return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
-      };
-      return null;
-    })
-
-    const parentMoveOptions = this.state.moves.map((move, index) => {
-      if (this.props.id !== move._id && (!this.state.parentMove || this.state.parentMove._id !== move._id)) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
     })
@@ -386,12 +286,12 @@ class MoveForm extends Component {
     return (
       <div>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
-        <span className="title">{!this.editPage() ? 'Add New Move' : 'Edit Move'}</span>
+        <span className="title">{!this.editPage() ? 'Add New Move Frame' : 'Edit Move Frame'}</span>
         <Divider />
         <div className="vertical-spacer" />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
           <FormItem label='Name'>
-            <Input placeholder="Name of the move" name='name' value={this.state.name} onChange={this.handleInputChange} />
+            <Input placeholder="Name of the move frame" name='name' value={this.state.name} onChange={this.handleInputChange} />
           </FormItem>
           <FormItem label='Origin'>
             <Select
@@ -417,15 +317,16 @@ class MoveForm extends Component {
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               <Option value="disabled" disabled>Select the move type</Option>
-              <Option value="toprock">Toprock</Option>
-              <Option value="rocking">Rocking</Option>
-              <Option value="drop">Drop</Option>
-              <Option value="footwork">Footwork</Option>
-              <Option value="floorwork">Floorwork</Option>
-              <Option value="backrock">Backrock</Option>
-              <Option value="powermove">Powermove</Option>
-              <Option value="freeze">Freeze</Option>
-              <Option value="position">Position</Option>
+              <Option value="floorPosition">Floor Position</Option>
+              <Option value="floorFreeze">Floor Freeze</Option>
+              <Option value="middlePosition">Middle Position</Option>
+              <Option value="middleFreeze">Middle Freeze</Option>
+              <Option value="standingPosition">Standing Position</Option>
+              <Option value="standingFreeze">Standing Freeze</Option>
+              <Option value="handstandPosition">Handstand Position</Option>
+              <Option value="handstandFreeze">Handstand Freeze</Option>
+              <Option value="airPosition">Air Position</Option>
+              <Option value="airFreeze">Air Freeze</Option>
             </Select>
           </FormItem>
           <div className="ant-form-item-label">
@@ -447,45 +348,6 @@ class MoveForm extends Component {
             <TextArea placeholder="Add some notes" rows={4} name='notes' value={this.state.notes} onChange={this.handleInputChange} />
           </FormItem>
           <div className="ant-form-item-label">
-            <label>Transitions</label>
-          </div>
-          <FormItem>
-            <Select
-              showSearch
-              placeholder='Starting Positions'
-              value='disabled'
-              onSelect={(value) => this.addMoveFrameToArray(value, 'startingPositions')}
-              optionFilterProp="children"
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              <Option value='disabled' disabled>Starting Positions</Option>
-              {startingPositionsOptions}
-            </Select>
-            {
-              (this.state.startingPositions.length === 0) ?
-              <Tag>Select moves from above</Tag> :
-              <MoveTags type="moveFrames" moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'startingPositions')} />
-            }
-          </FormItem>
-          <FormItem>
-            <Select
-              showSearch
-              placeholder='Ending Positions'
-              value='disabled'
-              onSelect={(value) => this.addMoveFrameToArray(value, 'endingPositions')}
-              optionFilterProp="children"
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              <Option value='disabled' disabled>Ending Positions</Option>
-              {endingPositionsOptions}
-            </Select>
-            {
-              (this.state.endingPositions.length === 0) ?
-              <Tag>Select moves from above</Tag> :
-              <MoveTags type="moveFrames" moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'endingPositions')} />
-            }
-          </FormItem>
-          <div className="ant-form-item-label">
             <label>Variations</label>
           </div>
           <FormItem>
@@ -503,7 +365,7 @@ class MoveForm extends Component {
             {
               (!this.state.parentMove) ?
               <Tag>Select a move from above</Tag> :
-              <MoveTag type="moves" move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
+              <MoveTag type="moveFrames" move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
             }
           </FormItem>
           <FormItem>
