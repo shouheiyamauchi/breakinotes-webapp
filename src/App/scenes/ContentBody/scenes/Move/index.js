@@ -21,7 +21,7 @@ class Move extends Component {
         notes: '',
         startingPositions: [],
         endingPositions: [],
-        parentMove: '',
+        parent: '',
         childMoves: [],
         multimedia: []
       },
@@ -129,7 +129,7 @@ class Move extends Component {
             <Divider />
             <div>
               <h3>Parent Move</h3>
-              {!this.state.move.parentMove ? <Tag>None</Tag> : <MoveTag type="moves" move={this.state.move.parentMove} /> }
+              {!this.state.move.parent ? <Tag>None</Tag> : <MoveTag type="moves" move={this.state.move.parent} /> }
             </div>
             <Divider />
             <div>

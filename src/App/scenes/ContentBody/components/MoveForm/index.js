@@ -26,7 +26,7 @@ class MoveForm extends Component {
       notes: '',
       startingPositions: [],
       endingPositions: [],
-      parentMove: null,
+      parent: null,
       multimedia: [],
       redirectUrl: '',
       uploading: new Map(),
@@ -89,7 +89,7 @@ class MoveForm extends Component {
           notes: response.data.notes,
           startingPositions: response.data.startingPositions,
           endingPositions: response.data.endingPositions,
-          parentMove: response.data.parentMove,
+          parent: response.data.parent,
           multimedia: response.data.multimedia
         });
       })
@@ -232,7 +232,7 @@ class MoveForm extends Component {
       notes: this.state.notes,
       startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.addedStartingPositions)),
       endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.addedEndingPositions)),
-      parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
+      parent: (this.state.parent) ? this.state.parent._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
     }), {
       headers: {
@@ -255,7 +255,7 @@ class MoveForm extends Component {
       notes: this.state.notes,
       startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.addedStartingPositions)),
       endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.addedEndingPositions)),
-      parentMove: (this.state.parentMove) ? this.state.parentMove._id : null,
+      parent: (this.state.parent) ? this.state.parent._id : null,
       multimedia: JSON.stringify(this.state.multimedia)
     }), {
       headers: {
@@ -353,8 +353,8 @@ class MoveForm extends Component {
       return null;
     })
 
-    const parentMoveOptions = this.state.moves.map((move, index) => {
-      if (this.props.id !== move._id && (!this.state.parentMove || this.state.parentMove._id !== move._id)) {
+    const parentOptions = this.state.moves.map((move, index) => {
+      if (this.props.id !== move._id && (!this.state.parent || this.state.parent._id !== move._id)) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -490,17 +490,17 @@ class MoveForm extends Component {
               showSearch
               placeholder='Parent Move'
               value='disabled'
-              onSelect={(value) => this.setSingleMove(value, 'parentMove')}
+              onSelect={(value) => this.setSingleMove(value, 'parent')}
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               <Option value='disabled' disabled>Parent Move</Option>
-              {parentMoveOptions}
+              {parentOptions}
             </Select>
             {
-              (!this.state.parentMove) ?
+              (!this.state.parent) ?
               <Tag>Select a move from above</Tag> :
-              <MoveTag type="moves" move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
+              <MoveTag type="moves" move={this.state.parent} closable={true} onClose={(e) => this.clearSingleMove(e, 'parent')} />
             }
           </FormItem>
           <FormItem>

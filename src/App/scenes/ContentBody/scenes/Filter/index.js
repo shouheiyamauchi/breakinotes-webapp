@@ -24,7 +24,7 @@ class Filter extends Component {
       type: '',
       startingPositions: [],
       endingPositions: [],
-      parentMove: '',
+      parent: '',
       loading: true
     };
   }
@@ -48,7 +48,7 @@ class Filter extends Component {
             type: urlParams.type,
             startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
             endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
-            parentMove: (urlParams.parentMove) ? this.state.allMoves.find((move) => move._id === urlParams.parentMove) : '',
+            parent: (urlParams.parent) ? this.state.allMoves.find((move) => move._id === urlParams.parent) : '',
           }, () => {
             this.getFilteredMoves();
           });
@@ -67,7 +67,7 @@ class Filter extends Component {
         type: this.state.type,
         startingPosition: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
         endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
-        parentMove: this.state.parentMove,
+        parent: this.state.parent,
       }), {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('breakinotes')
@@ -96,7 +96,7 @@ class Filter extends Component {
       notes: this.state.notes,
       startingPositions: this.state.startingPositions.map(move => move._id),
       endingPositions: this.state.endingPositions.map(move => move._id),
-      parentMove: this.state.parentMove ? this.state.parentMove._id : null,
+      parent: this.state.parent ? this.state.parent._id : null,
     };
 
     for (const filterType in filters) {
@@ -218,8 +218,8 @@ class Filter extends Component {
       return null;
     })
 
-    const parentMoveOptions = this.state.allMoves.map((move, index) => {
-      if (!this.state.parentMove || this.state.parentMove._id !== move._id) {
+    const parentOptions = this.state.allMoves.map((move, index) => {
+      if (!this.state.parent || this.state.parent._id !== move._id) {
         return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
@@ -326,17 +326,17 @@ class Filter extends Component {
                 showSearch
                 placeholder='Parent Move'
                 value='disabled'
-                onSelect={(value) => this.setSingleMove(value, 'parentMove')}
+                onSelect={(value) => this.setSingleMove(value, 'parent')}
                 optionFilterProp="children"
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
                 <Option value='disabled' disabled>Parent Move</Option>
-                {parentMoveOptions}
+                {parentOptions}
               </Select>
               {
-                (!this.state.parentMove) ?
+                (!this.state.parent) ?
                 <Tag>Select a move from above</Tag> :
-                <MoveTag type="moves" move={this.state.parentMove} closable={true} onClose={(e) => this.clearSingleMove(e, 'parentMove')} />
+                <MoveTag type="moves" move={this.state.parent} closable={true} onClose={(e) => this.clearSingleMove(e, 'parent')} />
               }
             </FormItem>
           </Form>

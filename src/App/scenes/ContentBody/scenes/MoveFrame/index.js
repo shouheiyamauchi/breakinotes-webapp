@@ -19,7 +19,7 @@ class MoveFrame extends Component {
         origin: '',
         type: '',
         notes: '',
-        parentMove: '',
+        parent: '',
         childMoves: [],
         entries: [],
         exits: [],
@@ -129,7 +129,7 @@ class MoveFrame extends Component {
             <Divider />
             <div>
               <h3>Parent Move</h3>
-              {!this.state.moveFrame.parentMove ? <Tag>None</Tag> : <MoveTag type="moveFrames" move={this.state.moveFrame.parentMove} /> }
+              {!this.state.moveFrame.parent ? <Tag>None</Tag> : <MoveTag type="moveFrames" move={this.state.moveFrame.parent} /> }
             </div>
             <Divider />
             <div>
