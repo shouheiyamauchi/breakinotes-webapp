@@ -2,8 +2,6 @@ import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
-import async from 'async';
-import qs from 'qs';
 import _ from 'lodash';
 import { Tag, Divider, Button, Modal, Spin } from 'antd';
 import MoveTypeAvatar from '../../components/MoveTypeAvatar';
@@ -22,11 +20,11 @@ class MoveFrame extends Component {
         type: '',
         notes: '',
         parentMove: '',
+        childMoves: [],
+        entries: [],
+        exits: [],
         multimedia: []
       },
-      childMoves: [],
-      entries: [],
-      exits: [],
       redirectUrl: '',
       loading: true
     };
@@ -47,74 +45,10 @@ class MoveFrame extends Component {
       }
     })
       .then((response) => {
-        async.parallel({
-          childMoves: callback => {
-            this.getChildMoveFrames(id, callback);
-          },
-          entries: callback => {
-            this.getEntries(id, callback);
-          },
-          exits: callback => {
-            this.getExits(id, callback);
-          }
-        },
-        (err, results) => {
-          this.setState({
-            moveFrame: response.data,
-            childMoves: results.childMoves,
-            entries: results.entries,
-            exits: results.exits,
-            loading: false
-          })
+        this.setState({
+          moveFrame: response.data,
+          loading: false
         });
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      })
-  }
-
-  getChildMoveFrames = (id, callback) => {
-    axios.post(API_URL + 'moveFrames/filter', qs.stringify({
-      parentMove: id
-    }), {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        callback(null, response.data);
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      })
-  }
-
-  getEntries = (id, callback) => {
-    axios.post(API_URL + 'moves/filter', qs.stringify({
-      endingPositions: JSON.stringify([id])
-    }), {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        callback(null, response.data);
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      })
-  }
-
-  getExits = (id, callback) => {
-    axios.post(API_URL + 'moves/filter', qs.stringify({
-      startingPositions: JSON.stringify([id])
-    }), {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        callback(null, response.data);
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -184,12 +118,12 @@ class MoveFrame extends Component {
             <div>
               <div>
                 <h3>Entries</h3>
-                {this.state.entries.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.entries} />}
+                {!this.state.moveFrame.entries.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.entries} />}
               </div>
               <Divider />
               <div>
                 <h3>Exits</h3>
-                {this.state.exits.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.exits} />}
+                {!this.state.moveFrame.exits.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.exits} />}
               </div>
             </div>
             <Divider />
@@ -200,12 +134,12 @@ class MoveFrame extends Component {
             <Divider />
             <div>
               <h3>Child Moves</h3>
-              {this.state.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.childMoves} />}
+              {!this.state.moveFrame.childMoves.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.moveFrame.childMoves} />}
             </div>
             <Divider />
             <div>
               <h3>Multimedia</h3>
-              {this.state.moveFrame.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.moveFrame.multimedia} />}
+              {!this.state.moveFrame.multimedia.length ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.moveFrame.multimedia} />}
             </div>
             <Divider />
             <div>

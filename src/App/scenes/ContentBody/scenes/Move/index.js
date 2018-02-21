@@ -2,8 +2,6 @@ import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
-import async from 'async';
-import qs from 'qs';
 import _ from 'lodash';
 import { Tag, Divider, Button, Modal, Spin } from 'antd';
 import MoveTypeAvatar from '../../components/MoveTypeAvatar';
@@ -120,12 +118,12 @@ class Move extends Component {
             <div>
               <div>
                 <h3>Starting Position</h3>
-                {this.state.move.startingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.startingPositions} />}
+                {!this.state.move.startingPositions.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.startingPositions} />}
               </div>
               <Divider />
               <div>
                 <h3>Ending Positions</h3>
-                {this.state.move.endingPositions.length === 0 ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.endingPositions} />}
+                {!this.state.move.endingPositions.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.endingPositions} />}
               </div>
             </div>
             <Divider />
@@ -136,12 +134,12 @@ class Move extends Component {
             <Divider />
             <div>
               <h3>Child Moves</h3>
-              {this.state.move.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.move.childMoves} />}
+              {!this.state.move.childMoves.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.move.childMoves} />}
             </div>
             <Divider />
             <div>
               <h3>Multimedia</h3>
-              {this.state.move.multimedia.length === 0 ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.move.multimedia} />}
+              {!this.state.move.multimedia.length ? <Tag>None</Tag> : <MultimediaTags multimedia={this.state.move.multimedia} />}
             </div>
             <Divider />
             <div>
