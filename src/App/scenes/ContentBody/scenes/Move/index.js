@@ -24,9 +24,9 @@ class Move extends Component {
         startingPositions: [],
         endingPositions: [],
         parentMove: '',
+        childMoves: [],
         multimedia: []
       },
-      childMoves: [],
       redirectUrl: '',
       loading: true
     };
@@ -47,34 +47,10 @@ class Move extends Component {
       }
     })
       .then((response) => {
-        async.parallel({
-          childMoves: callback => {
-            this.getChildMoves(id, callback);
-          }
-        },
-        (err, results) => {
-          this.setState({
-            move: response.data,
-            childMoves: results.childMoves,
-            loading: false
-          })
+        this.setState({
+          move: response.data,
+          loading: false
         });
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      })
-  }
-
-  getChildMoves = (id, callback) => {
-    axios.post(API_URL + 'moves/filter', qs.stringify({
-      parentMove: id
-    }), {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        callback(null, response.data);
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -160,7 +136,7 @@ class Move extends Component {
             <Divider />
             <div>
               <h3>Child Moves</h3>
-              {this.state.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.childMoves} />}
+              {this.state.move.childMoves.length === 0 ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.move.childMoves} />}
             </div>
             <Divider />
             <div>

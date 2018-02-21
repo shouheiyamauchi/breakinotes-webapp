@@ -169,7 +169,6 @@ class MoveForm extends Component {
       }
     })
       .then((response) => {
-        console.log(response.data)
         this.setState({
           startingPositionSuggestions: response.data.startingPositionSuggestions,
           endingPositionSuggestions: response.data.endingPositionSuggestions
@@ -424,8 +423,6 @@ class MoveForm extends Component {
               <Option value="floorwork">Floorwork</Option>
               <Option value="backrock">Backrock</Option>
               <Option value="powermove">Powermove</Option>
-              <Option value="freeze">Freeze</Option>
-              <Option value="position">Position</Option>
             </Select>
           </FormItem>
           <div className="ant-form-item-label">
