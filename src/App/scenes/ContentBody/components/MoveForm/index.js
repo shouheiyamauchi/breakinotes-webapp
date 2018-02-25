@@ -404,6 +404,7 @@ class MoveForm extends Component {
               <Option value="disabled" disabled>Select the move origin</Option>
               <Option value="foundational">Foundational</Option>
               <Option value="original">Original</Option>
+              <Option value="other">Other</Option>
             </Select>
           </FormItem>
           <FormItem label='Type'>
@@ -449,7 +450,7 @@ class MoveForm extends Component {
           <FormItem>
             <Select
               showSearch
-              placeholder='Starting Positions'
+              placeholder='Starting Frames'
               value='disabled'
               onSelect={(value) => this.addMoveFrameToArray(value, 'startingPositions')}
               optionFilterProp="children"
@@ -467,7 +468,7 @@ class MoveForm extends Component {
           <FormItem>
             <Select
               showSearch
-              placeholder='Ending Positions'
+              placeholder='Ending Frames'
               value='disabled'
               onSelect={(value) => this.addMoveFrameToArray(value, 'endingPositions')}
               optionFilterProp="children"

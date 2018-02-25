@@ -117,23 +117,23 @@ class MoveFrame extends Component {
             <div className="vertical-spacer" />
             <div>
               <div>
-                <h3>Entries</h3>
+                <h3>Entry Moves</h3>
                 {!this.state.moveFrame.entries.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.entries} />}
               </div>
               <Divider />
               <div>
-                <h3>Exits</h3>
+                <h3>Exit Moves</h3>
                 {!this.state.moveFrame.exits.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.exits} />}
               </div>
             </div>
             <Divider />
             <div>
-              <h3>Parent Move</h3>
+              <h3>Parent Frame</h3>
               {!this.state.moveFrame.parent ? <Tag>None</Tag> : <MoveTag type="moveFrames" move={this.state.moveFrame.parent} /> }
             </div>
             <Divider />
             <div>
-              <h3>Child Moves</h3>
+              <h3>Child Frames</h3>
               {!this.state.moveFrame.childMoves.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.moveFrame.childMoves} />}
             </div>
             <Divider />

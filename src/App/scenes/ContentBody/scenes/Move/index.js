@@ -117,12 +117,12 @@ class Move extends Component {
             <div className="vertical-spacer" />
             <div>
               <div>
-                <h3>Starting Position</h3>
+                <h3>Starting Frame</h3>
                 {!this.state.move.startingPositions.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.startingPositions} />}
               </div>
               <Divider />
               <div>
-                <h3>Ending Positions</h3>
+                <h3>Ending Frames</h3>
                 {!this.state.move.endingPositions.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.move.endingPositions} />}
               </div>
             </div>

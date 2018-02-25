@@ -1,4 +1,4 @@
-import { moveTypeColors, moveTypeShortNames } from 'helpers/constants';
+import { moveTypeColors, moveFrameTypeColors, moveTypeShortNames } from 'helpers/constants';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Avatar } from 'antd';

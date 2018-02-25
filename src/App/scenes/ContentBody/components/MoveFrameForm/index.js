@@ -300,6 +300,7 @@ class MoveForm extends Component {
               <Option value="disabled" disabled>Select the move origin</Option>
               <Option value="foundational">Foundational</Option>
               <Option value="original">Original</Option>
+              <Option value="other">Other</Option>
             </Select>
           </FormItem>
           <FormItem label='Type'>
@@ -314,8 +315,8 @@ class MoveForm extends Component {
               <Option value="disabled" disabled>Select the move type</Option>
               <Option value="floorPosition">Floor Position</Option>
               <Option value="floorFreeze">Floor Freeze</Option>
-              <Option value="middlePosition">Middle Position</Option>
-              <Option value="middleFreeze">Middle Freeze</Option>
+              <Option value="midPosition">Mid Position</Option>
+              <Option value="midFreeze">Mid Freeze</Option>
               <Option value="standingPosition">Standing Position</Option>
               <Option value="standingFreeze">Standing Freeze</Option>
               <Option value="handstandPosition">Handstand Position</Option>
@@ -348,7 +349,7 @@ class MoveForm extends Component {
           <FormItem>
             <Select
               showSearch
-              placeholder='Parent Move'
+              placeholder='Parent Frame'
               value='disabled'
               onSelect={(value) => this.setSingleMove(value, 'parent')}
               optionFilterProp="children"
