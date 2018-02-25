@@ -339,14 +339,14 @@ class MoveForm extends Component {
   }
 
   render() {
-    const startingPositionsOptions = this.state.moveFrames.map((moveFrame, index) => {
+    const startingFramesOptions = this.state.moveFrames.map((moveFrame, index) => {
       if (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === moveFrame._id) === -1) {
         return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
       return null;
     })
 
-    const endingPositionsOptions = this.state.moveFrames.map((moveFrame, index) => {
+    const endingFramesOptions = this.state.moveFrames.map((moveFrame, index) => {
       if (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === moveFrame._id) === -1) {
         return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
@@ -456,8 +456,8 @@ class MoveForm extends Component {
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value='disabled' disabled>Starting Positions</Option>
-              {startingPositionsOptions}
+              <Option value='disabled' disabled>Starting Frames</Option>
+              {startingFramesOptions}
             </Select>
             {
               (this.state.startingPositions.length === 0) ?
@@ -474,8 +474,8 @@ class MoveForm extends Component {
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value='disabled' disabled>Ending Positions</Option>
-              {endingPositionsOptions}
+              <Option value='disabled' disabled>Ending Frames</Option>
+              {endingFramesOptions}
             </Select>
             {
               (this.state.endingPositions.length === 0) ?

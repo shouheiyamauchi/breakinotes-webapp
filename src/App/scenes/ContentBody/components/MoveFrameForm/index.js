@@ -355,7 +355,7 @@ class MoveForm extends Component {
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value='disabled' disabled>Parent Move</Option>
+              <Option value='disabled' disabled>Parent Frame</Option>
               {parentOptions}
             </Select>
             {
