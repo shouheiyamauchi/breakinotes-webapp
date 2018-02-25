@@ -19,4 +19,4 @@ jobs:
       - run: yarn build
       - run: sudo apt-get update && sudo apt-get install -y python-pip libpython-dev
       - run: sudo pip install awscli==1.8.3
-      - run: aws s3 sync ./build s3://breakinotes.com --region ap-southeast-2 --delete
+      - run: aws s3 sync ./build s3://www.breakinotes.com --region ap-southeast-2 --delete
