@@ -1,7 +1,7 @@
 import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import axios from 'axios';
-import MovesList from '../../components/MovesList';
+import MovesList from './components/MovesList';
 
 class Moves extends Component {
   constructor(props) {

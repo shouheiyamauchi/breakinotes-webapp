@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal, Checkbox } from 'antd';
 import MoveTag from '../MoveTag';
 import MoveTags from '../MoveTags';
-import MultimediaTags from '../MultimediaTags'
+import MultimediaTags from 'App/components/MultimediaTags';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -28,6 +28,7 @@ class MoveForm extends Component {
       endingPositions: [],
       parent: null,
       multimedia: [],
+      draft: true,
       redirectUrl: '',
       uploading: new Map(),
       startingPositionSuggestions: [],
@@ -90,7 +91,8 @@ class MoveForm extends Component {
           startingPositions: response.data.startingPositions,
           endingPositions: response.data.endingPositions,
           parent: response.data.parent,
-          multimedia: response.data.multimedia
+          multimedia: response.data.multimedia,
+          draft: response.data.draft
         });
       })
       .catch((error) => {
@@ -233,7 +235,8 @@ class MoveForm extends Component {
       startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.addedStartingPositions)),
       endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.addedEndingPositions)),
       parent: (this.state.parent) ? this.state.parent._id : null,
-      multimedia: JSON.stringify(this.state.multimedia)
+      multimedia: JSON.stringify(this.state.multimedia),
+      draft: this.state.draft
     }), {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
@@ -256,7 +259,8 @@ class MoveForm extends Component {
       startingPositions: JSON.stringify((this.state.startingPositions.map(move => move._id)).concat(this.state.addedStartingPositions)),
       endingPositions: JSON.stringify((this.state.endingPositions.map(move => move._id)).concat(this.state.addedEndingPositions)),
       parent: (this.state.parent) ? this.state.parent._id : null,
-      multimedia: JSON.stringify(this.state.multimedia)
+      multimedia: JSON.stringify(this.state.multimedia),
+      draft: this.state.draft
     }), {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
@@ -503,6 +507,19 @@ class MoveForm extends Component {
               <Tag>Select a move from above</Tag> :
               <MoveTag type="moves" move={this.state.parent} closable={true} onClose={(e) => this.clearSingleMove(e, 'parent')} />
             }
+          </FormItem>
+          <FormItem label='Draft'>
+            <Select
+              showSearch
+              placeholder='Draft'
+              value={this.state.draft}
+              onChange={(value) => this.handleSelectChange(value, 'draft')}
+              optionFilterProp="children"
+              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+              <Option value={true}>Yes</Option>
+              <Option value={false}>No</Option>
+            </Select>
           </FormItem>
           <FormItem>
             <Button type='primary' htmlType='submit'>

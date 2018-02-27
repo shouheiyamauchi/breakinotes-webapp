@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom'
 import _ from 'lodash';
 import { List, Button, Modal, Spin } from 'antd';
-import MoveTypeAvatar from '../../components/MoveTypeAvatar';
+import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 
 class MoveFramesList extends Component {
   constructor(props) {
@@ -53,6 +53,7 @@ class MoveFramesList extends Component {
                     <span className="list-title">{moveFrame.name}</span>
                     <br />
                     <span>{_.capitalize(moveFrame.origin)} {_.capitalize(moveFrame.type)}</span>
+                    {moveFrame.draft && <span> (Draft)</span>}
                   </div>
                 </div>
                 <div className="vertical-spacer" />

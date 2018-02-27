@@ -4,10 +4,10 @@ import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import _ from 'lodash';
 import { Tag, Divider, Button, Modal, Spin } from 'antd';
-import MoveTypeAvatar from '../../components/MoveTypeAvatar';
+import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';
-import MultimediaTags from '../../components/MultimediaTags';
+import MultimediaTags from 'App/components/MultimediaTags';
 
 class MoveFrame extends Component {
   constructor(props) {
@@ -23,7 +23,8 @@ class MoveFrame extends Component {
         childMoves: [],
         entries: [],
         exits: [],
-        multimedia: []
+        multimedia: [],
+        draft: true
       },
       redirectUrl: '',
       loading: true
@@ -104,6 +105,7 @@ class MoveFrame extends Component {
                 <span className="title">{this.state.moveFrame.name}</span>
                 <br />
                 <span>{_.capitalize(this.state.moveFrame.origin)} {_.capitalize(this.state.moveFrame.type)}</span>
+                {this.state.moveFrame.draft && <span> (Draft)</span>}
               </div>
             </div>
             <div className="vertical-spacer" />
