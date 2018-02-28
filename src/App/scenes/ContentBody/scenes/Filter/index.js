@@ -4,7 +4,7 @@ import axios from 'axios';
 import qs from 'qs';
 import _ from 'lodash';
 import { Affix, Modal, Button, Form, Input, Select, Tag } from 'antd';
-import MovesList from '../../components/MovesList';
+import MovesList from './components/MovesList';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';
 

@@ -24,11 +24,8 @@ const menuItems = (
       <Menu.Item key="newMove">
         <Link to="/moves/new"><Icon type="plus-circle-o" />New Move</Link>
       </Menu.Item>
-      <Menu.Item key="listMoves">
-        <Link to="/moves"><Icon type="bars" />List Moves</Link>
-      </Menu.Item>
       <Menu.Item key="filter">
-        <Link to="/moves/filter"><Icon type="search" />Filter</Link>
+        <Link to="/moves/filter"><Icon type="bars" />List Moves</Link>
       </Menu.Item>
     </SubMenu>
   </Menu>

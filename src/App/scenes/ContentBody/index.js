@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
 import TransitionContainer from './scenes/TransitionContainer';
 import Home from './scenes/Home';
-import Moves from './scenes/Moves';
 import MoveFrames from './scenes/MoveFrames';
 import NewMove from './scenes/NewMove';
 import NewMoveFrame from './scenes/NewMoveFrame';
@@ -22,7 +21,6 @@ const ContentBody = props => {
       <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
         <Switch>
           <Route exact path="/" render={routerParams => <TransitionContainer><Home {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/moves" render={routerParams => <TransitionContainer><Moves {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route exact path="/moves/new" render={routerParams => <TransitionContainer><NewMove {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route exact path="/moves/filter" render={routerParams => <TransitionContainer><Filter {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route path="/moves/edit/:id" render={routerParams => <TransitionContainer><EditMove {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
