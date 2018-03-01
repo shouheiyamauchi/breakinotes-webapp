@@ -6,7 +6,7 @@ import Home from './scenes/Home';
 import MoveFrames from './scenes/MoveFrames';
 import NewMove from './scenes/NewMove';
 import NewMoveFrame from './scenes/NewMoveFrame';
-import Filter from './scenes/Filter';
+import Moves from './scenes/Moves';
 import Move from './scenes/Move';
 import MoveFrame from './scenes/MoveFrame';
 import EditMove from './scenes/EditMove';
@@ -22,7 +22,7 @@ const ContentBody = props => {
         <Switch>
           <Route exact path="/" render={routerParams => <TransitionContainer><Home {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route exact path="/moves/new" render={routerParams => <TransitionContainer><NewMove {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/moves/filter" render={routerParams => <TransitionContainer><Filter {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
+          <Route exact path="/moves/filter" render={routerParams => <TransitionContainer><Moves {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route path="/moves/edit/:id" render={routerParams => <TransitionContainer><EditMove {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route path="/moves/redirect/:id" render={routerParams => <TransitionContainer><RedirectPage {...routerParams} type={'moves'} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route path="/moves/:id" render={routerParams => <TransitionContainer><Move {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>

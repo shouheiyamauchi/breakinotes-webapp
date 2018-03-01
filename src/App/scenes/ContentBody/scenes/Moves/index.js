@@ -11,12 +11,13 @@ import MoveTags from '../../components/MoveTags';
 const FormItem = Form.Item;
 const { Option } = Select;
 
-class Filter extends Component {
+class Moves extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       allMoves: [],
+      allFrames: [],
       filteredMoves:[],
       filterModalVisible: false,
       name: '',
@@ -42,16 +43,27 @@ class Filter extends Component {
     })
       .then((response) => {
         this.setState({allMoves: response.data}, () => {
-          this.setState({
-            name: urlParams.name,
-            origin: urlParams.origin,
-            type: urlParams.type,
-            startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
-            endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allMoves.find(move => move._id === moveId)) : [],
-            parent: (urlParams.parent) ? this.state.allMoves.find((move) => move._id === urlParams.parent) : '',
-          }, () => {
-            this.getFilteredMoves();
-          });
+          axios.get(API_URL + 'moveFrames', {
+            headers: {
+              Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+            }
+          })
+            .then((response) => {
+              this.setState({
+                allFrames: response.data
+              }, () =>{
+                this.setState({
+                  name: urlParams.name,
+                  origin: urlParams.origin,
+                  type: urlParams.type,
+                  startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.state.allFrames.find(move => move._id === moveId)) : [],
+                  endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allFrames.find(move => move._id === moveId)) : [],
+                  parent: (urlParams.parent) ? this.state.allMoves.find((move) => move._id === urlParams.parent) : '',
+                }, () => {
+                  this.getFilteredMoves();
+                });
+              });
+            });
         });
       })
       .catch((error) => {
@@ -65,7 +77,7 @@ class Filter extends Component {
         name: this.state.name,
         origin: this.state.origin,
         type: this.state.type,
-        startingPosition: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
+        startingPositions: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
         endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
         parent: this.state.parent,
       }), {
@@ -166,7 +178,7 @@ class Filter extends Component {
   }
 
   addMoveToArray = (id, state) => {
-    axios.get(API_URL + 'moves/' + id, {
+    axios.get(API_URL + 'moveFrames/' + id, {
       headers: {
         Authorization: 'JWT ' + localStorage.getItem('breakinotes')
       }
@@ -200,20 +212,16 @@ class Filter extends Component {
   }
 
   render() {
-    const validStartingEndingPosition = move => {
-      return (move.type === 'position' || move.type === 'freeze' || move.type ==='powermove');
-    }
-
-    const startingPositionsOptions = this.state.allMoves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === move._id) === -1)) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
+    const startingPositionsOptions = this.state.allFrames.map((moveFrame, index) => {
+      if (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === moveFrame._id) === -1) {
+        return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
       return null;
     })
 
-    const endingPositionsOptions = this.state.allMoves.map((move, index) => {
-      if (validStartingEndingPosition(move) && (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === move._id) === -1)) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
+    const endingPositionsOptions = this.state.allFrames.map((moveFrame, index) => {
+      if (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === moveFrame._id) === -1) {
+        return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
       return null;
     })
@@ -255,6 +263,7 @@ class Filter extends Component {
                 <Option value="disabled" disabled>Select the move origin</Option>
                 <Option value="foundational">Foundational</Option>
                 <Option value="original">Original</Option>
+                <Option value="other">Other</Option>
               </Select>
             </FormItem>
             <FormItem label='Type'>
@@ -276,7 +285,6 @@ class Filter extends Component {
                 <Option value="backrock">Backrock</Option>
                 <Option value="powermove">Powermove</Option>
                 <Option value="freeze">Freeze</Option>
-                <Option value="position">Position</Option>
               </Select>
             </FormItem>
             <div className="ant-form-item-label">
@@ -285,13 +293,13 @@ class Filter extends Component {
             <FormItem>
               <Select
                 showSearch
-                placeholder='Starting Positions'
+                placeholder='Starting Frames'
                 value='disabled'
                 onSelect={(value) => this.addMoveToArray(value, 'startingPositions')}
                 optionFilterProp="children"
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
-                <Option value='disabled' disabled>Starting Positions</Option>
+                <Option value='disabled' disabled>Starting Frames</Option>
                 {startingPositionsOptions}
               </Select>
               {
@@ -303,13 +311,13 @@ class Filter extends Component {
             <FormItem>
               <Select
                 showSearch
-                placeholder='Ending Positions'
+                placeholder='Ending Frames'
                 value='disabled'
                 onSelect={(value) => this.addMoveToArray(value, 'endingPositions')}
                 optionFilterProp="children"
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >
-                <Option value='disabled' disabled>Ending Positions</Option>
+                <Option value='disabled' disabled>Ending Frames</Option>
                 {endingPositionsOptions}
               </Select>
               {
@@ -348,4 +356,4 @@ class Filter extends Component {
   }
 }
 
-export default Filter;
+export default Moves;

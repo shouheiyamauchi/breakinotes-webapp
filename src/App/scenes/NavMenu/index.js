@@ -12,22 +12,20 @@ const menuItems = (
     <Menu.Item key="home">
       <Link to="/"><Icon type="user" />Home</Link>
     </Menu.Item>
-    <SubMenu key="moveFrames" title={<span><Icon type="file" style={subMenuStyle} />Frames</span>}>
+    <SubMenu key="moveFrames" title={<span><Icon type="plus-circle-o" style={subMenuStyle} />Add</span>}>
       <Menu.Item key="newMoveFrame">
-        <Link to="/moveFrames/new"><Icon type="plus-circle-o" />New Frame</Link>
+        <Link to="/moveFrames/new"><Icon type="file" />New Frame</Link>
       </Menu.Item>
-      <Menu.Item key="listMoveFrames">
-        <Link to="/moveFrames"><Icon type="bars" />List Frames</Link>
-      </Menu.Item>
-    </SubMenu>
-    <SubMenu key="moves" title={<span><Icon type="file-text" style={subMenuStyle} />Moves</span>}>
       <Menu.Item key="newMove">
-        <Link to="/moves/new"><Icon type="plus-circle-o" />New Move</Link>
-      </Menu.Item>
-      <Menu.Item key="filter">
-        <Link to="/moves/filter"><Icon type="bars" />List Moves</Link>
+        <Link to="/moves/new"><Icon type="file-text" />New Move</Link>
       </Menu.Item>
     </SubMenu>
+    <Menu.Item key="listMoveFrames">
+      <Link to="/moveFrames"><Icon type="bars" />Frames List</Link>
+    </Menu.Item>
+    <Menu.Item key="filter">
+      <Link to="/moves/filter"><Icon type="bars" />Moves List</Link>
+    </Menu.Item>
   </Menu>
 );
 
