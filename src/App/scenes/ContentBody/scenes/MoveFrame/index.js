@@ -8,6 +8,7 @@ import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';
 import MultimediaTags from 'App/components/MultimediaTags';
+import LoadingMessage from 'App/components/LoadingMessage';
 
 class MoveFrame extends Component {
   constructor(props) {
@@ -89,12 +90,7 @@ class MoveFrame extends Component {
     return (
       <div>
         {this.state.loading ? (
-          <div className="align-center">
-            <div className="vertical-spacer" />
-            <div className="vertical-spacer" />
-            <Spin />
-            <br/>Loading...
-          </div>
+          <LoadingMessage />
         ) : (
           <div>
             {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}

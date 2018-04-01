@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom'
 import { List, Button, Modal, Spin } from 'antd';
 import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
+import LoadingMessage from 'App/components/LoadingMessage';
 
 class MovesList extends Component {
   constructor(props) {
@@ -34,12 +35,7 @@ class MovesList extends Component {
       <div>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         {this.props.loading ? (
-          <div className="align-center">
-            <div className="vertical-spacer" />
-            <div className="vertical-spacer" />
-            <Spin />
-            <br/>Loading...
-          </div>
+          <LoadingMessage />
         ) : (
           <List
             itemLayout="vertical"
