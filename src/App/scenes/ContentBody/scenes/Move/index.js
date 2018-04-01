@@ -3,7 +3,7 @@ import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
-import { Tag, Divider, Button, Modal, Spin } from 'antd';
+import { Tag, Divider, Button, Modal } from 'antd';
 import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';

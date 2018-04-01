@@ -2,7 +2,7 @@ import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { List, Button, Modal, Spin } from 'antd';
+import { List, Button, Modal } from 'antd';
 import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
 
