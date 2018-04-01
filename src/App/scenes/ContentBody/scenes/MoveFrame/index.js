@@ -1,8 +1,8 @@
 import { API_URL } from 'helpers/config';
+import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
-import _ from 'lodash';
 import { Tag, Divider, Button, Modal, Spin } from 'antd';
 import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 import MoveTag from '../../components/MoveTag';
@@ -104,7 +104,7 @@ class MoveFrame extends Component {
               <div style={{lineHeight:"125%"}}>
                 <span className="title">{this.state.moveFrame.name}</span>
                 <br />
-                <span>{_.capitalize(this.state.moveFrame.origin)} {_.capitalize(this.state.moveFrame.type)}</span>
+                <span>{sentenceCase(this.state.moveFrame.origin)} {sentenceCase(this.state.moveFrame.type)}</span>
                 {this.state.moveFrame.draft && <span> (Draft)</span>}
               </div>
             </div>

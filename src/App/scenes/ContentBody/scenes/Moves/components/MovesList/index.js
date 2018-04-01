@@ -1,7 +1,7 @@
+import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom'
-import _ from 'lodash';
 import { List, Button, Modal, Spin } from 'antd';
 import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
 
@@ -52,7 +52,7 @@ class MovesList extends Component {
                   <div style={{lineHeight:"125%"}}>
                     <span className="list-title">{move.name}</span>
                     <br />
-                    <span>{_.capitalize(move.origin)} {_.capitalize(move.type)}</span>
+                    <span>{sentenceCase(move.origin)} {sentenceCase(move.type)}</span>
                     {move.draft && <span> (Draft)</span>}
                   </div>
                 </div>

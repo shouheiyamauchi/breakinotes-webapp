@@ -1,8 +1,8 @@
 import { API_URL } from 'helpers/config'
+import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
-import _ from 'lodash';
 import { Affix, Modal, Button, Form, Input, Select, Tag } from 'antd';
 import MovesList from './components/MovesList';
 import MoveTag from '../../components/MoveTag';
@@ -214,21 +214,21 @@ class Moves extends Component {
   render() {
     const startingPositionsOptions = this.state.allFrames.map((moveFrame, index) => {
       if (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === moveFrame._id) === -1) {
-        return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
+        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
       return null;
     })
 
     const endingPositionsOptions = this.state.allFrames.map((moveFrame, index) => {
       if (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === moveFrame._id) === -1) {
-        return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
+        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
       return null;
     })
 
     const parentOptions = this.state.allMoves.map((move, index) => {
       if (!this.state.parent || this.state.parent._id !== move._id) {
-        return <Option value={move._id} key={index}>{_.capitalize(move.type) + ' - ' + move.name}</Option>;
+        return <Option value={move._id} key={index}>{sentenceCase(move.type) + ' - ' + move.name}</Option>;
       };
       return null;
     })

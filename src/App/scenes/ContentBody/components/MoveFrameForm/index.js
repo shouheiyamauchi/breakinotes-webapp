@@ -1,9 +1,9 @@
 import { API_URL } from 'helpers/config'
+import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import qs from 'qs';
-import _ from 'lodash';
 import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
 import MoveTag from '../MoveTag';
 import MultimediaTags from 'App/components/MultimediaTags';
@@ -255,7 +255,7 @@ class MoveForm extends Component {
   render() {
     const parentOptions = this.state.moveFrames.map((moveFrame, index) => {
       if (this.props.id !== moveFrame._id && (!this.state.parent || this.state.parent._id !== moveFrame._id)) {
-        return <Option value={moveFrame._id} key={index}>{_.capitalize(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
+        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
       };
       return null;
     })

@@ -11,6 +11,7 @@ import Move from './scenes/Move';
 import MoveFrame from './scenes/MoveFrame';
 import EditMove from './scenes/EditMove';
 import EditMoveFrame from './scenes/EditMoveFrame';
+import PracticeItems from './scenes/PracticeItems';
 import RedirectPage from './scenes/RedirectPage';
 
 const { Content } = Layout;
@@ -31,6 +32,7 @@ const ContentBody = props => {
           <Route path="/moveFrames/edit/:id" render={routerParams => <TransitionContainer><EditMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route path="/moveFrames/redirect/:id" render={routerParams => <TransitionContainer><RedirectPage {...routerParams} type={'moveFrames'} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
           <Route path="/moveFrames/:id" render={routerParams => <TransitionContainer><MoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
+          <Route exact path="/practiceItems/" render={routerParams => <TransitionContainer><PracticeItems {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
         </Switch>
       </Card>
     </Content>
