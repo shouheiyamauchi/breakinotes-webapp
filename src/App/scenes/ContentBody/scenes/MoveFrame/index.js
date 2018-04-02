@@ -97,7 +97,7 @@ class MoveFrame extends Component {
             <div className="vertical-align">
               <MoveTypeAvatar move={this.state.moveFrame} />
               <div className="horizontal-spacer" />
-              <div style={{lineHeight:"125%"}}>
+              <div style={{ lineHeight: '125%' }}>
                 <span className="title">{this.state.moveFrame.name}</span>
                 <br />
                 <span>{sentenceCase(this.state.moveFrame.origin)} {sentenceCase(this.state.moveFrame.type)}</span>

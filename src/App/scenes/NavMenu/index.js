@@ -20,11 +20,14 @@ const menuItems = (
         <Link to="/moves/new"><Icon type="file-text" />New Move</Link>
       </Menu.Item>
     </SubMenu>
+    <Menu.Item key="practiceItems">
+      <Link to="/practiceItems"><Icon type="bars" />Training Menu</Link>
+    </Menu.Item>
     <Menu.Item key="listMoveFrames">
-      <Link to="/moveFrames"><Icon type="bars" />Frames List</Link>
+      <Link to="/moveFrames"><Icon type="file" />Frames List</Link>
     </Menu.Item>
     <Menu.Item key="filter">
-      <Link to="/moves/filter"><Icon type="bars" />Moves List</Link>
+      <Link to="/moves/filter"><Icon type="file-text" />Moves List</Link>
     </Menu.Item>
   </Menu>
 );
@@ -32,7 +35,7 @@ const menuItems = (
 const NavMenu = () => (
   <Header className="vertical-align" style={{height: '46px', position: 'fixed', width: '100%', paddingLeft: '20px', zIndex: '1' }}>
     <Dropdown overlay={menuItems} trigger={['click']}>
-      <span className="menu-title"><Icon type="ant-design" style={{marginRight: '7px'}} />BreakiNotes</span>
+      <span className="menu-title"><Icon type="code" style={{marginRight: '7px'}} />BreakiNotes</span>
     </Dropdown>
   </Header>
 );

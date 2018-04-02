@@ -1,5 +1,6 @@
 import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
+import { Divider } from 'antd';
 import axios from 'axios';
 import MoveFramesList from './components/MoveFramesList';
 
@@ -54,7 +55,11 @@ class MoveFrames extends Component {
 
   render() {
     return (
-      <MoveFramesList moveFrames={this.state.moveFrames} deleteMove={this.deleteMove} loading={this.state.loading} />
+      <div>
+        <span className="title">Frames List</span>
+        <Divider />
+        <MoveFramesList moveFrames={this.state.moveFrames} deleteMove={this.deleteMove} loading={this.state.loading} />
+      </div>
     );
   }
 }

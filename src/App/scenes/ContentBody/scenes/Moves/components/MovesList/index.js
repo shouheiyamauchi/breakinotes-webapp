@@ -37,21 +37,35 @@ class MovesList extends Component {
   }
 
   render() {
+    const {
+      redirectToUrl,
+      confirmDelete
+    } = this;
+
+    const {
+      redirectUrl
+    } = this.state;
+
+    const {
+      loading,
+      moves
+    } = this.props;
+
     return (
       <div>
-        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
-        {this.props.loading ? (
+        {redirectUrl ? <Redirect push to={redirectUrl} /> : null}
+        {loading ? (
           <LoadingMessage />
         ) : (
           <List
             itemLayout="vertical"
-            dataSource={this.props.moves}
+            dataSource={moves}
             renderItem={move => (
               <List.Item>
-                <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/moves/' + move._id)}>
+                <div className="vertical-align clickable" onClick={() => redirectToUrl('/moves/' + move._id)}>
                   <MoveTypeAvatar move={move} />
                   <div className="horizontal-spacer" />
-                  <div style={{lineHeight:"125%"}}>
+                  <div style={{ lineHeight: '125%' }}>
                     <span className="list-title">{move.name}</span>
                     <br />
                     <span>{sentenceCase(move.origin)} {sentenceCase(move.type)}</span>
@@ -60,9 +74,9 @@ class MovesList extends Component {
                 </div>
                 <div className="vertical-spacer" />
                 <div className="align-right">
-                  <Button type="dashed" size="small" onClick={() => this.redirectToUrl('/moves/edit/' + move._id)}>Edit</Button>
+                  <Button type="dashed" size="small" onClick={() => redirectToUrl('/moves/edit/' + move._id)}>Edit</Button>
                   &nbsp;
-                  <Button type="danger" size="small" onClick={() => this.confirmDelete(move)}>Delete</Button>
+                  <Button type="danger" size="small" onClick={() => confirmDelete(move)}>Delete</Button>
                 </div>
               </List.Item>
             )}

@@ -45,7 +45,7 @@ class MoveFramesList extends Component {
                 <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/moveFrames/' + moveFrame._id)}>
                   <MoveTypeAvatar move={moveFrame} />
                   <div className="horizontal-spacer" />
-                  <div style={{lineHeight:"125%"}}>
+                  <div style={{ lineHeight: '125%' }}>
                     <span className="list-title">{moveFrame.name}</span>
                     <br />
                     <span>{sentenceCase(moveFrame.origin)} {sentenceCase(moveFrame.type)}</span>

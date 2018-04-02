@@ -1,4 +1,7 @@
 const moveTypeColors = {
+  MoveFrame: 'rgb(164, 139, 101)',
+  Move: 'rgb(203, 140, 89)',
+  MoveSet: 'rgb(108, 173, 128)',
   floorPosition: 'rgb(154, 125, 164)',
   floorFreeze: 'rgb(41, 190, 118)',
   midPosition: 'rgb(30, 112, 189)',
@@ -20,6 +23,9 @@ const moveTypeColors = {
 };
 
 const moveTypeShortNames = {
+  MoveFrame: 'Frame',
+  Move: 'Move',
+  MoveSet: 'Set',
   floorPosition: 'FlrPos',
   floorFreeze: 'FlrFz',
   midPosition: 'MidPos',

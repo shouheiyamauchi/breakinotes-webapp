@@ -3,7 +3,7 @@ import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
-import { Affix, Modal, Button, Form, Input, Select, Tag } from 'antd';
+import { Affix, Modal, Button, Form, Input, Select, Tag, Divider } from 'antd';
 import MovesList from './components/MovesList';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';
@@ -72,7 +72,7 @@ class Moves extends Component {
   }
 
   getFilteredMoves = () => {
-    this.setState({loading: true}, () => {
+    this.setState({ loading: true }, () => {
       axios.post(API_URL + 'moves/filter', qs.stringify({
         name: this.state.name,
         origin: this.state.origin,
@@ -350,6 +350,8 @@ class Moves extends Component {
           </Form>
         </Modal>
 
+        <span className="title">Moves List</span>
+        <Divider />
         <MovesList moves={this.state.filteredMoves} deleteMove={this.deleteMove} loading={this.state.loading} />
       </div>
     );

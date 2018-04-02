@@ -24,11 +24,25 @@ class PracticeItemForm extends Component {
     };
   }
 
-  editItem = () => {
-    return !!this.props.id;
+  componentDidMount() {
+    if (this.editItem()) {
+      this.setState({ moveType: this.props.practiceItem.move.moveType }, () => {
+        this.retrieveMoves(() => {
+          this.setState({
+            move: JSON.stringify({moveType: this.state.moveType, item: this.props.practiceItem.move.item._id}),
+            notes: this.props.practiceItem.notes,
+            multimedia: this.props.practiceItem.multimedia
+          });
+        });
+      });
+    };
   }
 
-  retrieveMoves = () => {
+  editItem = () => {
+    return !!this.props.practiceItem;
+  }
+
+  retrieveMoves = callback => {
     if (this.state.moveType !== 'disabled') {
       const resourceName = this.state.moveType[0].toLowerCase() + this.state.moveType.substr(1) + 's';
 
@@ -38,11 +52,13 @@ class PracticeItemForm extends Component {
         }
       })
         .then((response) => {
-          this.setState({ moves: response.data });
+          this.setState({ moves: response.data }, () => {
+            if (callback) callback();
+          });
         })
         .catch((error) => {
           this.props.removeAuthToken();
-        })
+        });
     };
   }
 
@@ -63,6 +79,10 @@ class PracticeItemForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
+    this.editItem() ? this.updatePracticeItem() : this.submitNewPracticeItem();
+  }
+
+  submitNewPracticeItem = () => {
     axios.post(API_URL + 'practiceItems', qs.stringify({
       date: this.props.dateString,
       move: this.state.move,
@@ -75,7 +95,29 @@ class PracticeItemForm extends Component {
       }
     })
       .then((response) => {
-        console.log(response.data);
+        this.props.appendNewPracticeItem(response.data);
+        this.props.changeEditing('');
+      })
+      .catch((error) => {
+        this.props.removeAuthToken();
+      });
+  }
+
+  updatePracticeItem = () => {
+    axios.put(API_URL + 'practiceItems/' + this.props.practiceItem._id, qs.stringify({
+      date: this.props.dateString,
+      move: this.state.move,
+      notes: this.state.notes,
+      multimedia: JSON.stringify(this.state.multimedia),
+      completed: this.props.practiceItem.completed
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        this.props.updatePracticeItem(response.data);
+        this.props.changeEditing('');
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -145,8 +187,11 @@ class PracticeItemForm extends Component {
 
 PracticeItemForm.propTypes = {
   removeAuthToken: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  dateString: PropTypes.string
+  practiceItem: PropTypes.object,
+  dateString: PropTypes.string,
+  changeEditing: PropTypes.func.isRequired,
+  appendNewPracticeItem: PropTypes.func,
+  updatePracticeItem: PropTypes.func
 }
 
 export default PracticeItemForm;

@@ -6,6 +6,7 @@
     "antd": "^3.0.2",
     "async": "^2.6.0",
     "axios": "^0.17.1",
+    "immutability-helper": "^2.6.6",
     "moment": "^2.21.0",
     "qs": "^6.5.1",
     "react": "^16.2.0",
@@ -19,10 +20,16 @@
     "video-react": "^0.9.4"
   },
   "scripts": {
-    "start": "REACT_APP_STAGE=production PORT=80 react-scripts start",
-    "dev": "REACT_APP_STAGE=development PORT=80 react-scripts start",
-    "build": "REACT_APP_STAGE=production react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "REACT_APP_STAGE=production PORT=80 react-app-rewired start",
+    "dev": "REACT_APP_STAGE=development PORT=80 react-app-rewired start",
+    "build": "REACT_APP_STAGE=production react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-app-rewired eject"
+  },
+  "devDependencies": {
+    "node-sass": "^4.8.3",
+    "react-app-rewire-css-modules": "codebandits/react-app-rewire-css-modules",
+    "react-app-rewired": "^1.5.0",
+    "sass-loader": "^6.0.7"
   }
 }
