@@ -36,7 +36,7 @@ const PracticeItemsList = props => {
                     <Avatar size="large" style={{ backgroundColor: moveTypeColors[practiceItem.move.moveType] }}>{moveTypeShortNames[practiceItem.move.moveType]}</Avatar>
                     <div className="horizontal-spacer" />
                     <div style={{ lineHeight: '125%' }}>
-                      <Link to={{ pathname: '/' + practiceItem.move.moveType[0].toLowerCase() + practiceItem.move.moveType.substr(1) + 's' + '/redirect/' + practiceItem.move.item._id }}>
+                      <Link to={{ pathname: '/' + practiceItem.move.moveType[0].toLowerCase() + practiceItem.move.moveType.substr(1) + 's/redirect/' + practiceItem.move.item._id }}>
                         <span className="list-title">{practiceItem.move.item.name}</span>
                       </Link>
                       <br />
