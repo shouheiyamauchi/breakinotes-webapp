@@ -20,20 +20,22 @@ const ContentBody = props => {
   return (
     <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
       <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
-        <Switch>
-          <Route exact path="/" render={routerParams => <TransitionContainer><Home {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/moves/new" render={routerParams => <TransitionContainer><NewMove {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/moves/filter" render={routerParams => <TransitionContainer><Moves {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route path="/moves/edit/:id" render={routerParams => <TransitionContainer><EditMove {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route path="/moves/redirect/:id" render={routerParams => <TransitionContainer><RedirectPage {...routerParams} type={'moves'} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route path="/moves/:id" render={routerParams => <TransitionContainer><Move {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/moveFrames/" render={routerParams => <TransitionContainer><MoveFrames {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/moveFrames/new" render={routerParams => <TransitionContainer><NewMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route path="/moveFrames/edit/:id" render={routerParams => <TransitionContainer><EditMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route path="/moveFrames/redirect/:id" render={routerParams => <TransitionContainer><RedirectPage {...routerParams} type={'moveFrames'} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route path="/moveFrames/:id" render={routerParams => <TransitionContainer><MoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-          <Route exact path="/practiceItems/" render={routerParams => <TransitionContainer><PracticeItems {...routerParams} removeAuthToken={props.removeAuthToken} /></TransitionContainer>}/>
-        </Switch>
+        <TransitionContainer key={props.path}>
+          <Switch>
+            <Route exact path="/" render={routerParams => <Home {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moves/new" render={routerParams => <NewMove {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moves/filter" render={routerParams => <Moves {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moves/edit/:id" render={routerParams => <EditMove {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moves/redirect/:id" render={routerParams => <RedirectPage {...routerParams} type={'moves'} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moves/:id" render={routerParams => <Move {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moveFrames/" render={routerParams => <MoveFrames {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moveFrames/new" render={routerParams => <NewMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moveFrames/edit/:id" render={routerParams => <EditMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moveFrames/redirect/:id" render={routerParams => <RedirectPage {...routerParams} type={'moveFrames'} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/moveFrames/:id" render={routerParams => <MoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+            <Route exact path="/practiceItems/" render={routerParams => <PracticeItems {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
+          </Switch>
+        </TransitionContainer>
       </Card>
     </Content>
   );

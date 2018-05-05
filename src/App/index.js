@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { Layout, Affix, Button, Icon } from 'antd';
 import Login from './scenes/Login';
 import NavMenu from './scenes/NavMenu';
@@ -29,28 +28,26 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
-        <Layout>
-          {!this.state.userToken ? (
-            <Login updateLoggedInStatus={this.updateLoggedInStatus} />
-          ) : (
-            <div>
-              <NavMenu />
-              <ContentBody removeAuthToken={this.removeAuthToken} />
-              <Affix style={{position: 'fixed', bottom: '20px', right: '20px'}}>
-                <Button.Group>
-                  <Button type="dashed" onClick={() => window.history.back()}>
-                    <Icon type="left" />
-                  </Button>
-                  <Button type="dashed" onClick={() => window.history.forward()}>
-                    <Icon type="right" />
-                  </Button>
-                </Button.Group>
-              </Affix>
-            </div>
-          )}
-        </Layout>
-      </Router>
+      <Layout>
+        {!this.state.userToken ? (
+          <Login updateLoggedInStatus={this.updateLoggedInStatus} />
+        ) : (
+          <div>
+            <NavMenu />
+            <ContentBody removeAuthToken={this.removeAuthToken} path={this.props.location.pathname} />
+            <Affix style={{position: 'fixed', bottom: '20px', right: '20px'}}>
+              <Button.Group>
+                <Button type="dashed" onClick={() => window.history.back()}>
+                  <Icon type="left" />
+                </Button>
+                <Button type="dashed" onClick={() => window.history.forward()}>
+                  <Icon type="right" />
+                </Button>
+              </Button.Group>
+            </Affix>
+          </div>
+        )}
+      </Layout>
     );
   }
 }
