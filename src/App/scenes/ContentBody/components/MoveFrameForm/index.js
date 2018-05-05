@@ -372,13 +372,13 @@ class MoveForm extends Component {
             <Select
               showSearch
               placeholder='Draft'
-              value={this.state.draft}
+              value={this.state.draft.toString()}
               onChange={(value) => this.handleSelectChange(value, 'draft')}
               optionFilterProp="children"
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              <Option value={true}>Yes</Option>
-              <Option value={false}>No</Option>
+              <Option value={'true'}>Yes</Option>
+              <Option value={'false'}>No</Option>
             </Select>
           </FormItem>
           <FormItem>
