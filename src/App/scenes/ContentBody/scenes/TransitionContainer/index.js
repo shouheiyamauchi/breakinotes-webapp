@@ -8,8 +8,8 @@ const TransitionContainer = props => {
         transitionAppear={true}
         transitionAppearTimeout={600}
         transitionEnterTimeout={600}
-        transitionLeaveTimeout={200}
-        transitionName={'SlideIn'}
+        transitionLeaveTimeout={600}
+        transitionName={'FadeIn'}
       >
         {props.children}
       </ReactCSSTransitionGroup>
