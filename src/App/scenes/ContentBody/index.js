@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
 import TransitionContainer from './scenes/TransitionContainer';
@@ -16,29 +16,85 @@ import RedirectPage from './scenes/RedirectPage';
 
 const { Content } = Layout;
 
-const ContentBody = props => {
-  return (
-    <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
-      <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
-        <TransitionContainer key={props.path}>
-          <Switch>
-            <Route exact path="/" render={routerParams => <Home {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moves/new" render={routerParams => <NewMove {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moves/filter" render={routerParams => <Moves {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moves/edit/:id" render={routerParams => <EditMove {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moves/redirect/:id" render={routerParams => <RedirectPage {...routerParams} type={'moves'} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moves/:id" render={routerParams => <Move {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moveFrames/" render={routerParams => <MoveFrames {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moveFrames/new" render={routerParams => <NewMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moveFrames/edit/:id" render={routerParams => <EditMoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moveFrames/redirect/:id" render={routerParams => <RedirectPage {...routerParams} type={'moveFrames'} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/moveFrames/:id" render={routerParams => <MoveFrame {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-            <Route exact path="/practiceItems/" render={routerParams => <PracticeItems {...routerParams} removeAuthToken={props.removeAuthToken} />}/>
-          </Switch>
-        </TransitionContainer>
-      </Card>
-    </Content>
-  );
+const routes = [
+  {
+    path: '/',
+    component: Home
+  },
+  {
+    path: '/moves/new',
+    component: NewMove
+  },
+  {
+    path: '/moves/filter',
+    component: Moves
+  },
+  {
+    path: '/moves/edit/:id',
+    component: EditMove
+  },
+  {
+    path: '/moves/redirect/:id',
+    component: RedirectPage,
+    extraProps: { type: 'moves' }
+  },
+  {
+    path: '/moves/:id',
+    component: Move
+  },
+  {
+    path: '/moveFrames',
+    component: MoveFrames
+  },
+  {
+    path: '/moveFrames/new',
+    component: NewMoveFrame
+  },
+  {
+    path: '/moveFrames/edit/:id',
+    component: EditMoveFrame
+  },
+  {
+    path: '/moveFrames/redirect/:id',
+    component: RedirectPage,
+    extraProps: { type: 'moveFrames' }
+  },
+  {
+    path: '/moveFrames/:id',
+    component: MoveFrame
+  },
+  {
+    path: '/practiceItems',
+    component: PracticeItems
+  },
+]
+
+class ContentBody extends Component {
+  generateAllRoutes = routeObjects => {
+    return routeObjects.map((routeObject, index) => this.generateRoute(index, routeObject.component, routeObject.path, routeObject.extraProps))
+  }
+
+  generateRoute = (key, Component, path, extraProps) => {
+    return <Route key={key} exact path={path} render={routerParams => <Component {...routerParams} removeAuthToken={this.props.removeAuthToken} {...extraProps} />}/>
+  }
+
+  render() {
+    const {
+      path
+    } = this.props
+
+    return (
+      <Content style={{ padding: 24, minHeight: 'calc(100vh - 46px)', marginTop: 46 }}>
+        <Card style={{ width: '100%', minHeight: 'calc(100vh - 94px)' }}>
+          <TransitionContainer key={path}>
+            <Switch>
+              {this.generateAllRoutes(routes)}
+            </Switch>
+          </TransitionContainer>
+        </Card>
+      </Content>
+    );
+  }
 }
 
 export default ContentBody;
