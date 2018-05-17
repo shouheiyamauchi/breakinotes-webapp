@@ -19,6 +19,9 @@ const menuItems = (
       <Menu.Item key="newMove">
         <Link to="/moves/new"><Icon type="file-text" />New Move</Link>
       </Menu.Item>
+      <Menu.Item key="newSet">
+        <Link to="/sets/new"><Icon type="folder-open" />New Set</Link>
+      </Menu.Item>
     </SubMenu>
     <Menu.Item key="practiceItems">
       <Link to="/practiceItems"><Icon type="bars" />Training Menu</Link>

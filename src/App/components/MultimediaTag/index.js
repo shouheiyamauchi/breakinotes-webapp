@@ -66,7 +66,7 @@ class MultimediaTag extends Component {
 
   render() {
     return (
-        <Tag closable={this.props.closable} onClose={this.props.onClose}>
+        <Tag color="#000000" closable={this.props.closable} onClose={this.props.onClose}>
           <span onClick={this.showModal}>{this.props.multimedia.name}</span>
           <Modal
             title={this.props.multimedia.name}

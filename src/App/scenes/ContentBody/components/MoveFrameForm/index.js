@@ -116,12 +116,6 @@ class MoveForm extends Component {
     this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
   }
 
-  removeMultimediaFromArray = (e, multimediaProp) => {
-    e.preventDefault();
-
-    this.setState({multimedia: this.state.multimedia.filter(multimedia => multimedia.value !== multimediaProp.value)});
-  }
-
   handleInputChange = e => {
     const target = e.target;
     const value = target.value;
@@ -246,6 +240,12 @@ class MoveForm extends Component {
     multimedia.name = newName;
 
     this.setState({multimedia: this.state.multimedia});
+  }
+
+  removeMultimediaFromArray = (e, multimediaProp) => {
+    e.preventDefault();
+
+    this.setState({multimedia: this.state.multimedia.filter(multimedia => multimedia.value !== multimediaProp.value)});
   }
 
   addExtraPositions = (selectedValues, extraStartingOrEndingPositions) => {
@@ -383,7 +383,7 @@ class MoveForm extends Component {
           </FormItem>
           <FormItem>
             <Button type='primary' htmlType='submit'>
-              {!this.editPage() ? 'Add Move Frame' : 'Edit Move Frame'}
+              {!this.editPage() ? 'Add Move Frame' : 'Update Move Frame'}
             </Button>
           </FormItem>
         </Form>

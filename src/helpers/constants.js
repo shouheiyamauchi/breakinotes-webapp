@@ -19,7 +19,7 @@ const moveTypeColors = {
   floorwork: 'rgb(255,225,132)',
   backrock: 'rgb(173, 198, 71)',
   powermove: 'rgb(174,232,132)',
-  freeze: 'rgb(124,229,217)'
+  freezework: 'rgb(124,229,217)'
 };
 
 const moveTypeShortNames = {
@@ -27,7 +27,7 @@ const moveTypeShortNames = {
   Move: 'Move',
   MoveSet: 'Set',
   floorPosition: 'FlrPos',
-  floorFreeze: 'FlrFz',
+  floorFreeze: 'FlrFrz',
   midPosition: 'MidPos',
   midFreeze: 'MidFrz',
   standingPosition: 'StdPos',
@@ -43,7 +43,7 @@ const moveTypeShortNames = {
   floorwork: 'Floor',
   backrock: 'Back',
   powermove: 'Power',
-  freeze: 'Freeze'
+  freezework: 'FrzWrk'
 }
 
 export { moveTypeColors, moveTypeShortNames };

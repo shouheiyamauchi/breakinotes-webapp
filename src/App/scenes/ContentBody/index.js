@@ -6,6 +6,7 @@ import Home from './scenes/Home';
 import MoveFrames from './scenes/MoveFrames';
 import NewMove from './scenes/NewMove';
 import NewMoveFrame from './scenes/NewMoveFrame';
+import NewSet from './scenes/NewSet';
 import Moves from './scenes/Moves';
 import Move from './scenes/Move';
 import MoveFrame from './scenes/MoveFrame';
@@ -53,6 +54,10 @@ const routes = [
   {
     path: '/moveFrames/edit/:id',
     component: EditMoveFrame
+  },
+  {
+    path: '/sets/new',
+    component: NewSet
   },
   {
     path: '/moveFrames/redirect/:id',

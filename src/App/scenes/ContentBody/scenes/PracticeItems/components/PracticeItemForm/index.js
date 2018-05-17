@@ -150,7 +150,7 @@ class PracticeItemForm extends Component {
           <Select
             showSearch
             value={moveType}
-            onChange={value => handleSelectChange(value, 'moveType')}
+            onChange={value => { handleSelectChange(value, 'moveType'); handleSelectChange('disabled', 'move'); }}
             optionFilterProp="children"
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
           >
@@ -177,7 +177,7 @@ class PracticeItemForm extends Component {
         </FormItem>
         <FormItem>
           <Button type='primary' htmlType='submit'>
-            {!this.editItem() ? 'Add Practice Item' : 'Edit Practice Item'}
+            {!this.editItem() ? 'Add Practice Item' : 'Update Practice Item'}
           </Button>
         </FormItem>
       </Form>
