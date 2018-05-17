@@ -28,8 +28,41 @@ class SetForm extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.editPage()) this.getSet(this.props.id); // edit page will have the move id as prop
+  }
+
   editPage = () => {
     return !!this.props.id;
+  }
+
+  getSet = id => {
+    axios.get(API_URL + 'moveSets/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        const moves = response.data.moves.map(move => {
+          return {
+            item: move.item._id,
+            moveType: move.moveType,
+            name: move.item.name,
+            type: move.item.type
+          };
+        });
+
+        this.setState({
+          name: response.data.name,
+          notes: response.data.notes,
+          moves,
+          multimedia: response.data.multimedia,
+          draft: response.data.draft
+        });
+      })
+      .catch((error) => {
+        this.props.removeAuthToken();
+      })
   }
 
   retrieveMoves = () => {
@@ -102,7 +135,7 @@ class SetForm extends Component {
       }
     })
       .then((response) => {
-        console.log('redirect to new set page')
+        console.log('redirect to new set page') // create set view page
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -110,7 +143,25 @@ class SetForm extends Component {
   }
 
   updateSet = () => {
-    console.log('update set API call')
+    const moves = this.state.moves.map(move => { return { moveType: move.moveType, item: move.item }});
+
+    axios.put(API_URL + 'moveSets/' + this.props.id, qs.stringify({
+      name: this.state.name,
+      moves: JSON.stringify(moves),
+      notes: this.state.notes,
+      multimedia: JSON.stringify(this.state.multimedia),
+      draft: this.state.draft
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        console.log('redirect to new set page') // create set view page
+      })
+      .catch((error) => {
+        this.props.removeAuthToken();
+      });
   }
 
   getSignedRequestAndUpload = file => {
@@ -227,7 +278,7 @@ class SetForm extends Component {
 
     const moves = this.state.moves.map(move => {
       return {
-        type: move.moveType[0].toLowerCase() + move.moveType.substr(1),
+        type: move.moveType[0].toLowerCase() + move.moveType.substr(1) + 's',
         move: {
           _id: move.item,
           type: move.type,

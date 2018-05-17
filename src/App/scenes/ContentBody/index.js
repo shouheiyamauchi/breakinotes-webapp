@@ -12,6 +12,7 @@ import Move from './scenes/Move';
 import MoveFrame from './scenes/MoveFrame';
 import EditMove from './scenes/EditMove';
 import EditMoveFrame from './scenes/EditMoveFrame';
+import EditSet from './scenes/EditSet';
 import PracticeItems from './scenes/PracticeItems';
 import RedirectPage from './scenes/RedirectPage';
 
@@ -33,6 +34,10 @@ const routes = [
   {
     path: '/moves/edit/:id',
     component: EditMove
+  },
+  {
+    path: '/sets/edit/:id',
+    component: EditSet
   },
   {
     path: '/moves/redirect/:id',
