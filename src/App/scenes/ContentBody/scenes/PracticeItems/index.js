@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 import moment from 'moment';
 import axios from 'axios';
 import qs from 'qs';
-import { Divider, DatePicker, Button } from 'antd';
+import { Divider, DatePicker, Button, Modal } from 'antd';
 import TransitionContainer from 'App/components/TransitionContainer';
 import PracticeItemForm from './components/PracticeItemForm';
 import PracticeItemsList from './components/PracticeItemsList';
@@ -101,13 +101,39 @@ class PracticeItems extends Component {
     return this.state.practiceItems.findIndex(practiceItem => practiceItem._id === id);
   }
 
+  confirmDelete = id => {
+    Modal.confirm({
+      title: 'Confirm delete',
+      content: 'Are you sure to delete this practice item?',
+      onOk: () => {
+        this.deletePracticeItem(id);
+      },
+      onCancel() {},
+    });
+  }
+
+  deletePracticeItem = id => {
+    axios.delete(API_URL + 'practiceItems/' + id, {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        this.getFilteredPracticeItems();
+      })
+      .catch((error) => {
+        this.props.removeAuthToken();
+      });
+  }
+
   render() {
     const {
       handleDateChange,
       changeEditing,
       toggleComplete,
       appendNewPracticeItem,
-      updatePracticeItem
+      updatePracticeItem,
+      confirmDelete
     } = this;
 
     const {
@@ -134,7 +160,8 @@ class PracticeItems extends Component {
       editing,
       practiceItemFormProps,
       changeEditing,
-      updatePracticeItem
+      updatePracticeItem,
+      confirmDelete
     };
 
     return (

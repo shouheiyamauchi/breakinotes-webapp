@@ -15,7 +15,8 @@ const PracticeItemsList = props => {
     editing,
     practiceItemFormProps,
     changeEditing,
-    updatePracticeItem
+    updatePracticeItem,
+    confirmDelete
   } = props;
 
   return (
@@ -29,8 +30,8 @@ const PracticeItemsList = props => {
               {editing === practiceItem._id ? (
                 <PracticeItemForm {...practiceItemFormProps} practiceItem={practiceItem} updatePracticeItem={updatePracticeItem} />
               ) : (
-                <div className={practiceItem.completed ? styles.completed : styles.incomplete}>
-                  <div className="vertical-align">
+                <div>
+                  <div className={'vertical-align ' + (practiceItem.completed ? styles.completed : styles.incomplete)}>
                     <Avatar size="large" style={{ backgroundColor: moveTypeColors[practiceItem.move.moveType] }}>{moveTypeShortNames[practiceItem.move.moveType]}</Avatar>
                     <div className="horizontal-spacer" />
                     <div style={{ lineHeight: '125%' }}>
@@ -46,7 +47,7 @@ const PracticeItemsList = props => {
                     <div style={{ float: 'left' }}>
                       <Button type="dashed" size="small" onClick={() => changeEditing(practiceItem._id)}>Edit</Button>
                       &nbsp;
-                      <Button type="danger" size="small" onClick={() => console.log('delete')}>Delete</Button>
+                      <Button type="danger" size="small" onClick={() => confirmDelete(practiceItem._id)}>Delete</Button>
                     </div>
                     <div style={{ float: 'right' }}>
                       <Switch checked={practiceItem.completed} onChange={() => toggleComplete(practiceItem._id)} disabled={practiceItem.loading} checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="cross" />} />
