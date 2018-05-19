@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { List, Button, Modal } from 'antd';
-import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
+import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
 
 class MoveFramesList extends Component {

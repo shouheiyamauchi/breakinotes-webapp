@@ -6,7 +6,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
 import MoveTag from '../MoveTag';
-import MultimediaTags from 'App/components/MultimediaTags';
+import MultimediaTags from '../MultimediaTags';
 
 const FormItem = Form.Item;
 const { Option } = Select;

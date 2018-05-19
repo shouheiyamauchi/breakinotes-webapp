@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import { Divider, Form, Input, Select, Upload, Progress, Button, Icon, Tag } from 'antd';
-import MultimediaTags from 'App/components/MultimediaTags';
+import MultimediaTags from '../MultimediaTags';
 import SetTags from '../SetTags';
 
 const FormItem = Form.Item;

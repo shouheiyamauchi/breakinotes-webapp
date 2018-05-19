@@ -7,7 +7,7 @@ import qs from 'qs';
 import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal, Checkbox } from 'antd';
 import MoveTag from '../MoveTag';
 import MoveTags from '../MoveTags';
-import MultimediaTags from 'App/components/MultimediaTags';
+import MultimediaTags from '../MultimediaTags';
 
 const FormItem = Form.Item;
 const { Option } = Select;

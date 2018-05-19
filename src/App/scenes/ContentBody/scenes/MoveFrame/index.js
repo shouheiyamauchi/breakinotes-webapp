@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import { Tag, Divider, Button, Modal } from 'antd';
-import MoveTypeAvatar from 'App/components/MoveTypeAvatar';
+import MoveTypeAvatar from '../../components/MoveTypeAvatar';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';
-import MultimediaTags from 'App/components/MultimediaTags';
+import MultimediaTags from '../../components/MultimediaTags';
 import LoadingMessage from 'App/components/LoadingMessage';
 
 class MoveFrame extends Component {
