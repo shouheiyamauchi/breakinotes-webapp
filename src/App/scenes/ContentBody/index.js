@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Layout, Card } from 'antd';
-import TransitionContainer from './scenes/TransitionContainer';
+import TransitionContainer from 'App/components/TransitionContainer';
 import Home from './scenes/Home';
 import MoveFrames from './scenes/MoveFrames';
 import NewMove from './scenes/NewMove';

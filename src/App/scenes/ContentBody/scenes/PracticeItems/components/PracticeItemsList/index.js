@@ -19,10 +19,8 @@ const PracticeItemsList = props => {
   } = props;
 
   return (
-    <div>
-      {loading ? (
-        <LoadingMessage />
-      ) : (
+    <LoadingMessage loading={loading}>
+      {!loading && (
         <List
           itemLayout="vertical"
           dataSource={practiceItems}
@@ -61,7 +59,7 @@ const PracticeItemsList = props => {
           )}
         />
       )}
-    </div>
+    </LoadingMessage>
   );
 }
 

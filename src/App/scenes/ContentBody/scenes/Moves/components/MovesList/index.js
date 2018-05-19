@@ -52,11 +52,9 @@ class MovesList extends Component {
     } = this.props;
 
     return (
-      <div>
+      <LoadingMessage loading={loading}>
         {redirectUrl ? <Redirect push to={redirectUrl} /> : null}
-        {loading ? (
-          <LoadingMessage />
-        ) : (
+        {!loading && (
           <List
             itemLayout="vertical"
             dataSource={moves}
@@ -82,7 +80,7 @@ class MovesList extends Component {
             )}
           />
         )}
-      </div>
+      </LoadingMessage>
     );
   }
 }

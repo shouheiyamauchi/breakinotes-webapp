@@ -87,11 +87,13 @@ class Move extends Component {
   }
 
   render() {
+    const {
+      loading
+    } = this.state;
+
     return (
-      <div>
-        {this.state.loading ? (
-          <LoadingMessage />
-        ) : (
+      <LoadingMessage loading={loading}>
+        {!loading && (
           <div>
             {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
             <div className="vertical-align">
@@ -146,7 +148,7 @@ class Move extends Component {
             </div>
           </div>
         )}
-      </div>
+      </LoadingMessage>
     );
   }
 }

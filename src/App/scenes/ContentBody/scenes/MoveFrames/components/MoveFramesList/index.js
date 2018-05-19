@@ -31,12 +31,14 @@ class MoveFramesList extends Component {
   }
 
   render() {
+    const {
+      loading
+    } = this.props;
+
     return (
-      <div>
+      <LoadingMessage loading={loading}>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
-        {this.props.loading ? (
-          <LoadingMessage />
-        ) : (
+        {!loading && (
           <List
             itemLayout="vertical"
             dataSource={this.props.moveFrames}
@@ -62,7 +64,7 @@ class MoveFramesList extends Component {
             )}
           />
         )}
-      </div>
+      </LoadingMessage>
     );
   }
 }

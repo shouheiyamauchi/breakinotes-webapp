@@ -42,6 +42,12 @@
   font-weight: 500;
 }
 
+/* custom CSS for layout */
+
+.ant-layout {
+  min-height: 100vh;
+}
+
 /* custom CSS for menu */
 
 .menu-title {
