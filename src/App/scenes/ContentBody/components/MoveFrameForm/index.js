@@ -18,7 +18,7 @@ class MoveForm extends Component {
     super(props);
 
     this.state = {
-      loading: true
+      loading: true,
       moveFrames: [],
       name: '',
       origin: 'disabled',
