@@ -1,6 +1,7 @@
 import { API_URL } from 'helpers/config';
 import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import { Divider, Form, Input, Select, Upload, Progress, Button, Icon, Tag } from 'antd';
@@ -12,7 +13,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
 
-class SetForm extends Component {
+class MoveSetForm extends Component {
   constructor(props) {
     super(props);
 
@@ -26,6 +27,7 @@ class SetForm extends Component {
       notes: '',
       multimedia: [],
       draft: true,
+      redirectUrl: '',
       uploading: new Map()
     };
   }
@@ -142,7 +144,7 @@ class SetForm extends Component {
       }
     })
       .then((response) => {
-        console.log('redirect to new set page') // create set view page
+        this.setState({redirectUrl: '/moveSets/' + response.data._id});
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -164,7 +166,7 @@ class SetForm extends Component {
       }
     })
       .then((response) => {
-        console.log('redirect to new set page') // create set view page
+        this.setState({redirectUrl: '/moveSets/' + response.data._id});
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -297,6 +299,7 @@ class SetForm extends Component {
 
     return (
       <LoadingMessage loading={loading}>
+        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         <span className="title">{!this.editPage() ? 'Add New Set' : 'Edit Set'}</span>
         <Divider />
         <div className="vertical-spacer" />
@@ -380,4 +383,4 @@ class SetForm extends Component {
   }
 }
 
-export default SetForm;
+export default MoveSetForm;

@@ -19,8 +19,8 @@ const menuItems = (
       <Menu.Item key="newMove">
         <Link to="/moves/new"><Icon type="file-text" />New Move</Link>
       </Menu.Item>
-      <Menu.Item key="newSet">
-        <Link to="/sets/new"><Icon type="folder-open" />New Set</Link>
+      <Menu.Item key="newMoveSet">
+        <Link to="/moveSets/new"><Icon type="folder-open" />New Set</Link>
       </Menu.Item>
     </SubMenu>
     <Menu.Item key="practiceItems">
@@ -31,6 +31,9 @@ const menuItems = (
     </Menu.Item>
     <Menu.Item key="filter">
       <Link to="/moves/filter"><Icon type="file-text" />Moves List</Link>
+    </Menu.Item>
+    <Menu.Item key="listMoveSets">
+      <Link to="/moveSets"><Icon type="folder-open" />Sets List</Link>
     </Menu.Item>
   </Menu>
 );

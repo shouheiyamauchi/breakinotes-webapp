@@ -6,13 +6,15 @@ import Home from './scenes/Home';
 import MoveFrames from './scenes/MoveFrames';
 import NewMove from './scenes/NewMove';
 import NewMoveFrame from './scenes/NewMoveFrame';
-import NewSet from './scenes/NewSet';
+import NewMoveSet from './scenes/NewMoveSet';
 import Moves from './scenes/Moves';
 import Move from './scenes/Move';
+import MoveSet from './scenes/MoveSet';
+import MoveSets from './scenes/MoveSets';
 import MoveFrame from './scenes/MoveFrame';
 import EditMove from './scenes/EditMove';
 import EditMoveFrame from './scenes/EditMoveFrame';
-import EditSet from './scenes/EditSet';
+import EditMoveSet from './scenes/EditMoveSet';
 import PracticeItems from './scenes/PracticeItems';
 import RedirectPage from './scenes/RedirectPage';
 
@@ -36,10 +38,6 @@ const routes = [
     component: EditMove
   },
   {
-    path: '/sets/edit/:id',
-    component: EditSet
-  },
-  {
     path: '/moves/redirect/:id',
     component: RedirectPage,
     extraProps: { type: 'moves' }
@@ -61,8 +59,20 @@ const routes = [
     component: EditMoveFrame
   },
   {
-    path: '/sets/new',
-    component: NewSet
+    path: '/moveSets/new',
+    component: NewMoveSet
+  },
+  {
+    path: '/moveSets',
+    component: MoveSets
+  },
+  {
+    path: '/moveSets/:id',
+    component: MoveSet
+  },
+  {
+    path: '/moveSets/edit/:id',
+    component: EditMoveSet
   },
   {
     path: '/moveFrames/redirect/:id',
