@@ -6,6 +6,7 @@ import moment from 'moment';
 import axios from 'axios';
 import qs from 'qs';
 import { Divider, DatePicker, Button } from 'antd';
+import TransitionContainer from 'App/components/TransitionContainer';
 import PracticeItemForm from './components/PracticeItemForm';
 import PracticeItemsList from './components/PracticeItemsList';
 
@@ -149,7 +150,9 @@ class PracticeItems extends Component {
           )}
         </div>
         <br />
-        {editing === 'new' && <PracticeItemForm {...practiceItemFormProps} appendNewPracticeItem={appendNewPracticeItem} />}
+        <TransitionContainer key={editing}>
+          {editing === 'new' && <PracticeItemForm {...practiceItemFormProps} appendNewPracticeItem={appendNewPracticeItem} />}
+        </TransitionContainer>
         <div>
           <PracticeItemsList {...practiceItemsListProps} />
         </div>

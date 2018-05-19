@@ -6,6 +6,7 @@ import qs from 'qs';
 import { Divider, Form, Input, Select, Upload, Progress, Button, Icon, Tag } from 'antd';
 import MultimediaTags from '../MultimediaTags';
 import SetTags from '../SetTags';
+import LoadingMessage from 'App/components/LoadingMessage';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -16,6 +17,7 @@ class SetForm extends Component {
     super(props);
 
     this.state = {
+      loading: true,
       moveType: 'disabled',
       moveOptions: [],
       moveFrames: [],
@@ -29,7 +31,11 @@ class SetForm extends Component {
   }
 
   componentDidMount() {
-    if (this.editPage()) this.getSet(this.props.id); // edit page will have the move id as prop
+    if (this.editPage()) {
+      this.getSet(this.props.id);
+    } else {
+      this.setState({ loading: false });
+    };
   }
 
   editPage = () => {
@@ -53,6 +59,7 @@ class SetForm extends Component {
         });
 
         this.setState({
+          loading: false,
           name: response.data.name,
           notes: response.data.notes,
           moves,
@@ -242,6 +249,7 @@ class SetForm extends Component {
     } = this;
 
     const {
+      loading,
       moveType,
       name,
       notes,
@@ -288,7 +296,7 @@ class SetForm extends Component {
     });
 
     return (
-      <div>
+      <LoadingMessage loading={loading}>
         <span className="title">{!this.editPage() ? 'Add New Set' : 'Edit Set'}</span>
         <Divider />
         <div className="vertical-spacer" />
@@ -367,7 +375,7 @@ class SetForm extends Component {
             </Button>
           </FormItem>
         </Form>
-      </div>
+      </LoadingMessage>
     );
   }
 }

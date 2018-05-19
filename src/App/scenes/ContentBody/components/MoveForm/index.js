@@ -8,6 +8,7 @@ import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Moda
 import MoveTag from '../MoveTag';
 import MoveTags from '../MoveTags';
 import MultimediaTags from '../MultimediaTags';
+import LoadingMessage from 'App/components/LoadingMessage';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -18,6 +19,7 @@ class MoveForm extends Component {
     super(props);
 
     this.state = {
+      loading: true,
       moves: [],
       moveFrames: [],
       name: '',
@@ -39,7 +41,12 @@ class MoveForm extends Component {
   }
 
   componentDidMount() {
-    if (this.editPage()) this.getMove(this.props.id); // edit page will have the move id as prop
+    if (this.editPage()) {
+      this.getMove(this.props.id);
+    } else {
+      this.setState({ loading: false });
+    };
+
     this.getMoves();
     this.getMoveFrames();
   }
@@ -55,7 +62,7 @@ class MoveForm extends Component {
       }
     })
       .then((response) => {
-        this.setState({moves: response.data});
+        this.setState({ loading: false, moves: response.data });
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -343,6 +350,10 @@ class MoveForm extends Component {
   }
 
   render() {
+    const {
+      loading
+    } = this.state;
+
     const startingFramesOptions = this.state.moveFrames.map((moveFrame, index) => {
       if (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === moveFrame._id) === -1) {
         return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
@@ -387,7 +398,7 @@ class MoveForm extends Component {
     })
 
     return (
-      <div>
+      <LoadingMessage loading={loading}>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         <span className="title">{!this.editPage() ? 'Add New Move' : 'Edit Move'}</span>
         <Divider />
@@ -528,7 +539,7 @@ class MoveForm extends Component {
             </Button>
           </FormItem>
         </Form>
-      </div>
+      </LoadingMessage>
     );
   }
 }

@@ -7,6 +7,7 @@ import qs from 'qs';
 import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
 import MoveTag from '../MoveTag';
 import MultimediaTags from '../MultimediaTags';
+import LoadingMessage from 'App/components/LoadingMessage';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -17,6 +18,7 @@ class MoveForm extends Component {
     super(props);
 
     this.state = {
+      loading: true
       moveFrames: [],
       name: '',
       origin: 'disabled',
@@ -31,7 +33,12 @@ class MoveForm extends Component {
   }
 
   componentDidMount() {
-    if (this.editPage()) this.getMoveFrame(this.props.id); // edit page will have the move id as prop
+    if (this.editPage()) {
+      this.getMoveFrame(this.props.id);
+    } else {
+      this.setState({ loading: false });
+    };
+
     this.getMoveFrames();
   }
 
@@ -46,7 +53,7 @@ class MoveForm extends Component {
       }
     })
       .then((response) => {
-        this.setState({moveFrames: response.data});
+        this.setState({ loading: false, moveFrames: response.data });
       })
       .catch((error) => {
         this.props.removeAuthToken();
@@ -253,6 +260,10 @@ class MoveForm extends Component {
   }
 
   render() {
+    const {
+      loading
+    } = this.state;
+
     const parentOptions = this.state.moveFrames.map((moveFrame, index) => {
       if (this.props.id !== moveFrame._id && (!this.state.parent || this.state.parent._id !== moveFrame._id)) {
         return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
@@ -283,7 +294,7 @@ class MoveForm extends Component {
     })
 
     return (
-      <div>
+      <LoadingMessage loading={loading}>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         <span className="title">{!this.editPage() ? 'Add New Move Frame' : 'Edit Move Frame'}</span>
         <Divider />
@@ -387,7 +398,7 @@ class MoveForm extends Component {
             </Button>
           </FormItem>
         </Form>
-      </div>
+      </LoadingMessage>
     );
   }
 }

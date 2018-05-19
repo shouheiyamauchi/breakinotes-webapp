@@ -38,7 +38,7 @@ const menuItems = (
 const NavMenu = () => (
   <Header className="vertical-align" style={{height: '46px', position: 'fixed', top: '0', width: '100%', paddingLeft: '20px', zIndex: '1' }}>
     <Dropdown overlay={menuItems} trigger={['click']}>
-      <span className="menu-title"><Icon type="code" style={{marginRight: '7px'}} />BreakiNotes</span>
+      <span className="menu-title"><Icon type="api" style={{marginRight: '7px'}} />BreakiNotes</span>
     </Dropdown>
   </Header>
 );
