@@ -34,6 +34,7 @@ class App extends Component {
       .catch((error) => {
         // invalid login token
         this.setState({ loading: false });
+        document.location.reload();
       })
   }
 
