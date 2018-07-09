@@ -2,6 +2,7 @@ import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import { Divider } from 'antd';
 import axios from 'axios';
+import qs from 'qs';
 import MoveSetsList from './components/MoveSetsList';
 
 class MoveSets extends Component {
@@ -20,7 +21,9 @@ class MoveSets extends Component {
 
   getMoveSets = () => {
     this.setState({loading: true}, () => {
-      axios.get(API_URL + 'moveSets', {
+      axios.post(API_URL + 'moveSets/filter', qs.stringify({
+
+      }), {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('breakinotes')
         }

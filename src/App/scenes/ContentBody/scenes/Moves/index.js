@@ -26,6 +26,7 @@ class Moves extends Component {
       startingPositions: [],
       endingPositions: [],
       parent: '',
+      draft: '',
       loading: true
     };
   }
@@ -59,6 +60,7 @@ class Moves extends Component {
                   startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.state.allFrames.find(move => move._id === moveId)) : [],
                   endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allFrames.find(move => move._id === moveId)) : [],
                   parent: (urlParams.parent) ? this.state.allMoves.find((move) => move._id === urlParams.parent) : '',
+                  draft: urlParams.draft
                 }, () => {
                   this.getFilteredMoves();
                 });
@@ -80,6 +82,7 @@ class Moves extends Component {
         startingPositions: (this.state.startingPositions.length > 0) ? JSON.stringify(this.state.startingPositions) : null,
         endingPositions: (this.state.endingPositions.length > 0) ? JSON.stringify(this.state.endingPositions) : null,
         parent: this.state.parent,
+        draft: this.state.draft
       }), {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('breakinotes')
@@ -109,6 +112,7 @@ class Moves extends Component {
       startingPositions: this.state.startingPositions.map(move => move._id),
       endingPositions: this.state.endingPositions.map(move => move._id),
       parent: this.state.parent ? this.state.parent._id : null,
+      draft: this.state.draft
     };
 
     for (const filterType in filters) {
@@ -346,6 +350,21 @@ class Moves extends Component {
                 <Tag>Select a move from above</Tag> :
                 <MoveTag type="moves" move={this.state.parent} closable={true} onClose={(e) => this.clearSingleMove(e, 'parent')} />
               }
+            </FormItem>
+            <FormItem label='Draft'>
+              <Select
+                showSearch
+                placeholder='Draft'
+                value={this.state.draft && this.state.draft.toString()}
+                allowClear={true}
+                onChange={(value) => this.handleSelectChange(value, 'draft')}
+                optionFilterProp="children"
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              >
+                <Option value='disabled' disabled>Draft</Option>
+                <Option value={'true'}>Yes</Option>
+                <Option value={'false'}>No</Option>
+              </Select>
             </FormItem>
           </Form>
         </Modal>

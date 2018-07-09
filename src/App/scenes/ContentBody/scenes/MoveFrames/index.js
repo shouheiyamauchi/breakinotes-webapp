@@ -2,6 +2,7 @@ import { API_URL } from 'helpers/config'
 import React, { Component } from 'react';
 import { Divider } from 'antd';
 import axios from 'axios';
+import qs from 'qs';
 import MoveFramesList from './components/MoveFramesList';
 
 class MoveFrames extends Component {
@@ -20,7 +21,9 @@ class MoveFrames extends Component {
 
   getMoves = () => {
     this.setState({loading: true}, () => {
-      axios.get(API_URL + 'moveFrames', {
+      axios.post(API_URL + 'moveFrames/filter', qs.stringify({
+
+      }), {
         headers: {
           Authorization: 'JWT ' + localStorage.getItem('breakinotes')
         }
