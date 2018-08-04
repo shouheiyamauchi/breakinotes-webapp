@@ -1,7 +1,7 @@
 import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { List, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -26,13 +26,8 @@ class MovesList extends Component {
 
   render() {
     const {
-      redirectToUrl,
       confirmDelete
     } = this;
-
-    const {
-      redirectUrl
-    } = this.state;
 
     const {
       loading,
@@ -59,7 +54,9 @@ class MovesList extends Component {
                 </div>
                 <div className="vertical-spacer" />
                 <div className="align-right">
-                  <Button type="dashed" size="small" onClick={() => redirectToUrl('/moves/edit/' + move._id)}>Edit</Button>
+                  <Link to={'/moves/edit/' + move._id}>
+                    <Button type="dashed" size="small">Edit</Button>
+                  </Link>
                   &nbsp;
                   <Button type="danger" size="small" onClick={() => confirmDelete(move)}>Delete</Button>
                 </div>

@@ -1,7 +1,7 @@
 import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { List, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -43,7 +43,9 @@ class MoveFramesList extends Component {
                 </div>
                 <div className="vertical-spacer" />
                 <div className="align-right">
-                  <Button type="dashed" size="small" onClick={() => this.redirectToUrl('/moveFrames/edit/' + moveFrame._id)}>Edit</Button>
+                  <Link to={'/moveFrames/edit/' + moveFrame._id}>
+                    <Button type="dashed" size="small">Edit</Button>
+                  </Link>
                   &nbsp;
                   <Button type="danger" size="small" onClick={() => this.confirmDelete(moveFrame)}>Delete</Button>
                 </div>

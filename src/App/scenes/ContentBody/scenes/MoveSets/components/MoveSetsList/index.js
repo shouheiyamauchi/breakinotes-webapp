@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { List, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -40,7 +40,9 @@ class MoveSetsList extends Component {
                 </div>
                 <div className="vertical-spacer" />
                 <div className="align-right">
-                  <Button type="dashed" size="small" onClick={() => this.redirectToUrl('/moveSets/edit/' + moveSet._id)}>Edit</Button>
+                  <Link to={'/moveSets/edit/' + moveSet._id}>
+                    <Button type="dashed" size="small">Edit</Button>
+                  </Link>
                   &nbsp;
                   <Button type="danger" size="small" onClick={() => this.confirmDelete(moveSet)}>Delete</Button>
                 </div>
