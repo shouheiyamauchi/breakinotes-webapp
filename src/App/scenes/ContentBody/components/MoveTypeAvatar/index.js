@@ -5,7 +5,9 @@ import { Avatar } from 'antd';
 
 const MoveTypeAvatar = props => {
   return (
-    <Avatar size="large" style={{ backgroundColor: moveTypeColors[props.move.type] }}>{moveTypeShortNames[props.move.type]}</Avatar>
+    <div className="avatar-div">
+      <Avatar size="large" style={{ backgroundColor: moveTypeColors[props.move.type] }}>{moveTypeShortNames[props.move.type]}</Avatar>
+    </div>
   );
 }
 

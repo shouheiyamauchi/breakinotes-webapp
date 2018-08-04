@@ -2,10 +2,6 @@
 
 /* classes for use */
 
-.clickable {
-  cursor: pointer;
-}
-
 .horizontal-spacer {
   width: 10px;
 }
@@ -28,6 +24,10 @@
   text-align: center;
 }
 
+.avatar-div {
+  width: 40px;
+}
+
 /* typography */
 
 .title {
@@ -40,6 +40,10 @@
   color: #000000;
   font-size: 1.5em;
   font-weight: 500;
+}
+
+.list-title:hover {
+  color: #000000;
 }
 
 /* custom CSS for layout */

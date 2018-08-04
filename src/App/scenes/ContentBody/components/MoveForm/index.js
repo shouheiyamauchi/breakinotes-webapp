@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal, Checkbox } from 'antd';
+import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
 import MoveTag from '../MoveTag';
 import MoveTags from '../MoveTags';
 import MultimediaTags from '../MultimediaTags';
@@ -33,8 +33,8 @@ class MoveForm extends Component {
       draft: true,
       redirectUrl: '',
       uploading: new Map(),
-      startingPositionSuggestions: [],
-      endingPositionSuggestions: [],
+      // startingPositionSuggestions: [],
+      // endingPositionSuggestions: [],
       addedStartingPositions: [],
       addedEndingPositions: []
     };
@@ -163,69 +163,71 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    axios.post(API_URL + 'moves/suggestions', qs.stringify({
-      startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
-      endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
-    }), {
-      headers: {
-        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
-      }
-    })
-      .then((response) => {
-        this.setState({
-          startingPositionSuggestions: response.data.startingPositionSuggestions,
-          endingPositionSuggestions: response.data.endingPositionSuggestions
-        }, () => {
-          if (this.state.startingPositionSuggestions.length + this.state.endingPositionSuggestions.length > 0) {
-            this.displaySuggestionsModal();
-          } else {
-            !this.editPage() ? this.postNewMove() : this.updateMove();
-          };
-        });
-      })
-      .catch((error) => {
-        this.props.removeAuthToken();
-      });
+    !this.editPage() ? this.postNewMove() : this.updateMove();
+
+    // axios.post(API_URL + 'moves/suggestions', qs.stringify({
+    //   startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
+    //   endingPositions: JSON.stringify(this.state.endingPositions.map(move => move._id)),
+    // }), {
+    //   headers: {
+    //     Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+    //   }
+    // })
+    //   .then((response) => {
+    //     this.setState({
+    //       startingPositionSuggestions: response.data.startingPositionSuggestions,
+    //       endingPositionSuggestions: response.data.endingPositionSuggestions
+    //     }, () => {
+    //       if (this.state.startingPositionSuggestions.length + this.state.endingPositionSuggestions.length > 0) {
+    //         this.displaySuggestionsModal();
+    //       } else {
+    //         !this.editPage() ? this.postNewMove() : this.updateMove();
+    //       };
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     this.props.removeAuthToken();
+    //   });
   }
 
-  displaySuggestionsModal = () => {
-    Modal.confirm({
-      title: 'Would you like to add to the starting and ending positions the following suggestions?',
-      content: (
-        <div>
-          {this.state.startingPositionSuggestions.length === 0 ? (
-            null
-          ) : (
-            <div>
-              <div className="ant-form-item-label">
-                <label>Starting Positions</label>
-              </div>
-              <Checkbox.Group options={this.state.startingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'addedStartingPositions')} />
-            </div>
-          )}
-          {this.state.endingPositionSuggestions.length === 0 ? (
-            null
-          ) : (
-            <div>
-              <div className="ant-form-item-label">
-                <label>Ending Positions</label>
-              </div>
-              <Checkbox.Group options={this.state.endingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'addedEndingPositions')} />
-            </div>
-          )}
-        </div>
-      ),
-      onOk: () => {
-        !this.editPage() ? this.postNewMove() : this.updateMove();
-      },
-      onCancel: () => {
-        this.setState({
-          addedStartingPositions: [],
-          addedEndingPositions: []
-        });
-      },
-    });
-  }
+  // displaySuggestionsModal = () => {
+  //   Modal.confirm({
+  //     title: 'Would you like to add to the starting and ending positions the following suggestions?',
+  //     content: (
+  //       <div>
+  //         {this.state.startingPositionSuggestions.length === 0 ? (
+  //           null
+  //         ) : (
+  //           <div>
+  //             <div className="ant-form-item-label">
+  //               <label>Starting Positions</label>
+  //             </div>
+  //             <Checkbox.Group options={this.state.startingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'addedStartingPositions')} />
+  //           </div>
+  //         )}
+  //         {this.state.endingPositionSuggestions.length === 0 ? (
+  //           null
+  //         ) : (
+  //           <div>
+  //             <div className="ant-form-item-label">
+  //               <label>Ending Positions</label>
+  //             </div>
+  //             <Checkbox.Group options={this.state.endingPositionSuggestions.map(move => ({label: move.name, value: move._id}))} onChange={(selectedValues) => this.addExtraPositions(selectedValues, 'addedEndingPositions')} />
+  //           </div>
+  //         )}
+  //       </div>
+  //     ),
+  //     onOk: () => {
+  //       !this.editPage() ? this.postNewMove() : this.updateMove();
+  //     },
+  //     onCancel: () => {
+  //       this.setState({
+  //         addedStartingPositions: [],
+  //         addedEndingPositions: []
+  //       });
+  //     },
+  //   });
+  // }
 
   postNewMove = () => {
     axios.post(API_URL + 'moves', qs.stringify({

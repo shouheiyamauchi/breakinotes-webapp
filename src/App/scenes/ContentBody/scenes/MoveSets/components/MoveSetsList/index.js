@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { List, Button, Modal } from 'antd';
+import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
 
 class MoveSetsList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      redirectUrl: ''
-    };
-  }
-
-  redirectToUrl = url => {
-    this.setState({redirectUrl: url});
-  }
-
   confirmDelete = moveSet => {
     Modal.confirm({
       title: 'Confirm delete',
@@ -35,16 +24,17 @@ class MoveSetsList extends Component {
 
     return (
       <LoadingMessage loading={loading}>
-        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         {!loading && (
           <List
             itemLayout="vertical"
             dataSource={this.props.moveSets}
             renderItem={moveSet => (
               <List.Item>
-                <div className="clickable" onClick={() => this.redirectToUrl('/moveSets/' + moveSet._id)}>
+                <div className="vertical-align">
+                  <MoveTypeAvatar move={{ type: 'set' }} />
+                  <div className="horizontal-spacer" />
                   <div style={{ lineHeight: '125%' }}>
-                    <span className="list-title">{moveSet.name}</span>
+                    <Link className="list-title" to={'/moveSets/' + moveSet._id}>{moveSet.name}</Link>
                     {moveSet.draft && <div><span>(Draft)</span></div>}
                   </div>
                 </div>

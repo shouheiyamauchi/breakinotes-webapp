@@ -1,7 +1,7 @@
 import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { List, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -11,18 +11,6 @@ class MovesList extends Component {
     loading: PropTypes.bool,
     moves: PropTypes.array,
     deleteMove: PropTypes.func
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      redirectUrl: ''
-    };
-  }
-
-  redirectToUrl = url => {
-    this.setState({redirectUrl: url});
   }
 
   confirmDelete = move => {
@@ -53,18 +41,17 @@ class MovesList extends Component {
 
     return (
       <LoadingMessage loading={loading}>
-        {redirectUrl ? <Redirect push to={redirectUrl} /> : null}
         {!loading && (
           <List
             itemLayout="vertical"
             dataSource={moves}
             renderItem={move => (
               <List.Item>
-                <div className="vertical-align clickable" onClick={() => redirectToUrl('/moves/' + move._id)}>
+                <div className="vertical-align">
                   <MoveTypeAvatar move={move} />
                   <div className="horizontal-spacer" />
                   <div style={{ lineHeight: '125%' }}>
-                    <span className="list-title">{move.name}</span>
+                    <Link className="list-title" to={'/moves/' + move._id}>{move.name}</Link>
                     <br />
                     <span>{sentenceCase(move.origin)} {sentenceCase(move.type)}</span>
                     {move.draft && <span> (Draft)</span>}

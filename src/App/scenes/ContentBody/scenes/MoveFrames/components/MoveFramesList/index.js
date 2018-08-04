@@ -1,24 +1,12 @@
 import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { List, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../../../components/MoveTypeAvatar';
 import LoadingMessage from 'App/components/LoadingMessage';
 
 class MoveFramesList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      redirectUrl: ''
-    };
-  }
-
-  redirectToUrl = url => {
-    this.setState({redirectUrl: url});
-  }
-
   confirmDelete = moveFrame => {
     Modal.confirm({
       title: 'Confirm delete',
@@ -37,18 +25,17 @@ class MoveFramesList extends Component {
 
     return (
       <LoadingMessage loading={loading}>
-        {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
         {!loading && (
           <List
             itemLayout="vertical"
             dataSource={this.props.moveFrames}
             renderItem={moveFrame => (
               <List.Item>
-                <div className="vertical-align clickable" onClick={() => this.redirectToUrl('/moveFrames/' + moveFrame._id)}>
+                <div className="vertical-align">
                   <MoveTypeAvatar move={moveFrame} />
                   <div className="horizontal-spacer" />
                   <div style={{ lineHeight: '125%' }}>
-                    <span className="list-title">{moveFrame.name}</span>
+                    <Link className="list-title" to={'/moveFrames/' + moveFrame._id}>{moveFrame.name}</Link>
                     <br />
                     <span>{sentenceCase(moveFrame.origin)} {sentenceCase(moveFrame.type)}</span>
                     {moveFrame.draft && <span> (Draft)</span>}
