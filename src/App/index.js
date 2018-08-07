@@ -56,7 +56,7 @@ class App extends Component {
               <Login updateLoggedInStatus={this.updateLoggedInStatus} />
             ) : (
               <div>
-                <NavMenu />
+                <NavMenu removeAuthToken={this.removeAuthToken} />
                 <ContentBody removeAuthToken={this.removeAuthToken} path={this.props.location.pathname} />
                 <Affix style={{position: 'fixed', bottom: '20px', right: '20px'}}>
                   <Button.Group>

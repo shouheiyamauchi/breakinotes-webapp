@@ -33,11 +33,11 @@ class MoveFrame extends Component {
   }
 
   componentDidMount() {
-    this.getMoveFrame(this.props.match.params.id);
+    this.getMoveFrame(this.props.previewId || this.props.match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getMoveFrame(nextProps.match.params.id);
+    if (!nextProps.previewId) this.getMoveFrame(nextProps.match.params.id);
   }
 
   getMoveFrame = id => {
@@ -59,6 +59,10 @@ class MoveFrame extends Component {
 
   editMoveFrame = () => {
     this.setState({redirectUrl: '/moveFrames/edit/' + this.state.moveFrame._id});
+  }
+
+  cloneMoveFrame = () => {
+    this.setState({redirectUrl: '/moveFrames/clone/' + this.state.moveFrame._id});
   }
 
   confirmDelete = () => {
@@ -107,34 +111,40 @@ class MoveFrame extends Component {
               </div>
             </div>
             <div className="vertical-spacer" />
-            <div className="align-right">
-              <Button type="dashed" size="small" onClick={this.editMoveFrame}>Edit</Button>
-              &nbsp;
-              <Button type="danger" size="small" onClick={this.confirmDelete}>Delete</Button>
-            </div>
-            <div className="vertical-spacer" />
+            {!this.props.previewId && (
+              <div>
+                <div className="align-right">
+                  <Button type="dashed" size="small" onClick={this.editMoveFrame}>Edit</Button>
+                  &nbsp;
+                  <Button type="primary" size="small" onClick={this.cloneMoveFrame}>Clone</Button>
+                  &nbsp;
+                  <Button type="danger" size="small" onClick={this.confirmDelete}>Delete</Button>
+                </div>
+                <div className="vertical-spacer" />
+              </div>
+            )}
             <Divider />
             <div className="vertical-spacer" />
             <div>
               <div>
                 <h3>Entry Moves</h3>
-                {!this.state.moveFrame.entries.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.entries} />}
+                {!this.state.moveFrame.entries.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.entries} removeAuthToken={this.props.removeAuthToken} />}
               </div>
               <Divider />
               <div>
                 <h3>Exit Moves</h3>
-                {!this.state.moveFrame.exits.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.exits} />}
+                {!this.state.moveFrame.exits.length ? <Tag>None</Tag> : <MoveTags type="moves" moves={this.state.moveFrame.exits} removeAuthToken={this.props.removeAuthToken} />}
               </div>
             </div>
             <Divider />
             <div>
               <h3>Parent Frame</h3>
-              {!this.state.moveFrame.parent ? <Tag>None</Tag> : <MoveTag type="moveFrames" move={this.state.moveFrame.parent} /> }
+              {!this.state.moveFrame.parent ? <Tag>None</Tag> : <MoveTag type="moveFrames" move={this.state.moveFrame.parent} removeAuthToken={this.props.removeAuthToken} /> }
             </div>
             <Divider />
             <div>
               <h3>Child Frames</h3>
-              {!this.state.moveFrame.childMoves.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.moveFrame.childMoves} />}
+              {!this.state.moveFrame.childMoves.length ? <Tag>None</Tag> : <MoveTags type="moveFrames" moves={this.state.moveFrame.childMoves} removeAuthToken={this.props.removeAuthToken} />}
             </div>
             <Divider />
             <div>

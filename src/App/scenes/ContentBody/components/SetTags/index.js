@@ -9,7 +9,7 @@ const SetTags = props => {
       {props.moves.map((move, index) => {
         return (
           <div key={index} className="side-by-side">
-            <MoveTag type={move.type} move={move.move} key={index} closable={props.closable} onClose={e => props.onClose(e, index)} />
+            <MoveTag type={move.type} move={move.move} key={index} closable={props.closable} onClose={e => props.onClose(e, index)} removeAuthToken={props.removeAuthToken} />
             {index + 1 !== props.moves.length && <Icon type="caret-right" />}
           </div>
         );

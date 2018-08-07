@@ -33,15 +33,17 @@ class MoveSetForm extends Component {
   }
 
   componentDidMount() {
-    if (this.editPage()) {
+    if (this.pageType() !== 'new') {
       this.getSet(this.props.id);
     } else {
       this.setState({ loading: false });
     };
   }
 
-  editPage = () => {
-    return !!this.props.id;
+  pageType = () => {
+    if (!this.props.id) return 'new'
+    else if (this.props.clone) return 'clone'
+    else return 'edit'
   }
 
   getSet = id => {
@@ -126,7 +128,7 @@ class MoveSetForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.editPage() ? this.updateSet() : this.submitNewSet();
+    this.pageType() !== 'edit' ?  this.submitNewSet() : this.updateSet();
   }
 
   submitNewSet = () => {
@@ -300,7 +302,7 @@ class MoveSetForm extends Component {
     return (
       <LoadingMessage loading={loading}>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
-        <span className="title">{!this.editPage() ? 'Add New Set' : 'Edit Set'}</span>
+        <span className="title">{this.pageType() !== 'edit' ? 'Add New Set' : 'Edit Set'}</span>
         <Divider />
         <div className="vertical-spacer" />
         <Form onSubmit={handleSubmit} layout='vertical'>
@@ -336,7 +338,7 @@ class MoveSetForm extends Component {
             <label>Set</label>
           </div>
           {moves.length ? (
-            <SetTags moves={moves} closable={true} onClose={removeMoveFromArray} />
+            <SetTags moves={moves} closable={true} onClose={removeMoveFromArray} removeAuthToken={this.props.removeAuthToken} />
           ) : (
             <Tag>Select moves from above</Tag>
           )}
@@ -374,7 +376,7 @@ class MoveSetForm extends Component {
           </FormItem>
           <FormItem>
             <Button type='primary' htmlType='submit'>
-              {!this.editPage() ? 'Add Set' : 'Update Set'}
+              {this.pageType() !== 'edit' ? 'Add Set' : 'Update Set'}
             </Button>
           </FormItem>
         </Form>

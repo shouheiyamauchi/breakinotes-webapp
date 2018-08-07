@@ -6,7 +6,7 @@ const MoveTags = props => {
   return (
     <div>
       {props.moves.map((move, index) => {
-        return <MoveTag type={props.type} move={move} key={index} closable={props.closable} onClose={props.onClose} />;
+        return <MoveTag type={props.type} move={move} key={index} closable={props.closable} onClose={props.onClose} removeAuthToken={props.removeAuthToken} />;
       })}
     </div>
   );
@@ -16,7 +16,8 @@ MoveTags.propTypes = {
   moves: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
   closable: PropTypes.bool,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  removeAuthToken: PropTypes.func
 }
 
 MoveTags.defaultProps = {

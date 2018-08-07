@@ -161,7 +161,8 @@ class PracticeItems extends Component {
       practiceItemFormProps,
       changeEditing,
       updatePracticeItem,
-      confirmDelete
+      confirmDelete,
+      removeAuthToken
     };
 
     return (

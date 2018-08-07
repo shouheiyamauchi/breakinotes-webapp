@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import { Tag, Divider, Button, Modal } from 'antd';
+import MoveTypeAvatar from '../../components/MoveTypeAvatar';
 import SetTags from '../../components/SetTags';
 import MultimediaTags from '../../components/MultimediaTags';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -25,11 +26,11 @@ class MoveSet extends Component {
   }
 
   componentDidMount() {
-    this.getSet(this.props.match.params.id);
+    this.getSet(this.props.previewId || this.props.match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getSet(nextProps.match.params.id);
+    if (!nextProps.previewId) this.getSet(nextProps.match.params.id);
   }
 
   getSet = id => {
@@ -60,6 +61,10 @@ class MoveSet extends Component {
 
   editMove = () => {
     this.setState({redirectUrl: '/moveSets/edit/' + this.state.set._id});
+  }
+
+  cloneMove = () => {
+    this.setState({redirectUrl: '/moveSets/clone/' + this.state.set._id});
   }
 
   confirmDelete = () => {
@@ -108,22 +113,32 @@ class MoveSet extends Component {
         {!loading && (
           <div>
             {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
-            <div style={{ lineHeight: '125%' }}>
-              <span className="title">{this.state.set.name}</span>
-              {this.state.set.draft && <div><span> (Draft)</span></div>}
+            <div className="vertical-align">
+              <MoveTypeAvatar move={{ type: 'set' }} />
+              <div className="horizontal-spacer" />
+              <div style={{ lineHeight: '125%' }}>
+                <span className="title">{this.state.set.name}</span>
+                {this.state.set.draft && <div><span> (Draft)</span></div>}
+              </div>
             </div>
             <div className="vertical-spacer" />
-            <div className="align-right">
-              <Button type="dashed" size="small" onClick={this.editMove}>Edit</Button>
-              &nbsp;
-              <Button type="danger" size="small" onClick={this.confirmDelete}>Delete</Button>
-            </div>
-            <div className="vertical-spacer" />
+            {!this.props.previewId && (
+              <div>
+                <div className="align-right">
+                  <Button type="dashed" size="small" onClick={this.editMove}>Edit</Button>
+                  &nbsp;
+                  <Button type="primary" size="small" onClick={this.cloneMove}>Clone</Button>
+                  &nbsp;
+                  <Button type="danger" size="small" onClick={this.confirmDelete}>Delete</Button>
+                </div>
+                <div className="vertical-spacer" />
+              </div>
+            )}
             <Divider />
             <div className="vertical-spacer" />
             <div>
               <h3>Set Moves</h3>
-              {!moves.length ? <Tag>None</Tag> : <SetTags moves={moves} /> }
+              {!moves.length ? <Tag>None</Tag> : <SetTags moves={moves} removeAuthToken={this.props.removeAuthToken} /> }
             </div>
             <Divider />
             <div>

@@ -41,7 +41,7 @@ class MoveForm extends Component {
   }
 
   componentDidMount() {
-    if (this.editPage()) {
+    if (this.pageType() !== 'new') {
       this.getMove(this.props.id);
     } else {
       this.setState({ loading: false });
@@ -51,8 +51,10 @@ class MoveForm extends Component {
     this.getMoveFrames();
   }
 
-  editPage = () => {
-    return !!this.props.id;
+  pageType = () => {
+    if (!this.props.id) return 'new'
+    else if (this.props.clone) return 'clone'
+    else return 'edit'
   }
 
   getMoves = () => {
@@ -163,7 +165,7 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    !this.editPage() ? this.postNewMove() : this.updateMove();
+    this.pageType() !== 'new' ? this.postNewMove() : this.updateMove();
 
     // axios.post(API_URL + 'moves/suggestions', qs.stringify({
     //   startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
@@ -402,7 +404,7 @@ class MoveForm extends Component {
     return (
       <LoadingMessage loading={loading}>
         {this.state.redirectUrl ? <Redirect push to={this.state.redirectUrl} /> : null}
-        <span className="title">{!this.editPage() ? 'Add New Move' : 'Edit Move'}</span>
+        <span className="title">{this.pageType() !== 'edit' ? 'Add New Move' : 'Edit Move'}</span>
         <Divider />
         <div className="vertical-spacer" />
         <Form onSubmit={this.handleSubmit} layout='vertical'>
@@ -480,7 +482,7 @@ class MoveForm extends Component {
             {
               (this.state.startingPositions.length === 0) ?
               <Tag>Select moves from above</Tag> :
-              <MoveTags type="moveFrames" moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'startingPositions')} />
+              <MoveTags type="moveFrames" moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'startingPositions')} removeAuthToken={this.props.removeAuthToken} />
             }
           </FormItem>
           <FormItem>
@@ -498,7 +500,7 @@ class MoveForm extends Component {
             {
               (this.state.endingPositions.length === 0) ?
               <Tag>Select moves from above</Tag> :
-              <MoveTags type="moveFrames" moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'endingPositions')} />
+              <MoveTags type="moveFrames" moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'endingPositions')} removeAuthToken={this.props.removeAuthToken} />
             }
           </FormItem>
           <div className="ant-form-item-label">
@@ -519,7 +521,7 @@ class MoveForm extends Component {
             {
               (!this.state.parent) ?
               <Tag>Select a move from above</Tag> :
-              <MoveTag type="moves" move={this.state.parent} closable={true} onClose={(e) => this.clearSingleMove(e, 'parent')} />
+              <MoveTag type="moves" move={this.state.parent} closable={true} onClose={(e) => this.clearSingleMove(e, 'parent')} removeAuthToken={this.props.removeAuthToken} />
             }
           </FormItem>
           <FormItem label='Draft'>
@@ -537,7 +539,7 @@ class MoveForm extends Component {
           </FormItem>
           <FormItem>
             <Button type='primary' htmlType='submit'>
-              {!this.editPage() ? 'Add Move' : 'Update Move'}
+              {this.pageType() !== 'edit' ? 'Add Move' : 'Update Move'}
             </Button>
           </FormItem>
         </Form>

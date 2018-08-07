@@ -2,6 +2,10 @@
 
 /* classes for use */
 
+.clickable {
+  cursor: pointer;
+}
+
 .horizontal-spacer {
   width: 10px;
 }

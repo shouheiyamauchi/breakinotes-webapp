@@ -7,7 +7,7 @@ const { SubMenu } = Menu;
 
 const subMenuStyle = { marginRight: '5px' };
 
-const menuItems = (
+const menuItems = (props) => (
   <Menu>
     <Menu.Item key="home">
       <Link to="/"><Icon type="user" />Home</Link>
@@ -35,12 +35,15 @@ const menuItems = (
     <Menu.Item key="listMoveSets">
       <Link to="/moveSets"><Icon type="folder-open" />Sets List</Link>
     </Menu.Item>
+    <Menu.Item key="logout">
+      <span onClick={props.removeAuthToken}><Icon type="logout" />Logout</span>
+    </Menu.Item>
   </Menu>
 );
 
-const NavMenu = () => (
+const NavMenu = (props) => (
   <Header className="vertical-align" style={{height: '46px', position: 'fixed', top: '0', width: '100%', paddingLeft: '20px', zIndex: '1' }}>
-    <Dropdown overlay={menuItems} trigger={['click']}>
+    <Dropdown overlay={menuItems(props)} trigger={['click']}>
       <span className="menu-title"><Icon type="api" style={{marginRight: '7px'}} />BreakiNotes</span>
     </Dropdown>
   </Header>

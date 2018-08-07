@@ -15,6 +15,9 @@ import MoveFrame from './scenes/MoveFrame';
 import EditMove from './scenes/EditMove';
 import EditMoveFrame from './scenes/EditMoveFrame';
 import EditMoveSet from './scenes/EditMoveSet';
+import CloneMove from './scenes/CloneMove';
+import CloneMoveFrame from './scenes/CloneMoveFrame';
+import CloneMoveSet from './scenes/CloneMoveSet';
 import PracticeItems from './scenes/PracticeItems';
 import RedirectPage from './scenes/RedirectPage';
 
@@ -38,6 +41,10 @@ const routes = [
     component: EditMove
   },
   {
+    path: '/moves/clone/:id',
+    component: CloneMove
+  },
+  {
     path: '/moves/redirect/:id',
     component: RedirectPage,
     extraProps: { type: 'moves' }
@@ -59,6 +66,10 @@ const routes = [
     component: EditMoveFrame
   },
   {
+    path: '/moveFrames/clone/:id',
+    component: CloneMoveFrame
+  },
+  {
     path: '/moveSets/new',
     component: NewMoveSet
   },
@@ -73,6 +84,10 @@ const routes = [
   {
     path: '/moveSets/edit/:id',
     component: EditMoveSet
+  },
+  {
+    path: '/moveSets/clone/:id',
+    component: CloneMoveSet
   },
   {
     path: '/moveFrames/redirect/:id',
