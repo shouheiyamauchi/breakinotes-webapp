@@ -165,7 +165,7 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.pageType() !== 'new' ? this.postNewMove() : this.updateMove();
+    this.pageType() !== 'edit' ? this.postNewMove() : this.updateMove();
 
     // axios.post(API_URL + 'moves/suggestions', qs.stringify({
     //   startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),
