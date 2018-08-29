@@ -10,7 +10,7 @@ import TransitionContainer from 'App/components/TransitionContainer';
 import PracticeItemForm from './components/PracticeItemForm';
 import PracticeItemsList from './components/PracticeItemsList';
 
-const dateFormat = 'DD/MM/YYYY';
+const DATE_FORMAT = 'DD/MM/YYYY';
 
 class PracticeItems extends Component {
   static propTypes = {
@@ -21,7 +21,7 @@ class PracticeItems extends Component {
     super(props);
 
     this.state = {
-      dateString: moment().format(dateFormat),
+      dateString: moment().format(DATE_FORMAT),
       practiceItems: [],
       loading: true,
       editing: ''
@@ -170,7 +170,8 @@ class PracticeItems extends Component {
         <span className="title">Training Menu</span>
         <Divider />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <DatePicker value={dateString ? moment(dateString, dateFormat) : null} format={dateFormat} onChange={handleDateChange} />
+          <DatePicker value={dateString ? moment(dateString, DATE_FORMAT) : null} format={DATE_FORMAT} onChange={handleDateChange} />
+          <div style={{ width: '10px' }} />
           {editing === 'new' ? (
             <Button type="default" icon="close-circle" onClick={() => changeEditing('')}>Cancel</Button>
           ) : (
