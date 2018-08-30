@@ -45,7 +45,7 @@ class MovesList extends Component {
                 <div className="vertical-align">
                   <MoveTypeAvatar move={move} />
                   <div className="horizontal-spacer" />
-                  <div style={{ lineHeight: '125%' }}>
+                  <div className="right-content">
                     <Link className="list-title" to={'/moves/' + move._id}>{move.name}</Link>
                     <br />
                     <span>{sentenceCase(move.origin)} {sentenceCase(move.type)}</span>

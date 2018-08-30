@@ -2,12 +2,21 @@
 
 /* classes for use */
 
+.word-wrap {
+  word-wrap: break-word;
+}
+
 .clickable {
   cursor: pointer;
 }
 
 .horizontal-spacer {
   width: 10px;
+}
+
+.right-content {
+  line-height: 125%;
+  width: calc(100% - 50px);
 }
 
 .vertical-spacer {

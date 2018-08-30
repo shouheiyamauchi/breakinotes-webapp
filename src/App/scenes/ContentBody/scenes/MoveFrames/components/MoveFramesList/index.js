@@ -34,7 +34,7 @@ class MoveFramesList extends Component {
                 <div className="vertical-align">
                   <MoveTypeAvatar move={moveFrame} />
                   <div className="horizontal-spacer" />
-                  <div style={{ lineHeight: '125%' }}>
+                  <div className="right-content">
                     <Link className="list-title" to={'/moveFrames/' + moveFrame._id}>{moveFrame.name}</Link>
                     <br />
                     <span>{sentenceCase(moveFrame.origin)} {sentenceCase(moveFrame.type)}</span>

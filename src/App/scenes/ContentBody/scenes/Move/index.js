@@ -8,6 +8,7 @@ import MoveTypeAvatar from '../../components/MoveTypeAvatar';
 import MoveTag from '../../components/MoveTag';
 import MoveTags from '../../components/MoveTags';
 import MultimediaTags from '../../components/MultimediaTags';
+import Notes from '../../components/Notes'
 import LoadingMessage from 'App/components/LoadingMessage';
 
 class Move extends Component {
@@ -104,7 +105,7 @@ class Move extends Component {
             <div className="vertical-align">
               <MoveTypeAvatar move={this.state.move} />
               <div className="horizontal-spacer" />
-              <div style={{ lineHeight: '125%' }}>
+              <div className="right-content">
                 {this.props.previewId ? (
                   <Link className="title" to={{ pathname: '/moves/redirect/' + this.state.move._id }}>{this.state.move.name}</Link>
                 ) : (
@@ -159,7 +160,7 @@ class Move extends Component {
             <Divider />
             <div>
               <h3>Notes</h3>
-              {!this.state.move.notes ? 'None' : this.state.move.notes}
+              {!this.state.move.notes ? 'None' : <Notes text={this.state.move.notes} />}
             </div>
           </div>
         )}

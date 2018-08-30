@@ -33,7 +33,7 @@ class MoveSetsList extends Component {
                 <div className="vertical-align">
                   <MoveTypeAvatar move={{ type: 'set' }} />
                   <div className="horizontal-spacer" />
-                  <div style={{ lineHeight: '125%' }}>
+                  <div className="right-content">
                     <Link className="list-title" to={'/moveSets/' + moveSet._id}>{moveSet.name}</Link>
                     {moveSet.draft && <div><span>(Draft)</span></div>}
                   </div>

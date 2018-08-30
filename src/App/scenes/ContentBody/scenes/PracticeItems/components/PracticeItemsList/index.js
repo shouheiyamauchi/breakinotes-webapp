@@ -10,6 +10,7 @@ import Move from '../../../Move'
 import MoveFrame from '../../../MoveFrame'
 import MoveSet from '../../../MoveSet'
 import MoveTypeAvatar from '../../../../components/MoveTypeAvatar'
+import Notes from '../../../../components/Notes'
 
 class PracticeItemsList extends Component {
   constructor(props) {
@@ -71,7 +72,7 @@ class PracticeItemsList extends Component {
                     <div className={'vertical-align ' + (practiceItem.completed ? styles.completed : styles.incomplete)}>
                       <MoveTypeAvatar move={{ type: practiceItem.move.moveType }} />
                       <div className="horizontal-spacer" />
-                      <div style={{ lineHeight: '125%' }}>
+                      <div className="right-content">
                         <span className="list-title clickable" onClick={() => this.toggleModal(practiceItem._id)}>{practiceItem.move.item.name}</span>
                         <Modal
                           visible={this.state.previewModalVisible[practiceItem._id]}
@@ -81,7 +82,7 @@ class PracticeItemsList extends Component {
                           {this.generateMovePreview(practiceItem.move.moveType, practiceItem.move.item._id)}
                         </Modal>
                         <br />
-                        <span>{practiceItem.notes}</span>
+                        <Notes text={practiceItem.notes} />
                       </div>
                     </div>
                     <div className="vertical-spacer" />

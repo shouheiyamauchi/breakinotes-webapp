@@ -6,6 +6,7 @@ import { Tag, Divider, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../components/MoveTypeAvatar';
 import SetTags from '../../components/SetTags';
 import MultimediaTags from '../../components/MultimediaTags';
+import Notes from '../../components/Notes'
 import LoadingMessage from 'App/components/LoadingMessage';
 
 class MoveSet extends Component {
@@ -116,7 +117,7 @@ class MoveSet extends Component {
             <div className="vertical-align">
               <MoveTypeAvatar move={{ type: 'set' }} />
               <div className="horizontal-spacer" />
-              <div style={{ lineHeight: '125%' }}>
+              <div className="right-content">
                 {this.props.previewId ? (
                   <Link className="title" to={{ pathname: '/moveSets/redirect/' + this.state.set._id }}>{this.state.set.name}</Link>
                 ) : (
@@ -152,7 +153,7 @@ class MoveSet extends Component {
             <Divider />
             <div>
               <h3>Notes</h3>
-              {!this.state.set.notes ? 'None' : this.state.set.notes}
+              {!this.state.set.notes ? 'None' : <Notes text={this.state.set.notes} />}
             </div>
           </div>
         )}
