@@ -1,6 +1,6 @@
 import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios';
 import { Tag, Divider, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../components/MoveTypeAvatar';
@@ -117,7 +117,11 @@ class MoveSet extends Component {
               <MoveTypeAvatar move={{ type: 'set' }} />
               <div className="horizontal-spacer" />
               <div style={{ lineHeight: '125%' }}>
-                <span className="title">{this.state.set.name}</span>
+                {this.props.previewId ? (
+                  <Link className="title" to={{ pathname: '/moveSets/redirect/' + this.state.set._id }}>{this.state.set.name}</Link>
+                ) : (
+                  <span className="title">{this.state.set.name}</span>
+                )}
                 {this.state.set.draft && <div><span> (Draft)</span></div>}
               </div>
             </div>

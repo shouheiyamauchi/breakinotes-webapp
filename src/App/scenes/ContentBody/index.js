@@ -70,6 +70,15 @@ const routes = [
     component: CloneMoveFrame
   },
   {
+    path: '/moveFrames/redirect/:id',
+    component: RedirectPage,
+    extraProps: { type: 'moveFrames' }
+  },
+  {
+    path: '/moveFrames/:id',
+    component: MoveFrame
+  },
+  {
     path: '/moveSets/new',
     component: NewMoveSet
   },
@@ -90,13 +99,9 @@ const routes = [
     component: CloneMoveSet
   },
   {
-    path: '/moveFrames/redirect/:id',
+    path: '/moveSets/redirect/:id',
     component: RedirectPage,
-    extraProps: { type: 'moveFrames' }
-  },
-  {
-    path: '/moveFrames/:id',
-    component: MoveFrame
+    extraProps: { type: 'moveSets' }
   },
   {
     path: '/practiceItems',

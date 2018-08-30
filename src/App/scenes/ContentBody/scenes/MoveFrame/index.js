@@ -1,7 +1,7 @@
 import { API_URL } from 'helpers/config';
 import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios';
 import { Tag, Divider, Button, Modal } from 'antd';
 import MoveTypeAvatar from '../../components/MoveTypeAvatar';
@@ -104,7 +104,11 @@ class MoveFrame extends Component {
               <MoveTypeAvatar move={this.state.moveFrame} />
               <div className="horizontal-spacer" />
               <div style={{ lineHeight: '125%' }}>
-                <span className="title">{this.state.moveFrame.name}</span>
+                {this.props.previewId ? (
+                  <Link className="title" to={{ pathname: '/moveFrames/redirect/' + this.state.moveFrame._id }}>{this.state.moveFrame.name}</Link>
+                ) : (
+                  <span className="title">{this.state.moveFrame.name}</span>
+                )}
                 <br />
                 <span>{sentenceCase(this.state.moveFrame.origin)} {sentenceCase(this.state.moveFrame.type)}</span>
                 {this.state.moveFrame.draft && <span> (Draft)</span>}

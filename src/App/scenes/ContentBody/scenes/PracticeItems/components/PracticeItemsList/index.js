@@ -1,34 +1,29 @@
-import { moveTypeColors, moveTypeShortNames } from 'helpers/constants';
 import React, { Component } from 'react';
+import update from 'immutability-helper'
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
-import { List, Avatar, Switch, Icon, Button, Modal } from 'antd';
+import { List, Switch, Icon, Button, Modal } from 'antd';
 import LoadingMessage from 'App/components/LoadingMessage';
 import styles from './styles.module.scss';
 import PracticeItemForm from '../PracticeItemForm';
 import Move from '../../../Move'
 import MoveFrame from '../../../MoveFrame'
 import MoveSet from '../../../MoveSet'
+import MoveTypeAvatar from '../../../../components/MoveTypeAvatar'
 
 class PracticeItemsList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      previewModalVisible: false
+      previewModalVisible: {}
     }
   }
 
-  handleCancel = e => {
+  toggleModal = (id) => {
     this.setState({
-      previewModalVisible: false,
-    });
-  }
-
-  showModal = e => {
-    this.setState({
-      previewModalVisible: true,
-    });
+      previewModalVisible: update(this.state.previewModalVisible, { [id]: { $set: !this.state.previewModalVisible[id] }})
+    })
   }
 
   generateMovePreview = (type, id) => {
@@ -74,13 +69,13 @@ class PracticeItemsList extends Component {
                 ) : (
                   <div>
                     <div className={'vertical-align ' + (practiceItem.completed ? styles.completed : styles.incomplete)}>
-                      <Avatar size="large" style={{ backgroundColor: moveTypeColors[practiceItem.move.moveType] }}>{moveTypeShortNames[practiceItem.move.moveType]}</Avatar>
+                      <MoveTypeAvatar move={{ type: practiceItem.move.moveType }} />
                       <div className="horizontal-spacer" />
                       <div style={{ lineHeight: '125%' }}>
-                        <span className="list-title clickable" onClick={this.showModal}>{practiceItem.move.item.name}</span>
+                        <span className="list-title clickable" onClick={() => this.toggleModal(practiceItem._id)}>{practiceItem.move.item.name}</span>
                         <Modal
-                          visible={this.state.previewModalVisible}
-                          onCancel={this.handleCancel}
+                          visible={this.state.previewModalVisible[practiceItem._id]}
+                          onCancel={() => this.toggleModal(practiceItem._id)}
                           footer={<Link to={{ pathname: '/' + practiceItem.move.moveType[0].toLowerCase() + practiceItem.move.moveType.substr(1) + 's/redirect/' + practiceItem.move.item._id }}><Button size="small">Open Full Page</Button></Link>}
                         >
                           {this.generateMovePreview(practiceItem.move.moveType, practiceItem.move.item._id)}
