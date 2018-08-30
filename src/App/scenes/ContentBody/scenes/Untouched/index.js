@@ -6,10 +6,11 @@ import axios from 'axios';
 import qs from 'qs';
 import { Divider, List, Checkbox, Modal, Select, Input, Button } from 'antd';
 import LoadingMessage from 'App/components/LoadingMessage';
+import MoveTag from '../../components/MoveTag'
 
 const Option = Select.Option;
 
-class Touched extends Component {
+class Untouched extends Component {
   static propTypes = {
     removeAuthToken: PropTypes.func.isRequired
   }
@@ -82,7 +83,7 @@ class Touched extends Component {
     })
       .then((response) => {
         this.updateCustomAttribute(moveOrFrames, id, 'loading', false, () => {
-          this.updateCustomAttribute(moveOrFrames, id, 'forceTouched', true)
+          this.updateCustomAttribute(moveOrFrames, id, 'forceUntouched', true)
         });
       })
       .catch((error) => {
@@ -139,11 +140,13 @@ class Touched extends Component {
                 renderItem={move => (
                   <List.Item actions={[
                     <Checkbox
-                      checked={move.forceTouched}
-                      disabled={move.loading || move.forceTouched}
+                      checked={move.forceUntouched}
+                      disabled={move.loading || move.forceUntouched}
                       onChange={() => this.confirmForceTouch('moves', move)}
                     />
-                  ]}>{move.name}</List.Item>
+                  ]}>
+                    <MoveTag move={move} type="moves" removeAuthToken={this.props.removeAuthToken} />
+                  </List.Item>
                 )}
               />
               <div className="vertical-spacer" />
@@ -155,11 +158,13 @@ class Touched extends Component {
                 renderItem={moveFrame => (
                   <List.Item actions={[
                     <Checkbox
-                      checked={moveFrame.forceTouched}
-                      disabled={moveFrame.loading || moveFrame.forceTouched}
+                      checked={moveFrame.forceUntouched}
+                      disabled={moveFrame.loading || moveFrame.forceUntouched}
                       onChange={() => this.confirmForceTouch('moveFrames', moveFrame)}
                     />
-                  ]}>{moveFrame.name}</List.Item>
+                  ]}>
+                    <MoveTag move={moveFrame} type="moveFrames" removeAuthToken={this.props.removeAuthToken} />
+                  </List.Item>
                 )}
               />
             </div>
@@ -170,4 +175,4 @@ class Touched extends Component {
   }
 }
 
-export default Touched;
+export default Untouched;
