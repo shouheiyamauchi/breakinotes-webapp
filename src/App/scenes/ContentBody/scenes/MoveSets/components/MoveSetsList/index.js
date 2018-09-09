@@ -1,3 +1,4 @@
+import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -35,7 +36,9 @@ class MoveSetsList extends Component {
                   <div className="horizontal-spacer" />
                   <div className="right-content">
                     <Link className="list-title" to={'/moveSets/' + moveSet._id}>{moveSet.name}</Link>
-                    {moveSet.draft && <div><span>(Draft)</span></div>}
+                    <br />
+                    <span>{sentenceCase(moveSet.type)}</span>
+                    {moveSet.draft && <span> (Draft)</span>}
                   </div>
                 </div>
                 <div className="vertical-spacer" />
