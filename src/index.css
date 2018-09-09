@@ -98,11 +98,6 @@
   margin-bottom: 0;
 }
 
-/* Display divs side by side */
-.side-by-side {
-  display: inline-block;
-}
-
 /* page transitions */
 .FadeIn-appear {
   opacity: 0;

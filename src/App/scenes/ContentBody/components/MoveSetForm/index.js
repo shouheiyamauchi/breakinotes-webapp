@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
+import update from 'immutability-helper';
 import { Divider, Form, Input, Select, Upload, Progress, Button, Icon, Tag } from 'antd';
 import MultimediaTags from '../MultimediaTags';
 import SetTags from '../SetTags';
@@ -245,6 +246,20 @@ class MoveSetForm extends Component {
     this.setState({multimedia: this.state.multimedia.filter(multimedia => multimedia.value !== multimediaProp.value)});
   }
 
+  onLeftClick = (index) => {
+    this.setState({ moves: update(this.state.moves, {
+      [index - 1]: { $set: this.state.moves[index] },
+      [index]: { $set: this.state.moves[index - 1] }
+    })})
+  }
+
+  onRightClick = (index) => {
+    this.setState({ moves: update(this.state.moves, {
+      [index]: { $set: this.state.moves[index + 1] },
+      [index + 1]: { $set: this.state.moves[index] }
+    })})
+  }
+
   render() {
     const {
       handleSelectChange,
@@ -338,7 +353,7 @@ class MoveSetForm extends Component {
             <label>Set</label>
           </div>
           {moves.length ? (
-            <SetTags moves={moves} closable={true} onClose={removeMoveFromArray} removeAuthToken={this.props.removeAuthToken} />
+            <SetTags edit={true} moves={moves} closable={true} onLeftClick={this.onLeftClick} onRightClick={this.onRightClick} onClose={removeMoveFromArray} removeAuthToken={this.props.removeAuthToken} />
           ) : (
             <Tag>Select moves from above</Tag>
           )}

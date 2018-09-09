@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.arrows-container {
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: center;
+
+  i:first-child {
+    margin-right: 7px !important;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.disabled {
+  color: #D0D0D0;
+}
