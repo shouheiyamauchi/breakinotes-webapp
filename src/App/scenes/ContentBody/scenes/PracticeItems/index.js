@@ -172,7 +172,7 @@ class PracticeItems extends Component {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <DatePicker value={dateString ? moment(dateString, DATE_FORMAT) : null} format={DATE_FORMAT} onChange={handleDateChange} />
           <div style={{ width: '10px' }} />
-          {editing === 'new' ? (
+          {editing ? (
             <Button type="default" icon="close-circle" onClick={() => changeEditing('')}>Cancel</Button>
           ) : (
             <Button type="primary" icon="plus-circle" onClick={() => changeEditing('new')}>Add</Button>
