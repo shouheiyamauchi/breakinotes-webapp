@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
+import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal } from 'antd';
 import MoveTag from '../MoveTag';
 import MoveTags from '../MoveTags';
 import MultimediaTags from '../MultimediaTags';
@@ -165,7 +165,12 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.pageType() !== 'edit' ? this.postNewMove() : this.updateMove();
+    (!this.state.name || this.state.origin === 'disabled' || this.state.type === 'disabled') ?
+      Modal.error({
+        title: 'Missing fields',
+        content: 'Name, origin and type must all be filled out',
+      }) :
+      this.pageType() !== 'edit' ? this.postNewMove() : this.updateMove();
 
     // axios.post(API_URL + 'moves/suggestions', qs.stringify({
     //   startingPositions: JSON.stringify(this.state.startingPositions.map(move => move._id)),

@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
 import update from 'immutability-helper';
-import { Divider, Form, Input, Select, Upload, Progress, Button, Icon, Tag } from 'antd';
+import { Divider, Form, Input, Select, Upload, Progress, Button, Icon, Tag, Modal } from 'antd';
 import MultimediaTags from '../MultimediaTags';
 import SetTags from '../SetTags';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -20,6 +20,7 @@ class MoveSetForm extends Component {
 
     this.state = {
       loading: true,
+      type: 'disabled',
       moveType: 'disabled',
       moveOptions: [],
       moveFrames: [],
@@ -66,6 +67,7 @@ class MoveSetForm extends Component {
         this.setState({
           loading: false,
           name: response.data.name,
+          type: response.data.type,
           notes: response.data.notes,
           moves,
           multimedia: response.data.multimedia,
@@ -129,7 +131,12 @@ class MoveSetForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.pageType() !== 'edit' ?  this.submitNewSet() : this.updateSet();
+    (!this.state.name || this.state.type === 'disabled') ?
+      Modal.error({
+        title: 'Missing fields',
+        content: 'Name and type must all be filled out',
+      }) :
+      this.pageType() !== 'edit' ?  this.submitNewSet() : this.updateSet();
   }
 
   submitNewSet = () => {
@@ -137,6 +144,7 @@ class MoveSetForm extends Component {
 
     axios.post(API_URL + 'moveSets', qs.stringify({
       name: this.state.name,
+      type: this.state.type,
       moves: JSON.stringify(moves),
       notes: this.state.notes,
       multimedia: JSON.stringify(this.state.multimedia),
@@ -159,6 +167,7 @@ class MoveSetForm extends Component {
 
     axios.put(API_URL + 'moveSets/' + this.props.id, qs.stringify({
       name: this.state.name,
+      type: this.state.type,
       moves: JSON.stringify(moves),
       notes: this.state.notes,
       multimedia: JSON.stringify(this.state.multimedia),
@@ -323,6 +332,20 @@ class MoveSetForm extends Component {
         <Form onSubmit={handleSubmit} layout='vertical'>
           <FormItem label='Name'>
             <Input placeholder="Name of the move" name='name' value={name} onChange={this.handleInputChange} />
+          </FormItem>
+          <FormItem label='Set Type'>
+            <Select
+              showSearch
+              placeholder='Set Type'
+              value={this.state.type}
+              onChange={(value) => this.handleSelectChange(value, 'type')}
+              optionFilterProp="children"
+              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+              <Option value="disabled" disabled>Select the set type</Option>
+              <Option value="drills">Drills</Option>
+              <Option value="battle">Battle</Option>
+            </Select>
           </FormItem>
           <FormItem label='Move Type'>
             <Select

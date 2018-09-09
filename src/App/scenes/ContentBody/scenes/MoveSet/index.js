@@ -1,4 +1,5 @@
 import { API_URL } from 'helpers/config';
+import { sentenceCase } from 'helpers/functions';
 import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios';
@@ -16,6 +17,7 @@ class MoveSet extends Component {
     this.state = {
       set: {
         name: '',
+        type: '',
         moves: [],
         notes: '',
         multimedia: [],
@@ -123,7 +125,9 @@ class MoveSet extends Component {
                 ) : (
                   <span className="title">{this.state.set.name}</span>
                 )}
-                {this.state.set.draft && <div><span> (Draft)</span></div>}
+                <br />
+                <span>{sentenceCase(this.state.set.type)}</span>
+                {this.state.set.draft && <span> (Draft)</span>}
               </div>
             </div>
             <div className="vertical-spacer" />

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import qs from 'qs';
-import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag } from 'antd';
+import { Divider, Form, Input, Icon, Select, Upload, Progress, Button, Tag, Modal } from 'antd';
 import MoveTag from '../MoveTag';
 import MultimediaTags from '../MultimediaTags';
 import LoadingMessage from 'App/components/LoadingMessage';
@@ -140,7 +140,12 @@ class MoveForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.pageType() !== 'edit' ? this.postNewMoveFrame() : this.updateMoveFrame();
+    (!this.state.name || this.state.origin === 'disabled' || this.state.type === 'disabled') ?
+      Modal.error({
+        title: 'Missing fields',
+        content: 'Name, origin and type must all be filled out',
+      }) :
+      this.pageType() !== 'edit' ? this.postNewMoveFrame() : this.updateMoveFrame();
   }
 
   postNewMoveFrame = () => {
