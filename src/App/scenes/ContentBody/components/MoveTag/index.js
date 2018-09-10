@@ -57,7 +57,7 @@ class MoveTag extends Component {
 
     return (
       removeAuthToken ? (
-        <Tag color={moveTypeColors[move.type]} closable={closable} onClose={onClose}>
+        <Tag color={moveTypeColors[move.type]} closable={closable} onClose={(e) => onClose(e, move)}>
           <span onClick={this.showModal}>{move.name}</span>
           <Modal
             visible={this.state.previewModalVisible}
@@ -68,7 +68,7 @@ class MoveTag extends Component {
           </Modal>
         </Tag>
       ) : (
-        <Tag color={moveTypeColors[move.type]} closable={closable} onClose={onClose}>
+        <Tag color={moveTypeColors[move.type]} closable={closable} onClose={(e) => onClose(e, move)}>
           <Link to={{ pathname: '/' + type + '/redirect/' + move._id }}>{move.name}</Link>
         </Tag>
       )

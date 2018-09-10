@@ -142,12 +142,10 @@ class MoveForm extends Component {
       })
   }
 
-  removeMoveFrameFromArray = (e, state) => {
+  removeMoveFrameFromArray = (state) => (e, move) => {
     e.preventDefault();
-    const moveUrl = e.target.parentElement.childNodes[0].childNodes[0].href;
-    const moveId = moveUrl.substr(moveUrl.lastIndexOf('/') + 1);
 
-    this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
+    this.setState({[state]: this.state[state].filter(filterMove => filterMove._id !== move._id)});
   }
 
   handleInputChange = e => {
@@ -487,7 +485,7 @@ class MoveForm extends Component {
             {
               (this.state.startingPositions.length === 0) ?
               <Tag>Select moves from above</Tag> :
-              <MoveTags type="moveFrames" moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'startingPositions')} removeAuthToken={this.props.removeAuthToken} />
+              <MoveTags type="moveFrames" moves={this.state.startingPositions} closable={true} onClose={this.removeMoveFrameFromArray('startingPositions')} removeAuthToken={this.props.removeAuthToken} />
             }
           </FormItem>
           <FormItem>
@@ -505,7 +503,7 @@ class MoveForm extends Component {
             {
               (this.state.endingPositions.length === 0) ?
               <Tag>Select moves from above</Tag> :
-              <MoveTags type="moveFrames" moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFrameFromArray(e, 'endingPositions')} removeAuthToken={this.props.removeAuthToken} />
+              <MoveTags type="moveFrames" moves={this.state.endingPositions} closable={true} onClose={this.removeMoveFrameFromArray('endingPositions')} removeAuthToken={this.props.removeAuthToken} />
             }
           </FormItem>
           <div className="ant-form-item-label">

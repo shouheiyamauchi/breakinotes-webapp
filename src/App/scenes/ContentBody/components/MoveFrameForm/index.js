@@ -117,14 +117,6 @@ class MoveForm extends Component {
       })
   }
 
-  removeMoveFromArray = (e, state) => {
-    e.preventDefault();
-    const moveUrl = e.target.parentElement.childNodes[0].childNodes[0].href;
-    const moveId = moveUrl.substr(moveUrl.lastIndexOf('/') + 1);
-
-    this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
-  }
-
   handleInputChange = e => {
     const target = e.target;
     const value = target.value;

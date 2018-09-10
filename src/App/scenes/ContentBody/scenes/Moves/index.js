@@ -195,12 +195,10 @@ class Moves extends Component {
       })
   }
 
-  removeMoveFromArray = (e, state) => {
+  removeMoveFromArray = (state) => (e, move) => {
     e.preventDefault();
-    const moveUrl = e.target.parentElement.childNodes[0].childNodes[0].href;
-    const moveId = moveUrl.substr(moveUrl.lastIndexOf('/') + 1);
 
-    this.setState({[state]: this.state[state].filter(move => move._id !== moveId)});
+    this.setState({[state]: this.state[state].filter(filterMove => filterMove._id !== move._id)});
   }
 
   handleOk = e => {
@@ -309,7 +307,7 @@ class Moves extends Component {
               {
                 (this.state.startingPositions.length === 0) ?
                 <Tag>Select moves from above</Tag> :
-                <MoveTags type="moves" moves={this.state.startingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'startingPositions')} />
+                <MoveTags type="moves" moves={this.state.startingPositions} closable={true} onClose={this.removeMoveFromArray('startingPositions')} />
               }
             </FormItem>
             <FormItem>
@@ -327,7 +325,7 @@ class Moves extends Component {
               {
                 (this.state.endingPositions.length === 0) ?
                 <Tag>Select moves from above</Tag> :
-                <MoveTags type="moves" moves={this.state.endingPositions} closable={true} onClose={(e) => this.removeMoveFromArray(e, 'endingPositions')} />
+                <MoveTags type="moves" moves={this.state.endingPositions} closable={true} onClose={this.removeMoveFromArray('endingPositions')} />
               }
             </FormItem>
             <div className="ant-form-item-label">
