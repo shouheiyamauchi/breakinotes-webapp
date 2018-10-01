@@ -1,26 +1,26 @@
 import { API_URL } from 'helpers/config'
-import React, { Component } from 'react';
-import { Divider } from 'antd';
-import axios from 'axios';
-import qs from 'qs';
-import MoveSetsList from './components/MoveSetsList';
+import React, { Component } from 'react'
+import { Divider } from 'antd'
+import axios from 'axios'
+import qs from 'qs'
+import { withMovesContext } from '../../../../contexts/MovesContext'
+import MoveSetsList from './components/MoveSetsList'
 
 class MoveSets extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      moveSets: [],
       loading: true
-    };
+    }
   }
 
   componentDidMount() {
-    this.getMoveSets();
+    this.getMoveSets()
   }
 
   getMoveSets = () => {
-    this.setState({loading: true}, () => {
+    this.setState({ loading: true }, () => {
       axios.post(API_URL + 'moveSets/filter', qs.stringify({
 
       }), {
@@ -29,15 +29,13 @@ class MoveSets extends Component {
         }
       })
         .then((response) => {
-          this.setState({
-            moveSets: response.data,
-            loading: false
-          });
+          this.props.setMoveSets(response.data)
+          this.setState({ loading: false })
         })
         .catch((error) => {
-          this.props.removeAuthToken();
-        });
-    });
+          this.props.removeAuthToken()
+        })
+    })
 
   }
 
@@ -48,12 +46,12 @@ class MoveSets extends Component {
       }
     })
       .then((response) => {
-        this.getMoveSets();
+        this.getMoveSets()
         return
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
   }
 
   render() {
@@ -61,10 +59,10 @@ class MoveSets extends Component {
       <div>
         <span className="title">Move Sets List</span>
         <Divider />
-        <MoveSetsList moveSets={this.state.moveSets} deleteMove={this.deleteMove} loading={this.state.loading} />
+        <MoveSetsList moveSets={this.props.moveSets} deleteMove={this.deleteMove} loading={false} />
       </div>
-    );
+    )
   }
 }
 
-export default MoveSets;
+export default withMovesContext(MoveSets)

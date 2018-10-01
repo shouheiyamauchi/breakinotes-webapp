@@ -2,6 +2,7 @@ import { API_URL } from 'helpers/config';
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Layout, Affix, Button, Icon } from 'antd';
+import { MovesContextProvider } from './contexts/MovesContext'
 import Login from './scenes/Login';
 import NavMenu from './scenes/NavMenu';
 import ContentBody from './scenes/ContentBody';
@@ -55,7 +56,7 @@ class App extends Component {
             {!userToken ? (
               <Login updateLoggedInStatus={this.updateLoggedInStatus} />
             ) : (
-              <div>
+              <MovesContextProvider>
                 <NavMenu removeAuthToken={this.removeAuthToken} />
                 <ContentBody removeAuthToken={this.removeAuthToken} path={this.props.location.pathname} />
                 <Affix style={{position: 'fixed', bottom: '20px', right: '20px'}}>
@@ -68,7 +69,7 @@ class App extends Component {
                     </Button>
                   </Button.Group>
                 </Affix>
-              </div>
+              </MovesContextProvider>
             )}
           </TransitionContainer>
         </LoadingMessage>

@@ -16,7 +16,7 @@ const moveTypeColors = {
   rocking: 'rgb(255,152,148)',
   drop: 'rgb(255,178,139)',
   footwork: 'rgb(255,207,134)',
-  floorwork: 'rgb(249, 255, 133)',
+  floorwork: 'rgb(133, 134, 255)',
   backrock: 'rgb(173, 198, 71)',
   powermove: 'rgb(174,232,132)',
   freezework: 'rgb(124,229,217)',

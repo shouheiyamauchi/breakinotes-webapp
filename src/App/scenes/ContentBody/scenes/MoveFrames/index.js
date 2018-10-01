@@ -1,25 +1,25 @@
 import { API_URL } from 'helpers/config'
-import React, { Component } from 'react';
-import { Divider } from 'antd';
-import axios from 'axios';
-import qs from 'qs';
-import MoveFramesList from './components/MoveFramesList';
+import React, { Component } from 'react'
+import { Divider } from 'antd'
+import axios from 'axios'
+import qs from 'qs'
+import { withMovesContext } from '../../../../contexts/MovesContext'
+import MoveFramesList from './components/MoveFramesList'
 
 class MoveFrames extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      moveFrames: [],
       loading: true
-    };
+    }
   }
 
   componentDidMount() {
-    this.getMoves();
+    this.getMoveFrames()
   }
 
-  getMoves = () => {
+  getMoveFrames = () => {
     this.setState({loading: true}, () => {
       axios.post(API_URL + 'moveFrames/filter', qs.stringify({
 
@@ -29,15 +29,13 @@ class MoveFrames extends Component {
         }
       })
         .then((response) => {
-          this.setState({
-            moveFrames: response.data,
-            loading: false
-          });
+          this.props.setFrames(response.data)
+          this.setState({ loading: false })
         })
         .catch((error) => {
-          this.props.removeAuthToken();
-        });
-    });
+          this.props.removeAuthToken()
+        })
+    })
 
   }
 
@@ -48,12 +46,12 @@ class MoveFrames extends Component {
       }
     })
       .then((response) => {
-        this.getMoves();
+        this.getMoveFrames()
         return
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
   }
 
   render() {
@@ -61,10 +59,10 @@ class MoveFrames extends Component {
       <div>
         <span className="title">Frames List</span>
         <Divider />
-        <MoveFramesList moveFrames={this.state.moveFrames} deleteMove={this.deleteMove} loading={this.state.loading} />
+        <MoveFramesList moveFrames={this.props.moveFrames} deleteMove={this.deleteMove} loading={false} />
       </div>
-    );
+    )
   }
 }
 
-export default MoveFrames;
+export default withMovesContext(MoveFrames)

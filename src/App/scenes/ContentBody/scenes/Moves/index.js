@@ -1,24 +1,22 @@
 import { API_URL } from 'helpers/config'
-import { sentenceCase } from 'helpers/functions';
-import React, { Component } from 'react';
-import axios from 'axios';
-import qs from 'qs';
-import { Affix, Modal, Button, Form, Input, Select, Tag, Divider } from 'antd';
-import MovesList from './components/MovesList';
-import MoveTag from '../../components/MoveTag';
-import MoveTags from '../../components/MoveTags';
+import { sentenceCase } from 'helpers/functions'
+import React, { Component } from 'react'
+import axios from 'axios'
+import qs from 'qs'
+import { Affix, Modal, Button, Form, Input, Select, Tag, Divider } from 'antd'
+import { withMovesContext } from '../../../../contexts/MovesContext'
+import MovesList from './components/MovesList'
+import MoveTag from '../../components/MoveTag'
+import MoveTags from '../../components/MoveTags'
 
-const FormItem = Form.Item;
-const { Option } = Select;
+const FormItem = Form.Item
+const { Option } = Select
 
 class Moves extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      allMoves: [],
-      allFrames: [],
-      filteredMoves:[],
       filterModalVisible: false,
       name: '',
       origin: '',
@@ -28,12 +26,12 @@ class Moves extends Component {
       parent: '',
       draft: '',
       loading: true
-    };
+    }
   }
 
   componentDidMount() {
-    const urlParams = qs.parse(this.props.location.search.substr(1));
-    this.getAllMoves(urlParams);
+    const urlParams = qs.parse(this.props.location.search.substr(1))
+    this.getAllMoves(urlParams)
   }
 
   getAllMoves = (urlParams) => {
@@ -43,34 +41,32 @@ class Moves extends Component {
       }
     })
       .then((response) => {
-        this.setState({allMoves: response.data}, () => {
+        this.props.setMoves(response.data, () => {
           axios.get(API_URL + 'moveFrames', {
             headers: {
               Authorization: 'JWT ' + localStorage.getItem('breakinotes')
             }
           })
             .then((response) => {
-              this.setState({
-                allFrames: response.data
-              }, () =>{
+              this.props.setFrames(response.data, () => {
                 this.setState({
                   name: urlParams.name,
                   origin: urlParams.origin,
                   type: urlParams.type,
-                  startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.state.allFrames.find(move => move._id === moveId)) : [],
-                  endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.state.allFrames.find(move => move._id === moveId)) : [],
-                  parent: (urlParams.parent) ? this.state.allMoves.find((move) => move._id === urlParams.parent) : '',
+                  startingPositions: (urlParams.startingPositions) ? urlParams.startingPositions.map(moveId => this.props.moveFrames.find(move => move._id === moveId)) : [],
+                  endingPositions: (urlParams.endingPositions) ? urlParams.endingPositions.map(moveId => this.props.moveFrames.find(move => move._id === moveId)) : [],
+                  parent: (urlParams.parent) ? this.props.moves.find((move) => move._id === urlParams.parent) : '',
                   draft: urlParams.draft
                 }, () => {
-                  this.getFilteredMoves();
-                });
-              });
-            });
-        });
+                  this.getFilteredMoves()
+                })
+              })
+            })
+        })
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
   }
 
   getFilteredMoves = () => {
@@ -89,18 +85,18 @@ class Moves extends Component {
         }
       })
         .then((response) => {
-          this.updateUrl();
+          this.updateUrl()
 
+          this.props.setFilteredMoves(window.location.search.substr(1), response.data)
           this.setState({
-            filteredMoves: response.data,
             filterModalVisible: false,
             loading: false
-          });
+          })
         })
         .catch((error) => {
-          this.props.removeAuthToken();
-        });
-    });
+          this.props.removeAuthToken()
+        })
+    })
   }
 
   updateUrl = () => {
@@ -113,20 +109,20 @@ class Moves extends Component {
       endingPositions: this.state.endingPositions.map(move => move._id),
       parent: this.state.parent ? this.state.parent._id : null,
       draft: this.state.draft
-    };
+    }
 
     for (const filterType in filters) {
       if (!filters[filterType] || filters[filterType].length === 0) {
-        delete filters[filterType];
-      };
-    };
+        delete filters[filterType]
+      }
+    }
 
-    const paramString = qs.stringify(filters);
+    const paramString = qs.stringify(filters)
     if (paramString) {
-      window.history.replaceState('', '', '/moves/filter?' + paramString);
+      window.history.replaceState('', '', '/moves/filter?' + paramString)
     } else {
-      window.history.replaceState('', '', '/moves/filter');
-    };
+      window.history.replaceState('', '', '/moves/filter')
+    }
   }
 
   deleteMove = id => {
@@ -136,30 +132,30 @@ class Moves extends Component {
       }
     })
       .then((response) => {
-        this.getFilteredMoves();
+        this.getFilteredMoves()
         return
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
   }
 
   showModal = () => {
     this.setState({
       filterModalVisible: true,
-    });
+    })
   }
 
   handleInputChange = e => {
-    const target = e.target;
-    const value = target.value;
-    const name = target.name;
+    const target = e.target
+    const value = target.value
+    const name = target.name
 
-    this.setState({[name]: value});
+    this.setState({[name]: value})
   }
 
   handleSelectChange = (value, name) => {
-    this.setState({[name]: value});
+    this.setState({[name]: value})
   }
 
   setSingleMove = (id, state) => {
@@ -169,16 +165,16 @@ class Moves extends Component {
       }
     })
       .then((response) => {
-        this.setState({[state]: response.data});
+        this.setState({[state]: response.data})
       })
       .catch((error) => {
-        this.props.removeAuthToken();
+        this.props.removeAuthToken()
       })
   }
 
   clearSingleMove = (e, state) => {
-    e.preventDefault();
-    this.setState({[state]: null});
+    e.preventDefault()
+    this.setState({[state]: null})
   }
 
   addMoveToArray = (id, state) => {
@@ -188,51 +184,51 @@ class Moves extends Component {
       }
     })
       .then((response) => {
-        this.setState({[state]: [...this.state[state], response.data]});
+        this.setState({[state]: [...this.state[state], response.data]})
       })
       .catch((error) => {
-        this.props.removeAuthToken();
+        this.props.removeAuthToken()
       })
   }
 
   removeMoveFromArray = (state) => (e, move) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    this.setState({[state]: this.state[state].filter(filterMove => filterMove._id !== move._id)});
+    this.setState({[state]: this.state[state].filter(filterMove => filterMove._id !== move._id)})
   }
 
   handleOk = e => {
     this.setState({
       filterModalVisible: false,
-    });
+    })
   }
 
   handleCancel = e => {
     this.setState({
       filterModalVisible: false,
-    });
+    })
   }
 
   render() {
-    const startingPositionsOptions = this.state.allFrames.map((moveFrame, index) => {
+    const startingPositionsOptions = this.props.moveFrames.map((moveFrame, index) => {
       if (this.state.startingPositions.length === 0 || this.state.startingPositions.findIndex(startingPosition => startingPosition._id === moveFrame._id) === -1) {
-        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
-      };
-      return null;
+        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>
+      }
+      return null
     })
 
-    const endingPositionsOptions = this.state.allFrames.map((moveFrame, index) => {
+    const endingPositionsOptions = this.props.moveFrames.map((moveFrame, index) => {
       if (this.state.endingPositions.length === 0 || this.state.endingPositions.findIndex(endingPosition => endingPosition._id === moveFrame._id) === -1) {
-        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>;
-      };
-      return null;
+        return <Option value={moveFrame._id} key={index}>{sentenceCase(moveFrame.type) + ' - ' + moveFrame.name}</Option>
+      }
+      return null
     })
 
-    const parentOptions = this.state.allMoves.map((move, index) => {
+    const parentOptions = this.props.moves.map((move, index) => {
       if (!this.state.parent || this.state.parent._id !== move._id) {
-        return <Option value={move._id} key={index}>{sentenceCase(move.type) + ' - ' + move.name}</Option>;
-      };
-      return null;
+        return <Option value={move._id} key={index}>{sentenceCase(move.type) + ' - ' + move.name}</Option>
+      }
+      return null
     })
 
     return (
@@ -369,10 +365,10 @@ class Moves extends Component {
 
         <span className="title">Moves List</span>
         <Divider />
-        <MovesList moves={this.state.filteredMoves} deleteMove={this.deleteMove} loading={this.state.loading} />
+        <MovesList moves={this.props.filteredMoves[window.location.search.substr(1)]} deleteMove={this.deleteMove} loading={false} />
       </div>
-    );
+    )
   }
 }
 
-export default Moves;
+export default withMovesContext(Moves)

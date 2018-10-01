@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { Layout, Card } from 'antd';
-import TransitionContainer from 'App/components/TransitionContainer';
-import Home from './scenes/Home';
-import MoveFrames from './scenes/MoveFrames';
-import NewMove from './scenes/NewMove';
-import NewMoveFrame from './scenes/NewMoveFrame';
-import NewMoveSet from './scenes/NewMoveSet';
-import Moves from './scenes/Moves';
-import Move from './scenes/Move';
-import MoveSet from './scenes/MoveSet';
-import MoveSets from './scenes/MoveSets';
-import MoveFrame from './scenes/MoveFrame';
-import EditMove from './scenes/EditMove';
-import EditMoveFrame from './scenes/EditMoveFrame';
-import EditMoveSet from './scenes/EditMoveSet';
-import CloneMove from './scenes/CloneMove';
-import CloneMoveFrame from './scenes/CloneMoveFrame';
-import CloneMoveSet from './scenes/CloneMoveSet';
-import PracticeItems from './scenes/PracticeItems';
-import RedirectPage from './scenes/RedirectPage';
+import React, { Component } from 'react'
+import { Route, Switch } from 'react-router-dom'
+import { Layout, Card } from 'antd'
 
-const { Content } = Layout;
+import TransitionContainer from 'App/components/TransitionContainer'
+
+import Home from './scenes/Home'
+import CloneMove from './scenes/CloneMove'
+import CloneMoveFrame from './scenes/CloneMoveFrame'
+import CloneMoveSet from './scenes/CloneMoveSet'
+import EditMove from './scenes/EditMove'
+import EditMoveFrame from './scenes/EditMoveFrame'
+import EditMoveSet from './scenes/EditMoveSet'
+import Move from './scenes/Move'
+import MoveFrame from './scenes/MoveFrame'
+import MoveFrames from './scenes/MoveFrames'
+import Moves from './scenes/Moves'
+import MoveSet from './scenes/MoveSet'
+import MoveSets from './scenes/MoveSets'
+import NewMove from './scenes/NewMove'
+import NewMoveFrame from './scenes/NewMoveFrame'
+import NewMoveSet from './scenes/NewMoveSet'
+import PracticeItems from './scenes/PracticeItems'
+import RedirectPage from './scenes/RedirectPage'
+
+const { Content } = Layout
 
 const routes = [
   {
@@ -133,8 +135,8 @@ class ContentBody extends Component {
           </TransitionContainer>
         </Card>
       </Content>
-    );
+    )
   }
 }
 
-export default ContentBody;
+export default ContentBody
