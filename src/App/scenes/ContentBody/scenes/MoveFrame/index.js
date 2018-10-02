@@ -1,19 +1,21 @@
-import { API_URL } from 'helpers/config';
-import { sentenceCase } from 'helpers/functions';
-import React, { Component } from 'react';
+import { API_URL } from 'helpers/config'
+import { sentenceCase } from 'helpers/functions'
+import React, { Component } from 'react'
 import { Redirect, Link } from 'react-router-dom'
-import axios from 'axios';
-import { Tag, Divider, Button, Modal } from 'antd';
-import MoveTypeAvatar from '../../components/MoveTypeAvatar';
-import MoveTag from '../../components/MoveTag';
-import MoveTags from '../../components/MoveTags';
-import MultimediaTags from '../../components/MultimediaTags';
+import axios from 'axios'
+import qs from 'qs'
+import { Tag, Divider, Button, Modal } from 'antd'
+import MoveTypeAvatar from '../../components/MoveTypeAvatar'
+import MoveTag from '../../components/MoveTag'
+import MoveTags from '../../components/MoveTags'
+import MultimediaTags from '../../components/MultimediaTags'
 import Notes from '../../components/Notes'
-import LoadingMessage from 'App/components/LoadingMessage';
+import PastPracticeItems from '../../components/PastPracticeItems'
+import LoadingMessage from 'App/components/LoadingMessage'
 
 class MoveFrame extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       moveFrame: {
@@ -29,16 +31,18 @@ class MoveFrame extends Component {
         draft: true
       },
       redirectUrl: '',
-      loading: true
-    };
+      loading: true,
+      pastPracticeItems: [],
+      pastPracticeItemsPage: 1
+    }
   }
 
   componentDidMount() {
-    this.getMoveFrame(this.props.previewId || this.props.match.params.id);
+    this.getMoveFrame(this.props.previewId || this.props.match.params.id)
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.previewId) this.getMoveFrame(nextProps.match.params.id);
+    if (!nextProps.previewId) this.getMoveFrame(nextProps.match.params.id)
   }
 
   getMoveFrame = id => {
@@ -51,19 +55,21 @@ class MoveFrame extends Component {
         this.setState({
           moveFrame: response.data,
           loading: false
-        });
+        })
       })
       .catch((error) => {
-        this.props.removeAuthToken();
+        this.props.removeAuthToken()
       })
+
+    this.getPreviousPractice(id)
   }
 
   editMoveFrame = () => {
-    this.setState({redirectUrl: '/moveFrames/edit/' + this.state.moveFrame._id});
+    this.setState({redirectUrl: '/moveFrames/edit/' + this.state.moveFrame._id})
   }
 
   cloneMoveFrame = () => {
-    this.setState({redirectUrl: '/moveFrames/clone/' + this.state.moveFrame._id});
+    this.setState({redirectUrl: '/moveFrames/clone/' + this.state.moveFrame._id})
   }
 
   confirmDelete = () => {
@@ -71,10 +77,10 @@ class MoveFrame extends Component {
       title: 'Confirm delete',
       content: 'Are you sure to delete "' + this.state.moveFrame.name + '"?',
       onOk: () => {
-        this.deleteMoveFrame();
+        this.deleteMoveFrame()
       },
       onCancel() {},
-    });
+    })
   }
 
   deleteMoveFrame = () => {
@@ -84,17 +90,39 @@ class MoveFrame extends Component {
       }
     })
       .then((response) => {
-        this.setState({redirectUrl: '/moveFrames'});
+        this.setState({redirectUrl: '/moveFrames'})
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
+  }
+
+  getPreviousPractice = (id) => {
+    axios.post(API_URL + 'practiceItems/filter', qs.stringify({
+      move: JSON.stringify({ moveType: 'MoveFrame', item: id })
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        this.setState({ pastPracticeItems: response.data })
+      })
+      .catch((error) => {
+        this.props.removeAuthToken()
+      })
+  }
+
+  updatePreviousPracticePage = (page, pageSize) => {
+    this.setState({ pastPracticeItemsPage: page })
   }
 
   render() {
     const {
-      loading
-    } = this.state;
+      loading,
+      pastPracticeItems,
+      pastPracticeItemsPage
+    } = this.state
 
     return (
       <LoadingMessage loading={loading}>
@@ -161,11 +189,20 @@ class MoveFrame extends Component {
               <h3>Notes</h3>
               {!this.state.moveFrame.notes ? 'None' : <Notes text={this.state.moveFrame.notes} />}
             </div>
+            <Divider />
+            <div>
+              <h3>Past Practice Items</h3>
+              <PastPracticeItems
+                onPageChange={this.updatePreviousPracticePage}
+                page={pastPracticeItemsPage}
+                pastPracticeItems={pastPracticeItems}
+              />
+            </div>
           </div>
         )}
       </LoadingMessage>
-    );
+    )
   }
 }
 
-export default MoveFrame;
+export default MoveFrame

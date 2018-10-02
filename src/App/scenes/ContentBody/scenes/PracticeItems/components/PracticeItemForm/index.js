@@ -1,18 +1,19 @@
-import { API_URL } from 'helpers/config';
-import { sentenceCase } from 'helpers/functions';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import axios from 'axios';
-import qs from 'qs';
-import { Form, Input, Select, Button } from 'antd';
+import { API_URL } from 'helpers/config'
+import { sentenceCase } from 'helpers/functions'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import axios from 'axios'
+import qs from 'qs'
+import { Form, Input, Select, Button } from 'antd'
+import PastPracticeItems from '../../../../components/PastPracticeItems'
 
-const FormItem = Form.Item;
-const { Option } = Select;
-const { TextArea } = Input;
+const FormItem = Form.Item
+const { Option } = Select
+const { TextArea } = Input
 
 class PracticeItemForm extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       moveType: 'disabled',
@@ -21,7 +22,9 @@ class PracticeItemForm extends Component {
       notes: '',
       multimedia: [],
       uploading: new Map(),
-    };
+      pastPracticeItems: [],
+      pastPracticeItemsPage: 1
+    }
   }
 
   componentDidMount() {
@@ -32,19 +35,21 @@ class PracticeItemForm extends Component {
             move: JSON.stringify({moveType: this.state.moveType, item: this.props.practiceItem.move.item._id}),
             notes: this.props.practiceItem.notes,
             multimedia: this.props.practiceItem.multimedia
-          });
-        });
-      });
-    };
+          }, () => {
+            this.getPreviousPractice()
+          })
+        })
+      })
+    }
   }
 
   editItem = () => {
-    return !!this.props.practiceItem;
+    return !!this.props.practiceItem
   }
 
   retrieveMoves = callback => {
     if (this.state.moveType !== 'disabled') {
-      const resourceName = this.state.moveType[0].toLowerCase() + this.state.moveType.substr(1) + 's';
+      const resourceName = this.state.moveType[0].toLowerCase() + this.state.moveType.substr(1) + 's'
 
       axios.get(API_URL + resourceName, {
         headers: {
@@ -53,33 +58,38 @@ class PracticeItemForm extends Component {
       })
         .then((response) => {
           this.setState({ moves: response.data }, () => {
-            if (callback) callback();
-          });
+            if (callback) callback()
+          })
         })
         .catch((error) => {
-          this.props.removeAuthToken();
-        });
-    };
+          this.props.removeAuthToken()
+        })
+    }
   }
 
   handleInputChange = e => {
-    const target = e.target;
-    const value = target.value;
-    const name = target.name;
+    const target = e.target
+    const value = target.value
+    const name = target.name
 
-    this.setState({ [name]: value });
+    this.setState({ [name]: value })
   }
 
   handleSelectChange = (value, name) => {
-    this.setState({ [name]: value }, () => {
-      if (name === 'moveType') this.retrieveMoves();
-    });
+    this.resetPreviousPractice()
+    this.setState({ [name]: value, notes: '' }, () => {
+      if (name === 'moveType') {
+        this.retrieveMoves()
+      } else if (name === 'move' && value !== 'disabled') {
+        this.getPreviousPractice()
+      }
+    })
   }
 
   handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
 
-    this.editItem() ? this.updatePracticeItem() : this.submitNewPracticeItem();
+    this.editItem() ? this.updatePracticeItem() : this.submitNewPracticeItem()
   }
 
   submitNewPracticeItem = () => {
@@ -95,12 +105,12 @@ class PracticeItemForm extends Component {
       }
     })
       .then((response) => {
-        this.props.appendNewPracticeItem(response.data);
-        this.props.changeEditing('');
+        this.props.appendNewPracticeItem(response.data)
+        this.props.changeEditing('')
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
   }
 
   updatePracticeItem = () => {
@@ -116,12 +126,36 @@ class PracticeItemForm extends Component {
       }
     })
       .then((response) => {
-        this.props.updatePracticeItem(response.data);
-        this.props.changeEditing('');
+        this.props.updatePracticeItem(response.data)
+        this.props.changeEditing('')
       })
       .catch((error) => {
-        this.props.removeAuthToken();
-      });
+        this.props.removeAuthToken()
+      })
+  }
+
+  resetPreviousPractice = () => {
+    this.setState({ pastPracticeItems: [], pastPracticeItemsPage: 1 })
+  }
+
+  getPreviousPractice = () => {
+    axios.post(API_URL + 'practiceItems/filter', qs.stringify({
+      move: this.state.move
+    }), {
+      headers: {
+        Authorization: 'JWT ' + localStorage.getItem('breakinotes')
+      }
+    })
+      .then((response) => {
+        this.setState({ pastPracticeItems: response.data })
+      })
+      .catch((error) => {
+        this.props.removeAuthToken()
+      })
+  }
+
+  updatePreviousPracticePage = (page, pageSize) => {
+    this.setState({ pastPracticeItemsPage: page })
   }
 
   render() {
@@ -129,20 +163,22 @@ class PracticeItemForm extends Component {
       handleSubmit,
       handleSelectChange,
       handleInputChange
-    } = this;
+    } = this
 
     const {
       moves,
       moveType,
       move,
-      notes
-    } = this.state;
+      notes,
+      pastPracticeItems,
+      pastPracticeItemsPage
+    } = this.state
 
     const moveOptions = moves.map((move, index) => {
       return <Option value={JSON.stringify({moveType: this.state.moveType, item: move._id})} key={index}>
         {(move.type ? sentenceCase(move.type) + ' - ' : '') + move.name}
       </Option>
-    });
+    })
 
     return (
       <Form onSubmit={handleSubmit} layout='vertical'>
@@ -150,7 +186,7 @@ class PracticeItemForm extends Component {
           <Select
             showSearch
             value={moveType}
-            onChange={value => { handleSelectChange(value, 'moveType'); handleSelectChange('disabled', 'move'); }}
+            onChange={value => { handleSelectChange(value, 'moveType'); handleSelectChange('disabled', 'move') }}
             optionFilterProp="children"
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
           >
@@ -172,6 +208,14 @@ class PracticeItemForm extends Component {
             {moveOptions}
           </Select>
         </FormItem>
+        <FormItem label='Past Practice Items'>
+          <PastPracticeItems
+            onPageChange={this.updatePreviousPracticePage}
+            onItemClick={(item) => this.setState({ notes: item.notes })}
+            page={pastPracticeItemsPage}
+            pastPracticeItems={pastPracticeItems}
+          />
+        </FormItem>
         <FormItem label='Notes'>
           <TextArea placeholder="Add some notes" rows={4} name='notes' value={notes} onChange={handleInputChange} />
         </FormItem>
@@ -181,7 +225,7 @@ class PracticeItemForm extends Component {
           </Button>
         </FormItem>
       </Form>
-    );
+    )
   }
 }
 
@@ -194,4 +238,4 @@ PracticeItemForm.propTypes = {
   updatePracticeItem: PropTypes.func
 }
 
-export default PracticeItemForm;
+export default PracticeItemForm

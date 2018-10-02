@@ -2,6 +2,10 @@
 
 /* classes for use */
 
+.full-width {
+  width: 100%;
+}
+
 .word-wrap {
   word-wrap: break-word;
 }
@@ -95,6 +99,10 @@
 /* custom CSS for list */
 .ant-list-vertical .ant-list-item-content {
   margin-bottom: 0;
+}
+
+.ant-list-item-content {
+  width: 100%;
 }
 
 /* page transitions */

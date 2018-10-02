@@ -331,7 +331,7 @@ class MoveForm extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
+        this.props.removeAuthToken();
       });
   }
 
