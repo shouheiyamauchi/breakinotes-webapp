@@ -443,6 +443,7 @@ class MoveForm extends Component {
               <Option value="rocking">Rocking</Option>
               <Option value="drop">Drop</Option>
               <Option value="footwork">Footwork</Option>
+              <Option value="powerFootwork">Power Footwork</Option>
               <Option value="floorwork">Floorwork</Option>
               <Option value="backrock">Backrock</Option>
               <Option value="freezework">Freezework</Option>
