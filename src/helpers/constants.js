@@ -42,7 +42,7 @@ const moveTypeShortNames = {
   rocking: 'Rock',
   drop: 'Drop',
   footwork: 'Foot',
-  powerFootwork: 'PowFoot'
+  powerFootwork: 'PowFoot',
   floorwork: 'Floor',
   backrock: 'Back',
   powermove: 'Power',
